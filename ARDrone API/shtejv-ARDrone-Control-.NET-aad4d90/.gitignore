@@ -1,0 +1,9 @@
+TestResults
+*.suo
+*.sdf
+*.ipch
+*.opensdf
+bin
+obj
+**/bin
+**/obj

@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{104C0B70-4D35-4090-942A-9223222D0E6C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ARDrone.Input</RootNamespace>
+    <AssemblyName>ARDrone.Input</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\InputLibrary\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\InputLibrary\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DirectX.Direct3D, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.Direct3D.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DirectX.DirectInput, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.DirectInput.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WiimoteLib">
+      <HintPath>lib\WiimoteLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ButtonBasedInput.cs" />
+    <Compile Include="ConfigurableInput.cs" />
+    <Compile Include="DirectInputInput.cs" />
+    <Compile Include="InputConfigs\ButtonBasedInputConfig.cs" />
+    <Compile Include="InputConfigs\InputConfig.cs" />
+    <Compile Include="InputConfigs\SpeechBasedInputConfig.cs" />
+    <Compile Include="InputConfigs\AxisDitheredInputConfig.cs" />
+    <Compile Include="InputControls\ButtonBasedInputControl.cs" />
+    <Compile Include="InputControls\SpeechBasedInputControl.cs" />
+    <Compile Include="InputMappings\ButtonBasedInputMapping.cs" />
+    <Compile Include="InputMappings\SpeechBasedInputMapping.cs" />
+    <Compile Include="Timing\TimeBasedCommand.cs" />
+    <Compile Include="Speech\SpeechRecognition.cs" />
+    <Compile Include="Utils\Events.cs" />
+    <Compile Include="GenericInput.cs" />
+    <Compile Include="InputManager.cs" />
+    <Compile Include="InputMappings\ValidatedInputMapping.cs" />
+    <Compile Include="InputControls\InputControl.cs" />
+    <Compile Include="InputMappings\InputMapping.cs" />
+    <Compile Include="Utils\InputFactory.cs" />
+    <Compile Include="Utils\InputState.cs" />
+    <Compile Include="JoystickInput.cs" />
+    <Compile Include="KeyboardInput.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpeechInput.cs" />
+    <Compile Include="WiiMoteInput.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ARDroneBasics\ARDroneBasics.csproj">
+      <Project>{30FB7E9C-2668-4303-BF0D-1618DD30B8E5}</Project>
+      <Name>ARDroneBasics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
