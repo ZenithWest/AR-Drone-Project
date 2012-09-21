@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCV_Testing", "OpenCV_Testing\OpenCV_Testing.csproj", "{440891FB-5766-4DE3-BE74-5D7FFE71B8F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{440891FB-5766-4DE3-BE74-5D7FFE71B8F2}.Debug|x86.ActiveCfg = Debug|x86
+		{440891FB-5766-4DE3-BE74-5D7FFE71B8F2}.Debug|x86.Build.0 = Debug|x86
+		{440891FB-5766-4DE3-BE74-5D7FFE71B8F2}.Release|x86.ActiveCfg = Release|x86
+		{440891FB-5766-4DE3-BE74-5D7FFE71B8F2}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
