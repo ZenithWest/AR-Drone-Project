@@ -31,105 +31,200 @@ namespace OpenCV_Testing
 		}
 		private void timer1_Tick(object sender, EventArgs e)
 		{
-			checkBox2.Checked = true;
 			using (Emgu.CV.Image<Bgr,byte> nextFrame = cap.QueryFrame())
 			{
-				checkBox2.Checked = true;
 				if (nextFrame != null)
 				{
 					// there's only one channel (greyscale), hence the zero index
 					//var faces = nextFrame.DetectHaarCascade(haar)[0];
-					checkBox3.Checked = true;
+					bool checkBoxFaceValue = checkBoxFace.Checked;
+					bool checkBoxMouthValue = checkBoxMouth.Checked;
+					bool checkBoxNoseValue = checkBoxNose.Checked;
+					bool checkBoxLeftEarValue = checkBoxLeftEar.Checked;
+					bool checkRightEarValue = checkBoxRightEar.Checked;
+					bool checkBoxLeftEyeValue = checkBoxLeftEye.Checked;
+					bool checkBoxRightEyeValue = checkBoxRightEye.Checked;
+					bool checkBoxUpperbodyValue = checkBoxUpperbody.Checked;
 
 					Emgu.CV.Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
-					var faces =
+					MCvAvgComp[] faces = null;
+					MCvAvgComp[] mouth = null;
+					MCvAvgComp[] nose = null;
+					MCvAvgComp[] rightear = null;
+					MCvAvgComp[] leftear = null;
+					MCvAvgComp[] righteye = null;
+					MCvAvgComp[] lefteye = null;
+					MCvAvgComp[] upperbody = null;
+
+					//Size minSize = new Size(nextFrame.Width / 8, nextFrame.Height / 8);
+					Size minSize = new Size(20,20);
+					Emgu.CV.CvEnum.HAAR_DETECTION_TYPE detection_type = HAAR_DETECTION_TYPE.FIND_BIGGEST_OBJECT | HAAR_DETECTION_TYPE.DO_CANNY_PRUNING;
+
+					if (checkBoxFaceValue)
+					{
+						faces =
 						grayframe.DetectHaarCascade(
-							haarFace, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
+							haarFace, 1.1, 4,
+						detection_type,
+						minSize
 						)[0];
-					var rightear =
+					}
+
+					if (checkBoxMouthValue)
+					{
+						mouth =
 						grayframe.DetectHaarCascade(
-							haarRightEar, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
+							haarMouth, 1.4, 3,
+						detection_type,
+						minSize
 						)[0];
-					var leftear =
-						grayframe.DetectHaarCascade(
-							haarLeftEar, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
-						)[0];
-					var righteye =
-						grayframe.DetectHaarCascade(
-							haarRightEye, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
-						)[0];
-					var lefteye =
-						grayframe.DetectHaarCascade(
-							haarLeftEye, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
-						)[0];
-					var mouth =
-						grayframe.DetectHaarCascade(
-							haarMouth, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
-						)[0];
-					var nose =
+					}
+
+					if (checkBoxNoseValue)
+					{
+						nose =
 						grayframe.DetectHaarCascade(
 							haarNose, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
+						detection_type,
+						minSize
 						)[0];
-					var upperbody =
+					}
+
+					if (checkBoxLeftEarValue)
+					{
+						leftear =
+						grayframe.DetectHaarCascade(
+							haarLeftEar, 1.4, 4,
+						detection_type,
+						minSize
+						)[0];
+					}
+
+					if (checkRightEarValue)
+					{
+						rightear =
+						grayframe.DetectHaarCascade(
+							haarRightEar, 1.3, 4,
+						detection_type,
+						minSize
+						)[0];
+					}
+
+					if (checkBoxLeftEyeValue)
+					{
+						lefteye =
+						grayframe.DetectHaarCascade(
+							haarLeftEye, 1.3, 4,
+						detection_type,
+						minSize
+						)[0];
+					}
+
+					if (checkBoxRightEyeValue)
+					{
+						righteye =
+						grayframe.DetectHaarCascade(
+							haarRightEye, 1.3, 4,
+						detection_type,
+						minSize
+						)[0];
+					}
+
+					if (checkBoxUpperbodyValue)
+					{
+						upperbody =
 						grayframe.DetectHaarCascade(
 							haarUpperBody, 1.4, 4,
-						HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-						new Size(nextFrame.Width / 8, nextFrame.Height / 8)
+						detection_type,
+						minSize
 						)[0];
-
-					foreach (var face in faces)
-					{
-						nextFrame.Draw(face.rect, new Bgr(Color.AliceBlue), 1);
 					}
 
-					foreach (var face in rightear)
+					int thickness = 2;
+					if (checkBoxFaceValue)
 					{
-						nextFrame.Draw(face.rect, new Bgr(Color.Red), 1);
+						foreach (var face in faces)
+						{
+							pictureBox2.Image = nextFrame.Copy(face.rect).ToBitmap();
+						}
 					}
 
-					foreach (var face in leftear)
+					if (checkBoxLeftEyeValue)
 					{
-						nextFrame.Draw(face.rect, new Bgr(Color.Blue), 1);
+						foreach (var face in lefteye)
+						{
+							pictureBox3.Image = nextFrame.Copy(face.rect).ToBitmap();
+						}
 					}
 
-					foreach (var face in righteye)
+
+					if (checkBoxFaceValue)
 					{
-						nextFrame.Draw(face.rect, new Bgr(Color.Green), 1);
+						foreach (var face in faces)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.AliceBlue), thickness);
+						}
 					}
 
-					foreach (var face in lefteye)
+					if (checkBoxMouthValue)
 					{
-						nextFrame.Draw(face.rect, new Bgr(Color.Yellow), 1);
+						foreach (var face in mouth)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.Purple), thickness);
+						}
 					}
 
-					foreach (var face in mouth)
+					if (checkBoxNoseValue)
 					{
-						nextFrame.Draw(face.rect, new Bgr(Color.Purple), 1);
+						foreach (var face in nose)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.Orange), thickness);
+						}
 					}
 
-					foreach (var face in nose)
+					if (checkBoxLeftEarValue)
 					{
-						nextFrame.Draw(face.rect, new Bgr(Color.Orange), 1);
+						foreach (var face in leftear)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.Blue), thickness);
+						}
 					}
 
-					foreach (var face in upperbody)
+					if (checkRightEarValue)
 					{
-						nextFrame.Draw(face.rect, new Bgr(Color.GreenYellow), 1);
+						foreach (var face in rightear)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.Red), thickness);
+						}
 					}
+
+					if (checkBoxLeftEyeValue)
+					{
+						foreach (var face in lefteye)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.Yellow), thickness);
+						}
+					}
+
+					if (checkBoxRightEyeValue)
+					{
+
+						foreach (var face in righteye)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.Green), thickness);
+						}
+						
+					}
+
+					if (checkBoxUpperbodyValue)
+					{
+						foreach (var face in upperbody)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.GreenYellow), thickness);
+						}
+					}
+					
+					
 
 					pictureBox1.Image = nextFrame.ToBitmap();
 
@@ -143,8 +238,8 @@ namespace OpenCV_Testing
 			cap = new Capture(5);
 			// adjust path to find your xml
 
-			haarRightEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_righteye.xml");
-			haarLeftEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_lefteye.xml");
+			haarRightEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_righteye_2splits.xml");
+			haarLeftEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_lefteye_2splits.xml");
 			haarMouth = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_mouth.xml");
 			haarNose = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_nose.xml");
 			haarRightEar = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_rightear.xml");
@@ -152,7 +247,6 @@ namespace OpenCV_Testing
 			haarUpperBody = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_upperbody.xml");
 			haarFace = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
 			//	 "..\\..\\..\\..\\lib\\haarcascade_frontalface_alt2.xml");
-			checkBox1.Checked = true;
 		}
 	}
 }
