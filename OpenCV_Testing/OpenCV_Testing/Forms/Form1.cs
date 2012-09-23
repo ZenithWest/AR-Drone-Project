@@ -6,10 +6,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 using Emgu.CV;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
+
+using Emgu.CV.OCR;
 
 
 namespace OpenCV_Testing
@@ -17,17 +20,20 @@ namespace OpenCV_Testing
 	public partial class Form1 : Form
 	{
 		private Capture cap;
-		private HaarCascade haarRightEye;
-		private HaarCascade haarLeftEye;
-		private HaarCascade haarMouth;
+		//private CascadeClassifier haarFace;
 		private HaarCascade haarFace;
 		private HaarCascade haarNose;
-		private HaarCascade haarRightEar;
+		private HaarCascade haarMouth;
 		private HaarCascade haarLeftEar;
+		private HaarCascade haarRightEar;
+		private HaarCascade haarLeftEye;
+		private HaarCascade haarRightEye;
 		private HaarCascade haarUpperBody;
+		private Tesseract _ocr;
 		public Form1()
 		{
 			InitializeComponent();
+			_ocr = new Tesseract();
 		}
 		private void timer1_Tick(object sender, EventArgs e)
 		{
@@ -47,6 +53,7 @@ namespace OpenCV_Testing
 					bool checkBoxUpperbodyValue = checkBoxUpperbody.Checked;
 
 					Emgu.CV.Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
+					//Rectangle[] faces = null;
 					MCvAvgComp[] faces = null;
 					MCvAvgComp[] mouth = null;
 					MCvAvgComp[] nose = null;
@@ -62,82 +69,44 @@ namespace OpenCV_Testing
 
 					if (checkBoxFaceValue)
 					{
-						faces =
-						grayframe.DetectHaarCascade(
-							haarFace, 1.1, 4,
-						detection_type,
-						minSize
-						)[0];
+						
+						//faces = haarFace.DetectMultiScale(grayframe, 1.1, 8, minSize, Size.Empty);
+						faces = haarFace.Detect(grayframe, 1.1, 8, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxMouthValue)
 					{
-						mouth =
-						grayframe.DetectHaarCascade(
-							haarMouth, 1.4, 3,
-						detection_type,
-						minSize
-						)[0];
+						mouth = haarMouth.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxNoseValue)
 					{
-						nose =
-						grayframe.DetectHaarCascade(
-							haarNose, 1.4, 4,
-						detection_type,
-						minSize
-						)[0];
+						nose = haarNose.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxLeftEarValue)
 					{
-						leftear =
-						grayframe.DetectHaarCascade(
-							haarLeftEar, 1.4, 4,
-						detection_type,
-						minSize
-						)[0];
+						leftear = haarLeftEar.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkRightEarValue)
 					{
-						rightear =
-						grayframe.DetectHaarCascade(
-							haarRightEar, 1.3, 4,
-						detection_type,
-						minSize
-						)[0];
+						rightear = haarRightEar.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxLeftEyeValue)
 					{
-						lefteye =
-						grayframe.DetectHaarCascade(
-							haarLeftEye, 1.3, 4,
-						detection_type,
-						minSize
-						)[0];
+						lefteye = haarLeftEye.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxRightEyeValue)
 					{
-						righteye =
-						grayframe.DetectHaarCascade(
-							haarRightEye, 1.3, 4,
-						detection_type,
-						minSize
-						)[0];
+						righteye = haarRightEye.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxUpperbodyValue)
 					{
-						upperbody =
-						grayframe.DetectHaarCascade(
-							haarUpperBody, 1.4, 4,
-						detection_type,
-						minSize
-						)[0];
+						upperbody = haarUpperBody.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
 					}
 
 					int thickness = 2;
@@ -145,7 +114,8 @@ namespace OpenCV_Testing
 					{
 						foreach (var face in faces)
 						{
-							pictureBox2.Image = nextFrame.Copy(face.rect).ToBitmap();
+							//imageBox2.Image = nextFrame.Copy(face);
+							imageBox2.Image = nextFrame.Copy(face.rect);
 						}
 					}
 
@@ -153,7 +123,7 @@ namespace OpenCV_Testing
 					{
 						foreach (var face in lefteye)
 						{
-							pictureBox3.Image = nextFrame.Copy(face.rect).ToBitmap();
+							imageBox3.Image = nextFrame.Copy(face.rect);
 						}
 					}
 
@@ -162,6 +132,7 @@ namespace OpenCV_Testing
 					{
 						foreach (var face in faces)
 						{
+							//nextFrame.Draw(face, new Bgr(Color.AliceBlue), thickness);
 							nextFrame.Draw(face.rect, new Bgr(Color.AliceBlue), thickness);
 						}
 					}
@@ -223,10 +194,10 @@ namespace OpenCV_Testing
 							nextFrame.Draw(face.rect, new Bgr(Color.GreenYellow), thickness);
 						}
 					}
-					
-					
 
-					pictureBox1.Image = nextFrame.ToBitmap();
+
+
+					imageBox1.Image = nextFrame;
 
 				}
 			}
@@ -238,14 +209,15 @@ namespace OpenCV_Testing
 			cap = new Capture(5);
 			// adjust path to find your xml
 
-			haarRightEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_righteye_2splits.xml");
-			haarLeftEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_lefteye_2splits.xml");
+			//haarFace = new CascadeClassifier("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
+			haarFace = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
 			haarMouth = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_mouth.xml");
 			haarNose = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_nose.xml");
-			haarRightEar = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_rightear.xml");
 			haarLeftEar = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_leftear.xml");
+			haarRightEar = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_mcs_rightear.xml");
+			haarLeftEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_lefteye_2splits.xml");
+			haarRightEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_righteye_2splits.xml");
 			haarUpperBody = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_upperbody.xml");
-			haarFace = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
 			//	 "..\\..\\..\\..\\lib\\haarcascade_frontalface_alt2.xml");
 		}
 	}
