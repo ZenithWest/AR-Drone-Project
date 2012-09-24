@@ -65,13 +65,13 @@ namespace OpenCV_Testing
 
 					//Size minSize = new Size(nextFrame.Width / 8, nextFrame.Height / 8);
 					Size minSize = new Size(20,20);
-					Emgu.CV.CvEnum.HAAR_DETECTION_TYPE detection_type = HAAR_DETECTION_TYPE.FIND_BIGGEST_OBJECT | HAAR_DETECTION_TYPE.DO_CANNY_PRUNING;
+					Emgu.CV.CvEnum.HAAR_DETECTION_TYPE detection_type = HAAR_DETECTION_TYPE.DO_CANNY_PRUNING | HAAR_DETECTION_TYPE.FIND_BIGGEST_OBJECT;
 
 					if (checkBoxFaceValue)
 					{
 						
 						//faces = haarFace.DetectMultiScale(grayframe, 1.1, 8, minSize, Size.Empty);
-						faces = haarFace.Detect(grayframe, 1.1, 8, detection_type, minSize, Size.Empty);
+						faces = haarFace.Detect(grayframe, 1.1, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxMouthValue)
@@ -96,7 +96,7 @@ namespace OpenCV_Testing
 
 					if (checkBoxLeftEyeValue)
 					{
-						lefteye = haarLeftEye.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
+						lefteye = haarLeftEye.Detect(grayframe, 1.2, 4, detection_type, minSize, Size.Empty);
 					}
 
 					if (checkBoxRightEyeValue)
