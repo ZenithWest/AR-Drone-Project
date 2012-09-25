@@ -1,0 +1,15 @@
+﻿  lk.cpp
+lk.cpp(175): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+lk.cpp(175): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+lk.cpp(176): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+lk.cpp(176): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+lk.cpp(177): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+lk.cpp(177): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+lk.obj : warning LNK4006: _mexFunction already defined in warp.obj; second definition ignored
+linkagemex.obj : warning LNK4006: _mexFunction already defined in warp.obj; second definition ignored
+ii2.obj : warning LNK4006: _mexFunction already defined in warp.obj; second definition ignored
+ii.obj : warning LNK4006: _mexFunction already defined in warp.obj; second definition ignored
+fern.obj : warning LNK4006: _mexFunction already defined in warp.obj; second definition ignored
+distance.obj : warning LNK4006: _mexFunction already defined in warp.obj; second definition ignored
+bb_overlap.obj : warning LNK4006: _mexFunction already defined in warp.obj; second definition ignored
+  vs2008.vcxproj -> C:\Users\Zenith\Documents\GitHub\AR-Drone-Project\Object Tracking\zk00006-OpenTLD-8a6934d\mex\Release\vs2008.lib

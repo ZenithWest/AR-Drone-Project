@@ -21,9 +21,9 @@
 % Try to run independently in Matlab (requires Image Acquisition toolbox)
 % if it does not work, modify the first two lines
 
-%source.vid = videoinput('winvideo', 1);
+source.vid = videoinput('winvideo', 2);
 %source.vid = videoinput('winvideo', 1,'RGB24_320x240');
-source.vid = videoinput('winvideo', 1,'YUY2_320x240');
+%source.vid = videoinput('winvideo', 1,'YUY2_320x240');
 
 set(source.vid,'ReturnedColorSpace','grayscale');
 vidRes = get(source.vid, 'VideoResolution');

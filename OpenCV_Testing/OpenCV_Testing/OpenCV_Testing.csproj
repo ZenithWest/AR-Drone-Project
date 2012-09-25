@@ -76,16 +76,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\Form1.cs">
+    <Compile Include="Forms\FaceDetection.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\FaceDetection.Designer.cs">
+      <DependentUpon>FaceDetection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SURFFeatureExample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SURFFeatureExample.Designer.cs">
+      <DependentUpon>SURFFeatureExample.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FaceDetection.resx">
+      <DependentUpon>FaceDetection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SURFFeatureExample.resx">
+      <DependentUpon>SURFFeatureExample.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

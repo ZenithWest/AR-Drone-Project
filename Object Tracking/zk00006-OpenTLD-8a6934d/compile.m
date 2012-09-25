@@ -27,8 +27,9 @@ if ispc
     lib = [];
     for i = 1:length(files),
         lib = [lib ' ' libpath files(i).name];
-    end
+	 end
     
+	 mex -setup
     eval(['mex lk.cpp -O' include lib]);
     mex -O -c tld.cpp
     mex -O fern.cpp tld.obj
