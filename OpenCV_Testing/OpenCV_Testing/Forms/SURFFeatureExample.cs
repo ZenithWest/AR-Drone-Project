@@ -24,14 +24,36 @@ namespace OpenCV_Testing
 		public SURFFeatureExample()
 		{
 			InitializeComponent();
-			Image<Gray, byte> modelImage = new Image<Gray, byte>("C:\\Users\\Zenith\\Pictures\\Picture 43 2.png");
-			Image<Gray, byte> observedImage = new Image<Gray, byte>("C:\\Users\\Zenith\\Pictures\\cereals.jpg");
-			Image<Bgr, byte> resultImage;
+		}
+
+		private void buttonDrawMatches_Click(object sender, EventArgs e)
+		{
+			Image<Gray, byte> modelImage = new Image<Gray, byte>(textBoxModelImage.Text);
+			Image<Gray, byte> observedImage = new Image<Gray, byte>(textBoxObservedImage.Text);
 			long matchTime = 0;
-			resultImage = DrawMatches.Draw(modelImage, observedImage, out matchTime);
-			imageBox1.Image = modelImage;
-			imageBox2.Image = observedImage;
-			imageBox3.Image = resultImage;
+			imageBox3.Image = DrawMatches.Draw(this, modelImage, observedImage, out matchTime);
+			//imageBox1.Image = modelImage;
+			//imageBox2.Image = observedImage;
+			modelImage.Dispose();
+			observedImage.Dispose();
+		}
+
+		private void buttonBrowseModel_Click(object sender, EventArgs e)
+		{
+			DialogResult result = openFileDialog1.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				textBoxModelImage.Text = openFileDialog1.FileName;
+			}
+		}
+
+		private void buttonBrowseObserve_Click(object sender, EventArgs e)
+		{
+			DialogResult result = openFileDialog1.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				textBoxObservedImage.Text = openFileDialog1.FileName;
+			}
 		}
 	}
 
@@ -45,19 +67,19 @@ namespace OpenCV_Testing
 		/// <param name="observedImage">The observed image</param>
 		/// <param name="matchTime">The output total time for computing the homography matrix.</param>
 		/// <returns>The model image and observed image, the matched features and homography projection.</returns>
-		public static Image<Bgr, Byte> Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
+		public static Image<Bgr, Byte> Draw(SURFFeatureExample form, Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
 		{
 			Stopwatch watch;
 			HomographyMatrix homography = null;
 
-			SURFDetector surfCPU = new SURFDetector(100, true,3,3);
+			SURFDetector surfCPU = new SURFDetector((double)form.numericHessianThreshhold.Value, form.checkBoxExtendedFlag.Checked, (int)form.numericnOctaves.Value, (int)form.numericnOctavesLayers.Value);
 			VectorOfKeyPoint modelKeyPoints;
 			VectorOfKeyPoint observedKeyPoints;
 			Matrix<int> indices;
 
 			Matrix<byte> mask;
 			int k = 2;
-			double uniquenessThreshold = 0.9;
+			double uniquenessThreshold = (double)form.numericUniquenessThreshold.Value;
 			if (GpuInvoke.HasCuda)
 			{
 				GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.SURFParams, 0.01f);
@@ -149,7 +171,7 @@ namespace OpenCV_Testing
 
 			//Draw the matched keypoints
 			Image<Bgr, Byte> result = Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
-				indices, new Bgr(255, 255, 255), new Bgr(255, 255, 255), mask, Features2DToolbox.KeypointDrawType.DEFAULT);
+				indices, new Bgr(Color.Green), new Bgr(Color.Blue), mask, Features2DToolbox.KeypointDrawType.DEFAULT);
 
 			#region draw the projected region on the image
 			if (homography != null)
@@ -163,6 +185,7 @@ namespace OpenCV_Testing
 				homography.ProjectPoints(pts);
 
 				result.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Bgr(Color.Red), 5);
+				
 			}
 			#endregion
 

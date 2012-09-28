@@ -48,7 +48,7 @@ namespace ARDrone.Detection
 
         #endregion
 
-        private Features2DTracker featureTracker;
+		  private Features2DTracker<float> featureTracker;
         private SURFDetector surfaceParameters;
         private MemStorage octagonStorage;
         private Contour<Point> octagonContour;
@@ -74,7 +74,7 @@ namespace ARDrone.Detection
             using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>(Properties.Resources.SignModel))
             using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
             {
-                featureTracker = new Features2DTracker(surfaceParameters.DetectFeatures(redMask, null));
+					featureTracker = new Features2DTracker<float>(surfaceParameters.DetectFeatures(redMask, null));
             }
         }
 
@@ -148,8 +148,8 @@ namespace ARDrone.Detection
             Image<Gray, Byte> smoothedRedMask = GetRedPixelMask(smoothedImage);
             smoothedRedMask._Dilate(1);
             smoothedRedMask._Erode(1);
-            Image<Gray, Byte> cannyImage = smoothedRedMask.Erode(5).Dilate(5).Canny(new Gray(100), new Gray(50));
-
+            //Image<Gray, Byte> cannyImage = smoothedRedMask.Erode(5).Dilate(5).Canny(new Gray(100), new Gray(50));
+				Image<Gray, Byte> cannyImage = smoothedRedMask.Erode(5).Dilate(5).Canny(100, 50);
             return cannyImage;
         }
 
@@ -230,11 +230,11 @@ namespace ARDrone.Detection
         [HandleProcessCorruptedStateExceptions]
         private int GetMatchedFeatureCount(Image<Gray, Byte> contourImage)
         {
-            Features2DTracker.MatchedImageFeature[] matchedFeatures;
+            Features2DTracker<float>.MatchedImageFeature[] matchedFeatures;
             try
             {
                 //return 20;
-                ImageFeature[] features = surfaceParameters.DetectFeatures(contourImage, null);
+					ImageFeature<float>[] features = surfaceParameters.DetectFeatures(contourImage, null);
                 matchedFeatures = featureTracker.MatchFeature(features, 2);
             }
             catch (AccessViolationException)
@@ -248,7 +248,7 @@ namespace ARDrone.Detection
             }
 
             int matchedFeatureCount = 0;
-            foreach (Features2DTracker.MatchedImageFeature feature in matchedFeatures)
+				foreach (Features2DTracker<float>.MatchedImageFeature feature in matchedFeatures)
             {
                 if (feature.SimilarFeatures[0].Distance < 0.5)
                     matchedFeatureCount++;
