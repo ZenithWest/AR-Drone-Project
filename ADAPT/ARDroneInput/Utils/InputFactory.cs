@@ -17,41 +17,42 @@ using ARDrone.Input.InputMappings;
 
 namespace ARDrone.Input.Utils
 {
-    public class InputFactory
-    {
+	 public class InputFactory
+	 {
 
-        public static InputConfig CreateConfigFor(GenericInput input)
-        {
-            if (input is WiiMoteInput)
-                return new AxisDitheredInputConfig(((WiiMoteInput)input).AxisMappingNames);
-            else if (input is ButtonBasedInput)
-                return new ButtonBasedInputConfig();
-                //return new ButtonBasedInputConfig();
-            else if (input is SpeechInput)
-                return new SpeechBasedInputConfig();
+		  public static InputConfig CreateConfigFor(GenericInput input)
+		  {
+				//if (input is WiiMoteInput)
+				//    return new AxisDitheredInputConfig(((WiiMoteInput)input).AxisMappingNames);
+				//else
+					if (input is ButtonBasedInput)
+					 return new ButtonBasedInputConfig();
+					 //return new ButtonBasedInputConfig();
+				//else if (input is SpeechInput)
+				 //   return new SpeechBasedInputConfig();
 
-            throw new Exception("No suitable input config class found");
-        }
+				throw new Exception("No suitable input config class found");
+		  }
 
-        public static InputControl CloneInputControls(InputControl controls)
-        {
-            if (controls is ButtonBasedInputControl)
-                return new ButtonBasedInputControl(controls.Mappings);
-            else if (controls is SpeechBasedInputControl)
-                return new SpeechBasedInputControl(controls.Mappings);
+		  public static InputControl CloneInputControls(InputControl controls)
+		  {
+				if (controls is ButtonBasedInputControl)
+					 return new ButtonBasedInputControl(controls.Mappings);
+				//else if (controls is SpeechBasedInputControl)
+				//	 return new SpeechBasedInputControl(controls.Mappings);
 
 
-            throw new Exception("No suitable input control class found");
-        }
+				throw new Exception("No suitable input control class found");
+		  }
 
-        public static InputControl CreateInputControlFromMappings(Dictionary<String, String> mappings, InputMapping mappingToCreateFor)
-        {
-            if (mappingToCreateFor is ButtonBasedInputMapping)
-                return new ButtonBasedInputControl(mappings);
-            else if (mappingToCreateFor is SpeechBasedInputMapping)
-                return new SpeechBasedInputControl(mappings);
+		  public static InputControl CreateInputControlFromMappings(Dictionary<String, String> mappings, InputMapping mappingToCreateFor)
+		  {
+				if (mappingToCreateFor is ButtonBasedInputMapping)
+					 return new ButtonBasedInputControl(mappings);
+				//else if (mappingToCreateFor is SpeechBasedInputMapping)
+				//    return new SpeechBasedInputControl(mappings);
 
-            throw new Exception("No suitable input mapping class found to create the input controls for");
-        }
-    }
+				throw new Exception("No suitable input mapping class found to create the input controls for");
+		  }
+	 }
 }

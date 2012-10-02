@@ -47,15 +47,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WiimoteLib">
-      <HintPath>lib\WiimoteLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ButtonBasedInput.cs" />
@@ -63,14 +59,9 @@
     <Compile Include="DirectInputInput.cs" />
     <Compile Include="InputConfigs\ButtonBasedInputConfig.cs" />
     <Compile Include="InputConfigs\InputConfig.cs" />
-    <Compile Include="InputConfigs\SpeechBasedInputConfig.cs" />
-    <Compile Include="InputConfigs\AxisDitheredInputConfig.cs" />
     <Compile Include="InputControls\ButtonBasedInputControl.cs" />
-    <Compile Include="InputControls\SpeechBasedInputControl.cs" />
     <Compile Include="InputMappings\ButtonBasedInputMapping.cs" />
-    <Compile Include="InputMappings\SpeechBasedInputMapping.cs" />
     <Compile Include="Timing\TimeBasedCommand.cs" />
-    <Compile Include="Speech\SpeechRecognition.cs" />
     <Compile Include="Utils\Events.cs" />
     <Compile Include="GenericInput.cs" />
     <Compile Include="InputManager.cs" />
@@ -79,11 +70,8 @@
     <Compile Include="InputMappings\InputMapping.cs" />
     <Compile Include="Utils\InputFactory.cs" />
     <Compile Include="Utils\InputState.cs" />
-    <Compile Include="JoystickInput.cs" />
     <Compile Include="KeyboardInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpeechInput.cs" />
-    <Compile Include="WiiMoteInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ARDroneBasics\ARDroneBasics.csproj">

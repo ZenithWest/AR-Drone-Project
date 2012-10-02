@@ -122,7 +122,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -137,10 +139,6 @@
     <ProjectReference Include="..\ARDroneControlLibrary\ARDroneControlLibrary.csproj">
       <Project>{92277DFC-0D55-4998-8ACF-B01F3A7FB508}</Project>
       <Name>ARDroneControlLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ARDroneDetection\ARDroneDetection.csproj">
-      <Project>{23C3D4AC-F987-4A68-BB43-47027337D81B}</Project>
-      <Name>ARDroneDetection</Name>
     </ProjectReference>
     <ProjectReference Include="..\ARDroneInput\ARDroneInput.csproj">
       <Project>{104C0B70-4D35-4090-942A-9223222D0E6C}</Project>
@@ -168,6 +166,51 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxmultipleaxLib">
+      <Guid>{98DE28B6-6CD3-4E08-B9FA-3D1DB43F1D2F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="AxwrapperaxLib">
+      <Guid>{3B756301-0075-4E40-8BE8-5A81DE2426B7}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="multipleaxLib">
+      <Guid>{98DE28B6-6CD3-4E08-B9FA-3D1DB43F1D2F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="wrapperaxLib">
+      <Guid>{3B756301-0075-4E40-8BE8-5A81DE2426B7}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

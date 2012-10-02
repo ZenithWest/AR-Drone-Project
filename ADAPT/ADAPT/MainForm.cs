@@ -15,7 +15,6 @@ using ARDrone.Control;
 using ARDrone.Control.Commands;
 using ARDrone.Control.Data;
 using ARDrone.Control.Events;
-using ARDrone.Detection;
 using ARDrone.Input;
 using ARDrone.Input.Utils;
 
@@ -28,25 +27,12 @@ namespace ADAPT
 		private InputManager inputManager = null;
 		private DroneControl droneControl = null;
 
-		//private SignDetector signDetector = null;
-		//private CourseAdvisor courseAdvisor = null;
-
-		//private int minValue = 12;
-		//private int maxValue = 160;
-
-		//private bool lastValueForSpecialAction = false;
-		//private bool followingDrone = false;
-
-		//private CourseList course = null;
-
 		public MainForm()
 		{
 			InitializeComponent();
 			InitializeInputManager();
 
 			InitializeDroneControl();
-
-			//InitDetection();
 		}
 
 		public void InitializeInputManager()
@@ -65,22 +51,6 @@ namespace ADAPT
 			droneControl.Error += droneControl_Error_Async;
 			droneControl.ConnectionStateChanged += droneControl_ConnectionStateChanged_Async;
 		}
-		/*
-		public void InitDetection()
-		{
-			signDetector = new SignDetector();
-			courseAdvisor = new CourseAdvisor(droneControl.BottomCameraPictureSize, droneControl.BottomCameraFieldOfViewDegrees);
-			course = new CourseList();
-
-			InitDetectionSliders();
-		}
-
-		public void InitDetectionSliders()
-		{
-			signDetector.invertChannel = true;
-			signDetector.channelSliderMin = minValue;
-			signDetector.channelSliderMax = maxValue;
-		}*/
 
 		private void AddInputListeners()
 		{
@@ -201,7 +171,7 @@ namespace ADAPT
 
 		private void UpdateUISync(String message)
 		{
-			//textBoxOutput.AppendText(message + "\r\n");
+			textBoxOutput.AppendText(message + "\r\n");
 
 			UpdateInteractiveElements();
 		}
@@ -209,7 +179,7 @@ namespace ADAPT
 		private void UpdateInteractiveElements()
 		{
 			inputManager.SetFlags(droneControl.IsConnected, droneControl.IsEmergency, droneControl.IsFlying, droneControl.IsHovering);
-			/*
+			
 			if (!droneControl.IsConnected) { buttonConnect.Enabled = true; } else { buttonConnect.Enabled = false; }
 			if (droneControl.IsConnected) { buttonShutdown.Enabled = true; } else { buttonShutdown.Enabled = false; }
 
@@ -219,7 +189,7 @@ namespace ADAPT
 			if (droneControl.CanSendFlatTrim) { buttonCommandFlatTrim.Enabled = true; } else { buttonCommandFlatTrim.Enabled = false; }
 
 			if (!droneControl.IsFlying) { buttonCommandTakeoff.Text = "Take off"; } else { buttonCommandTakeoff.Text = "Land"; }
-			if (!droneControl.IsHovering) { buttonCommandHover.Text = "Start hover"; } else { buttonCommandHover.Text = "Stop hover"; }*/
+			if (!droneControl.IsHovering) { buttonCommandHover.Text = "Start hover"; } else { buttonCommandHover.Text = "Stop hover"; }
 		}
 
 		  private void UpdateStatus()
@@ -348,7 +318,7 @@ namespace ADAPT
 		{
 			if (image != null)
 			{
-				//pictureBoxVideo.Image = image;
+				pictureBoxVideo.Image = image;
 			}
 		}
 
