@@ -16,7 +16,6 @@ using System.Windows.Forms;
 using Microsoft.DirectX.DirectInput;
 using System.IO;
 using System.Xml.Serialization;
-using WiimoteLib;
 using ARDrone.Input.Utils;
 
 namespace ARDrone.Input
