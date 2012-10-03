@@ -35,6 +35,10 @@
 			this.buttonConnect = new System.Windows.Forms.Button();
 			this.buttonShutdown = new System.Windows.Forms.Button();
 			this.groupBoxStatus = new System.Windows.Forms.GroupBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.labelStatusRoll = new System.Windows.Forms.Label();
 			this.labelStatusRollInfo = new System.Windows.Forms.Label();
 			this.labelStatusPitch = new System.Windows.Forms.Label();
@@ -59,10 +63,6 @@
 			this.buttonCommandTakeScreenshot = new System.Windows.Forms.Button();
 			this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
 			this.buttonCommandChangeCamera = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
 			this.groupBoxStatus.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
 			this.SuspendLayout();
@@ -96,6 +96,7 @@
 			this.buttonConnect.TabIndex = 56;
 			this.buttonConnect.Text = "Startup";
 			this.buttonConnect.UseVisualStyleBackColor = true;
+			this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
 			// 
 			// buttonShutdown
 			// 
@@ -105,6 +106,7 @@
 			this.buttonShutdown.TabIndex = 57;
 			this.buttonShutdown.Text = "Shutdown";
 			this.buttonShutdown.UseVisualStyleBackColor = true;
+			this.buttonShutdown.Click += new System.EventHandler(this.buttonShutdown_Click);
 			// 
 			// groupBoxStatus
 			// 
@@ -134,6 +136,42 @@
 			this.groupBoxStatus.TabIndex = 55;
 			this.groupBoxStatus.TabStop = false;
 			this.groupBoxStatus.Text = "Status";
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(122, 214);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(40, 13);
+			this.label3.TabIndex = 52;
+			this.label3.Text = "+0.000";
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(14, 214);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(26, 13);
+			this.label4.TabIndex = 51;
+			this.label4.Text = "Gaz";
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(122, 195);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(40, 13);
+			this.label1.TabIndex = 50;
+			this.label1.Text = "+0.000";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(14, 195);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(28, 13);
+			this.label2.TabIndex = 49;
+			this.label2.Text = "Yaw";
 			// 
 			// labelStatusRoll
 			// 
@@ -299,6 +337,7 @@
 			this.buttonCommandEmergency.TabIndex = 50;
 			this.buttonCommandEmergency.Text = "Emergency";
 			this.buttonCommandEmergency.UseVisualStyleBackColor = true;
+			this.buttonCommandEmergency.Click += new System.EventHandler(this.buttonCommandHover_Click);
 			// 
 			// buttonCommandHover
 			// 
@@ -308,6 +347,7 @@
 			this.buttonCommandHover.TabIndex = 54;
 			this.buttonCommandHover.Text = "Hover";
 			this.buttonCommandHover.UseVisualStyleBackColor = true;
+			this.buttonCommandHover.Click += new System.EventHandler(this.buttonCommandHover_Click);
 			// 
 			// buttonCommandTakeoff
 			// 
@@ -317,6 +357,7 @@
 			this.buttonCommandTakeoff.TabIndex = 52;
 			this.buttonCommandTakeoff.Text = "Take off";
 			this.buttonCommandTakeoff.UseVisualStyleBackColor = true;
+			this.buttonCommandTakeoff.Click += new System.EventHandler(this.buttonCommandTakeoff_Click);
 			// 
 			// buttonCommandFlatTrim
 			// 
@@ -326,6 +367,7 @@
 			this.buttonCommandFlatTrim.TabIndex = 53;
 			this.buttonCommandFlatTrim.Text = "Flat trim";
 			this.buttonCommandFlatTrim.UseVisualStyleBackColor = true;
+			this.buttonCommandFlatTrim.Click += new System.EventHandler(this.buttonCommandFlatTrim_Click);
 			// 
 			// buttonCommandTakeScreenshot
 			// 
@@ -335,6 +377,7 @@
 			this.buttonCommandTakeScreenshot.TabIndex = 51;
 			this.buttonCommandTakeScreenshot.Text = "Take Screenshot";
 			this.buttonCommandTakeScreenshot.UseVisualStyleBackColor = true;
+			this.buttonCommandTakeScreenshot.Click += new System.EventHandler(this.buttonCommandTakeScreenshot_Click);
 			// 
 			// pictureBoxVideo
 			// 
@@ -353,42 +396,6 @@
 			this.buttonCommandChangeCamera.TabIndex = 59;
 			this.buttonCommandChangeCamera.Text = "Change camera";
 			this.buttonCommandChangeCamera.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(122, 195);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(40, 13);
-			this.label1.TabIndex = 50;
-			this.label1.Text = "+0.000";
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(14, 195);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(28, 13);
-			this.label2.TabIndex = 49;
-			this.label2.Text = "Yaw";
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(122, 214);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(40, 13);
-			this.label3.TabIndex = 52;
-			this.label3.Text = "+0.000";
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(14, 214);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(26, 13);
-			this.label4.TabIndex = 51;
-			this.label4.Text = "Gaz";
 			// 
 			// MainForm
 			// 
