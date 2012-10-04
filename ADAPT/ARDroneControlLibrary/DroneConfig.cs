@@ -52,8 +52,8 @@ namespace ARDrone.Control
             droneConfigInitialized = false;
 
             standardOwnIpAddress = "192.168.1.2";
-            droneIpAddress = "192.168.1.1";
-            droneNetworkIdentifierStart = "ardrone_";
+            droneIpAddress = "10.200.240.7";
+            droneNetworkIdentifierStart = "tamulink-guest";
 
             videoPort = 5555;
             navigationPort = 5554;

@@ -136,6 +136,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ARDroneBasics\ARDroneBasics.csproj">
+      <Project>{30FB7E9C-2668-4303-BF0D-1618DD30B8E5}</Project>
+      <Name>ARDroneBasics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ARDroneCapture\ARDroneCapture.csproj">
+      <Project>{DF44B163-A438-4DCC-ADB0-5CDB08803A0F}</Project>
+      <Name>ARDroneCapture</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ARDroneControlLibrary\ARDroneControlLibrary.csproj">
       <Project>{92277DFC-0D55-4998-8ACF-B01F3A7FB508}</Project>
       <Name>ARDroneControlLibrary</Name>
