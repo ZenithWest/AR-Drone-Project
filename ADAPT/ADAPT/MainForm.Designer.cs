@@ -537,6 +537,7 @@
 			this.buttonSnapshot.TabIndex = 62;
 			this.buttonSnapshot.Text = "Take a Snapshot";
 			this.buttonSnapshot.UseVisualStyleBackColor = true;
+			this.buttonSnapshot.Click += new System.EventHandler(this.buttonSnapshot_Click);
 			// 
 			// buttonVideoEnd
 			// 
