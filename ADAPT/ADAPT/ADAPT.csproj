@@ -98,6 +98,24 @@
     <Compile Include="DirectionControl.designer.cs">
       <DependentUpon>DirectionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DroneConfigurationOutputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DroneConfigurationOutputForm.Designer.cs">
+      <DependentUpon>DroneConfigurationOutputForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GeneralConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GeneralConfigForm.Designer.cs">
+      <DependentUpon>GeneralConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InputConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InputConfigForm.Designer.cs">
+      <DependentUpon>InputConfigForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +126,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="DirectionControl.resx">
       <DependentUpon>DirectionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DroneConfigurationOutputForm.resx">
+      <DependentUpon>DroneConfigurationOutputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GeneralConfigForm.resx">
+      <DependentUpon>GeneralConfigForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -136,6 +160,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ARDroneBasics\ARDroneBasics.csproj">
+      <Project>{30FB7E9C-2668-4303-BF0D-1618DD30B8E5}</Project>
+      <Name>ARDroneBasics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ARDroneCapture\ARDroneCapture.csproj">
       <Project>{DF44B163-A438-4DCC-ADB0-5CDB08803A0F}</Project>
       <Name>ARDroneCapture</Name>
@@ -172,6 +200,31 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="AxmultipleaxLib">
+      <Guid>{98DE28B6-6CD3-4E08-B9FA-3D1DB43F1D2F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="AxwrapperaxLib">
+      <Guid>{3B756301-0075-4E40-8BE8-5A81DE2426B7}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="multipleaxLib">
+      <Guid>{98DE28B6-6CD3-4E08-B9FA-3D1DB43F1D2F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="stdole">
       <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>2</VersionMajor>
@@ -181,105 +234,19 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\GlobalLib\x86\cublas32_42_9.dll">
-      <Link>cublas32_42_9.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\cudart32_42_9.dll">
-      <Link>cudart32_42_9.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\cufft32_42_9.dll">
-      <Link>cufft32_42_9.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\cvextern.dll">
-      <Link>cvextern.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\npp32_42_9.dll">
-      <Link>npp32_42_9.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\nvcuda.dll">
-      <Link>nvcuda.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_calib3d242.dll">
-      <Link>opencv_calib3d242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_contrib242.dll">
-      <Link>opencv_contrib242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_core242.dll">
-      <Link>opencv_core242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_features2d242.dll">
-      <Link>opencv_features2d242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_ffmpeg242.dll">
-      <Link>opencv_ffmpeg242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_flann242.dll">
-      <Link>opencv_flann242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_gpu242.dll">
-      <Link>opencv_gpu242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_highgui242.dll">
-      <Link>opencv_highgui242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_imgproc242.dll">
-      <Link>opencv_imgproc242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_legacy242.dll">
-      <Link>opencv_legacy242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_ml242.dll">
-      <Link>opencv_ml242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_nonfree242.dll">
-      <Link>opencv_nonfree242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_objdetect242.dll">
-      <Link>opencv_objdetect242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_photo242.dll">
-      <Link>opencv_photo242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_stitching242.dll">
-      <Link>opencv_stitching242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_video242.dll">
-      <Link>opencv_video242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\GlobalLib\x86\opencv_videostab242.dll">
-      <Link>opencv_videostab242.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <COMReference Include="wrapperaxLib">
+      <Guid>{3B756301-0075-4E40-8BE8-5A81DE2426B7}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy  "$(TargetDir)..\..\..\GlobalLib\x86" "$(TargetDir)" /i /y /d</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
