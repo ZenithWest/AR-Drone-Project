@@ -127,49 +127,28 @@ namespace ARDrone.NavData
 		public void saveToCVS(string fileName)
 		{
 			string cvs = "";
-			cvs += "TimeStamp,";
-			cvs += "Time_ms,";
-			cvs += "DataPoint,";
-			cvs += "Roll,";
-			cvs += "Pitch,";
-			cvs += "Yaw,";
-			cvs += "Gaz,";
-			cvs += "CameraSwap,";
-			cvs += "Emergency,";
-			cvs += "FlatTrim,";
-			cvs += "Hover,";
-			cvs += "Land,";
-			cvs += "TakeOff,";
-			cvs += "Theta,";
-			cvs += "Phi,";
-			cvs += "Psi,";
-			cvs += "VX,";
-			cvs += "VY,";
-			cvs += "VZ,";
-			cvs += "Altitude,";
-			cvs += "BatteryLevel,\n";
+
+			foreach (XElement dataGroup in xNavData.Element("Data").Elements())
+			{
+				foreach (XElement dataGroupName in dataGroup.Elements())
+				{
+					cvs += dataGroupName.Name + ",";
+				}
+			}
+			cvs.TrimEnd(',');
+			cvs += "\n";
+
 			foreach (XElement dataPoint in xNavData.Elements())
 			{
-				cvs += dataPoint.Element("Info").Element("TimeStamp").Value + ",";
-				cvs += dataPoint.Element("Info").Element("Time_ms").Value + ",";
-				cvs += dataPoint.Element("Info").Element("DataPoint").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("Roll").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("Pitch").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("Yaw").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("Gaz").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("CameraSwap").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("Emergency").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("FlatTrim").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("Hover").Value + ",";
-				cvs += dataPoint.Element("InputState").Element("TakeOff").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("Theta").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("Phi").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("Psi").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("VX").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("VY").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("VZ").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("Altitude").Value + ",";
-				cvs += dataPoint.Element("DroneData").Element("BatteryLevel").Value + "\n";
+				foreach (XElement dataGroup in dataPoint.Elements())
+				{
+					foreach (XElement dataItem in dataGroup.Elements())
+					{
+						cvs += dataItem.Value + ",";
+					}
+				}
+				cvs.TrimEnd(',');
+				cvs += "\n";
 			}
 
 			using (StreamWriter outfile = new StreamWriter(fileName + ".csv"))

@@ -66,6 +66,12 @@
 			this.buttonCommandChangeCamera = new System.Windows.Forms.Button();
 			this.groupBoxInput = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.labelStatusVXInfo = new System.Windows.Forms.Label();
+			this.labelStatusVYInfo = new System.Windows.Forms.Label();
+			this.labelStatusVZInfo = new System.Windows.Forms.Label();
+			this.labelStatusVX = new System.Windows.Forms.Label();
+			this.labelStatusVY = new System.Windows.Forms.Label();
+			this.labelStatusVZ = new System.Windows.Forms.Label();
 			this.groupBoxVideoSnapshots = new System.Windows.Forms.GroupBox();
 			this.labelVideoStatus = new System.Windows.Forms.Label();
 			this.buttonSnapshot = new System.Windows.Forms.Button();
@@ -76,17 +82,11 @@
 			this.buttonInputSettings = new System.Windows.Forms.Button();
 			this.buttonGeneralSettings = new System.Windows.Forms.Button();
 			this.labelCurrentBooleanInput = new System.Windows.Forms.Label();
-			this.labelStatusVXInfo = new System.Windows.Forms.Label();
-			this.labelStatusVYInfo = new System.Windows.Forms.Label();
-			this.labelStatusVZInfo = new System.Windows.Forms.Label();
-			this.labelStatusVX = new System.Windows.Forms.Label();
-			this.labelStatusVY = new System.Windows.Forms.Label();
-			this.labelStatusVZ = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.buttonNavData = new System.Windows.Forms.Button();
-			this.buttonSaveNavData = new System.Windows.Forms.Button();
-			this.navDataInterval = new System.Windows.Forms.NumericUpDown();
 			this.label1 = new System.Windows.Forms.Label();
+			this.navDataInterval = new System.Windows.Forms.NumericUpDown();
+			this.buttonSaveNavData = new System.Windows.Forms.Button();
+			this.buttonNavData = new System.Windows.Forms.Button();
 			this.groupBoxStatus.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.imageVideo)).BeginInit();
@@ -528,6 +528,66 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(178, 156);
 			this.tableLayoutPanel2.TabIndex = 61;
 			// 
+			// labelStatusVXInfo
+			// 
+			this.labelStatusVXInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelStatusVXInfo.AutoSize = true;
+			this.labelStatusVXInfo.Location = new System.Drawing.Point(3, 99);
+			this.labelStatusVXInfo.Name = "labelStatusVXInfo";
+			this.labelStatusVXInfo.Size = new System.Drawing.Size(21, 13);
+			this.labelStatusVXInfo.TabIndex = 53;
+			this.labelStatusVXInfo.Text = "VX";
+			// 
+			// labelStatusVYInfo
+			// 
+			this.labelStatusVYInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelStatusVYInfo.AutoSize = true;
+			this.labelStatusVYInfo.Location = new System.Drawing.Point(3, 119);
+			this.labelStatusVYInfo.Name = "labelStatusVYInfo";
+			this.labelStatusVYInfo.Size = new System.Drawing.Size(21, 13);
+			this.labelStatusVYInfo.TabIndex = 54;
+			this.labelStatusVYInfo.Text = "VY";
+			// 
+			// labelStatusVZInfo
+			// 
+			this.labelStatusVZInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelStatusVZInfo.AutoSize = true;
+			this.labelStatusVZInfo.Location = new System.Drawing.Point(3, 139);
+			this.labelStatusVZInfo.Name = "labelStatusVZInfo";
+			this.labelStatusVZInfo.Size = new System.Drawing.Size(21, 13);
+			this.labelStatusVZInfo.TabIndex = 55;
+			this.labelStatusVZInfo.Text = "VZ";
+			// 
+			// labelStatusVX
+			// 
+			this.labelStatusVX.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelStatusVX.AutoSize = true;
+			this.labelStatusVX.Location = new System.Drawing.Point(90, 99);
+			this.labelStatusVX.Name = "labelStatusVX";
+			this.labelStatusVX.Size = new System.Drawing.Size(40, 13);
+			this.labelStatusVX.TabIndex = 56;
+			this.labelStatusVX.Text = "+0.000";
+			// 
+			// labelStatusVY
+			// 
+			this.labelStatusVY.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelStatusVY.AutoSize = true;
+			this.labelStatusVY.Location = new System.Drawing.Point(90, 119);
+			this.labelStatusVY.Name = "labelStatusVY";
+			this.labelStatusVY.Size = new System.Drawing.Size(40, 13);
+			this.labelStatusVY.TabIndex = 57;
+			this.labelStatusVY.Text = "+0.000";
+			// 
+			// labelStatusVZ
+			// 
+			this.labelStatusVZ.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelStatusVZ.AutoSize = true;
+			this.labelStatusVZ.Location = new System.Drawing.Point(90, 139);
+			this.labelStatusVZ.Name = "labelStatusVZ";
+			this.labelStatusVZ.Size = new System.Drawing.Size(40, 13);
+			this.labelStatusVZ.TabIndex = 58;
+			this.labelStatusVZ.Text = "+0.000";
+			// 
 			// groupBoxVideoSnapshots
 			// 
 			this.groupBoxVideoSnapshots.Controls.Add(this.labelVideoStatus);
@@ -630,66 +690,6 @@
 			this.labelCurrentBooleanInput.TabIndex = 65;
 			this.labelCurrentBooleanInput.Text = "No button";
 			// 
-			// labelStatusVXInfo
-			// 
-			this.labelStatusVXInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelStatusVXInfo.AutoSize = true;
-			this.labelStatusVXInfo.Location = new System.Drawing.Point(3, 99);
-			this.labelStatusVXInfo.Name = "labelStatusVXInfo";
-			this.labelStatusVXInfo.Size = new System.Drawing.Size(21, 13);
-			this.labelStatusVXInfo.TabIndex = 53;
-			this.labelStatusVXInfo.Text = "VX";
-			// 
-			// labelStatusVYInfo
-			// 
-			this.labelStatusVYInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelStatusVYInfo.AutoSize = true;
-			this.labelStatusVYInfo.Location = new System.Drawing.Point(3, 119);
-			this.labelStatusVYInfo.Name = "labelStatusVYInfo";
-			this.labelStatusVYInfo.Size = new System.Drawing.Size(21, 13);
-			this.labelStatusVYInfo.TabIndex = 54;
-			this.labelStatusVYInfo.Text = "VY";
-			// 
-			// labelStatusVZInfo
-			// 
-			this.labelStatusVZInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelStatusVZInfo.AutoSize = true;
-			this.labelStatusVZInfo.Location = new System.Drawing.Point(3, 139);
-			this.labelStatusVZInfo.Name = "labelStatusVZInfo";
-			this.labelStatusVZInfo.Size = new System.Drawing.Size(21, 13);
-			this.labelStatusVZInfo.TabIndex = 55;
-			this.labelStatusVZInfo.Text = "VZ";
-			// 
-			// labelStatusVX
-			// 
-			this.labelStatusVX.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelStatusVX.AutoSize = true;
-			this.labelStatusVX.Location = new System.Drawing.Point(90, 99);
-			this.labelStatusVX.Name = "labelStatusVX";
-			this.labelStatusVX.Size = new System.Drawing.Size(40, 13);
-			this.labelStatusVX.TabIndex = 56;
-			this.labelStatusVX.Text = "+0.000";
-			// 
-			// labelStatusVY
-			// 
-			this.labelStatusVY.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelStatusVY.AutoSize = true;
-			this.labelStatusVY.Location = new System.Drawing.Point(90, 119);
-			this.labelStatusVY.Name = "labelStatusVY";
-			this.labelStatusVY.Size = new System.Drawing.Size(40, 13);
-			this.labelStatusVY.TabIndex = 57;
-			this.labelStatusVY.Text = "+0.000";
-			// 
-			// labelStatusVZ
-			// 
-			this.labelStatusVZ.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelStatusVZ.AutoSize = true;
-			this.labelStatusVZ.Location = new System.Drawing.Point(90, 139);
-			this.labelStatusVZ.Name = "labelStatusVZ";
-			this.labelStatusVZ.Size = new System.Drawing.Size(40, 13);
-			this.labelStatusVZ.TabIndex = 58;
-			this.labelStatusVZ.Text = "+0.000";
-			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.label1);
@@ -703,25 +703,14 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Navigational Data";
 			// 
-			// buttonNavData
+			// label1
 			// 
-			this.buttonNavData.Location = new System.Drawing.Point(9, 16);
-			this.buttonNavData.Name = "buttonNavData";
-			this.buttonNavData.Size = new System.Drawing.Size(169, 23);
-			this.buttonNavData.TabIndex = 0;
-			this.buttonNavData.Text = "Start Recording";
-			this.buttonNavData.UseVisualStyleBackColor = true;
-			this.buttonNavData.Click += new System.EventHandler(this.buttonNavData_Click);
-			// 
-			// buttonSaveNavData
-			// 
-			this.buttonSaveNavData.Location = new System.Drawing.Point(9, 45);
-			this.buttonSaveNavData.Name = "buttonSaveNavData";
-			this.buttonSaveNavData.Size = new System.Drawing.Size(81, 23);
-			this.buttonSaveNavData.TabIndex = 1;
-			this.buttonSaveNavData.Text = "Save Data";
-			this.buttonSaveNavData.UseVisualStyleBackColor = true;
-			this.buttonSaveNavData.Click += new System.EventHandler(this.buttonSaveNavData_Click);
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(158, 50);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(20, 13);
+			this.label1.TabIndex = 3;
+			this.label1.Text = "ms";
 			// 
 			// navDataInterval
 			// 
@@ -742,20 +731,31 @@
             0,
             0});
 			// 
-			// label1
+			// buttonSaveNavData
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(158, 50);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(20, 13);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "ms";
+			this.buttonSaveNavData.Location = new System.Drawing.Point(9, 45);
+			this.buttonSaveNavData.Name = "buttonSaveNavData";
+			this.buttonSaveNavData.Size = new System.Drawing.Size(81, 23);
+			this.buttonSaveNavData.TabIndex = 1;
+			this.buttonSaveNavData.Text = "Save Data";
+			this.buttonSaveNavData.UseVisualStyleBackColor = true;
+			this.buttonSaveNavData.Click += new System.EventHandler(this.buttonSaveNavData_Click);
+			// 
+			// buttonNavData
+			// 
+			this.buttonNavData.Location = new System.Drawing.Point(9, 16);
+			this.buttonNavData.Name = "buttonNavData";
+			this.buttonNavData.Size = new System.Drawing.Size(169, 23);
+			this.buttonNavData.TabIndex = 0;
+			this.buttonNavData.Text = "Start Recording";
+			this.buttonNavData.UseVisualStyleBackColor = true;
+			this.buttonNavData.Click += new System.EventHandler(this.buttonNavData_Click);
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(848, 730);
+			this.ClientSize = new System.Drawing.Size(851, 730);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelCurrentBooleanInput);
 			this.Controls.Add(this.buttonGeneralSettings);
