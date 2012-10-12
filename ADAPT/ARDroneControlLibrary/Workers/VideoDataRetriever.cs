@@ -76,7 +76,7 @@ namespace ARDrone.Control.Workers
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Socket exception occured: " + e.ErrorCode);
+                    Console.WriteLine("Socket exception occurred: " + e.ErrorCode);
                     SendMessage(1);
                 }
             }

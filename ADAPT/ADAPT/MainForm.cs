@@ -22,8 +22,9 @@ using ARDrone.Input;
 using ARDrone.Input.Utils;
 using ARDrone.Input.InputMappings;
 using ARDrone.Capture;
+using ARDrone.NavData;
 
-namespace ADAPT
+namespace ARDrone.UI
 {
 	//class Utility
 	//{
@@ -62,6 +63,7 @@ namespace ADAPT
 		private SnapshotRecorder snapshotRecorder;
 
 		private InputManager inputManager = null;
+
 		private DroneControl droneControl = null;
 		private DroneConfig currentDroneConfig;
 
@@ -73,6 +75,8 @@ namespace ADAPT
 		private Dictionary<String, DateTime> booleanInputFadeout;
 		String snapshotFilePath = string.Empty;
 		int snapshotFileCount = 0;
+
+		NavDataRecorder navDataRecorder;
 		#endregion
 
 		#region MainForm
@@ -85,6 +89,8 @@ namespace ADAPT
 			InitializeTimers();
 			InitializeInputManager();
 			InitializeRecorders();
+
+			navDataRecorder = new NavDataRecorder(droneControl, inputManager, (double)navDataInterval.Value);
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -153,9 +159,8 @@ namespace ADAPT
 		{
 
 			inputManager = new ARDrone.Input.InputManager(this.Handle);
-
 			inputManager.SwitchInputMode(ARDrone.Input.InputManager.InputMode.ControlInput);
-
+			
 			inputManager.NewInputState += inputManager_NewInputState;
 			inputManager.NewInputDevice += inputManager_NewInputDevice;
 			inputManager.InputDeviceLost += inputManager_InputDeviceLost;
@@ -281,39 +286,56 @@ namespace ADAPT
 				droneControl.SendCommand(flightMoveCommand);
 		}
 
-		private void Snapshot()
+		private void TakeSnapshot()
 		{
 			//DroneData data = droneControl.NavigationData;
 			//pictureBoxMask.Image.Save(@"D:\bla.png");
 
-			//if (snapshotFilePath == string.Empty)
-			//{
-			//   snapshotFilePath = ShowFileDialog(".png", "PNG files (.png)|*.png");
-			//   if (snapshotFilePath == null) { return; }
-			//}
+			if (snapshotFilePath == string.Empty)
+			{
+				snapshotFilePath = ShowFileDialog(".png", "PNG files (.png)|*.png");
+				if (snapshotFilePath == null) { return; }
+			}
 
-			//System.Drawing.Bitmap currentImage = (System.Drawing.Bitmap)droneControl.BitmapImage.Clone();
-			//snapshotRecorder.SaveSnapshot(currentImage, snapshotFilePath.Replace(".png", "_" + snapshotFileCount.ToString() + ".png"));
-			//UpdateUISync("Saved image #" + snapshotFileCount.ToString());
-			//snapshotFileCount++;
+			System.Drawing.Bitmap currentImage = (System.Drawing.Bitmap)droneControl.BitmapImage.Clone();
+			snapshotRecorder.SaveSnapshot(currentImage, snapshotFilePath.Replace(".png", String.Format("_{0}.png", snapshotFileCount)));
+			UpdateUISync("Saved image #" + snapshotFileCount.ToString());
+			snapshotFileCount++;
 		}
 
 		private void SendDroneCommands(InputState inputState)
 		{
+			if (inputState.CameraSwap)
+			{
+				ChangeCamera();
+			}
+
 			if (inputState.TakeOff && droneControl.CanTakeoff)
+			{
 				Takeoff();
+			}
 			else if (inputState.Land && droneControl.CanLand)
+			{
 				Land();
+			}
 
 			if (inputState.Hover && droneControl.CanEnterHoverMode)
+			{
 				EnterHoverMode();
+			}
 			else if (inputState.Hover && droneControl.CanLeaveHoverMode)
+			{
 				LeaveHoverMode();
+			}
 
 			if (inputState.Emergency)
+			{
 				Emergency();
+			}
 			else if (inputState.FlatTrim)
+			{
 				FlatTrim();
+			}
 			/*
 			if (SpecialActionChanged(inputState.SpecialAction))
 			{
@@ -344,7 +366,7 @@ namespace ADAPT
 		private void UpdateUISync(String message)
 		{
 			textBoxOutput.AppendText(message + "\r\n");
-
+			//textBoxOutput.ScrollToCaret();
 			UpdateInteractiveElements();
 		}
 
@@ -359,33 +381,103 @@ namespace ADAPT
 			if (droneControl.CanEnterHoverMode || droneControl.CanLeaveHoverMode) { buttonCommandHover.Enabled = true; } else { buttonCommandHover.Enabled = false; }
 			if (droneControl.CanCallEmergency) { buttonCommandEmergency.Enabled = true; } else { buttonCommandEmergency.Enabled = false; }
 			if (droneControl.CanSendFlatTrim) { buttonCommandFlatTrim.Enabled = true; } else { buttonCommandFlatTrim.Enabled = false; }
+			if (droneControl.IsCommandPossible(new SwitchCameraCommand(DroneCameraMode.NextMode)) && !videoRecorder.IsVideoCaptureRunning && !videoRecorder.IsCompressionRunning) { buttonCommandChangeCamera.Enabled = true; } else { buttonCommandChangeCamera.Enabled = false; }
 
 			if (!droneControl.IsFlying) { buttonCommandTakeoff.Text = "Take off"; } else { buttonCommandTakeoff.Text = "Land"; }
 			if (!droneControl.IsHovering) { buttonCommandHover.Text = "Start hover"; } else { buttonCommandHover.Text = "Stop hover"; }
+
+			if (droneControl.IsConnected) { buttonSnapshot.Enabled = true; } else { buttonSnapshot.Enabled = false; }
+			if (!droneControl.IsConnected || videoRecorder.IsVideoCaptureRunning || videoRecorder.IsCompressionRunning) { checkBoxVideoCompress.Enabled = false; } else { checkBoxVideoCompress.Enabled = true; }
+			if (CanCaptureVideo && !videoRecorder.IsVideoCaptureRunning && !videoRecorder.IsCompressionRunning) { buttonVideoStart.Enabled = true; } else { buttonVideoStart.Enabled = false; }
+			if (CanCaptureVideo && videoRecorder.IsVideoCaptureRunning && !videoRecorder.IsCompressionRunning) { buttonVideoEnd.Enabled = true; } else { buttonVideoEnd.Enabled = false; }
+
+			if (droneControl.IsConnected && !droneControl.IsFlying) { buttonShowConfig.Enabled = true; } else { buttonShowConfig.Enabled = false; }
+			if (!droneControl.IsConnected && !droneControl.IsConnecting) { buttonGeneralSettings.Enabled = true; } else { buttonGeneralSettings.Enabled = false; }
+			if (!droneControl.IsConnected && !droneControl.IsConnecting) { buttonInputSettings.Enabled = true; } else { buttonInputSettings.Enabled = false; }
+
+			if (videoRecorder.IsCompressionRunning) { labelVideoStatus.Text = "Compressing"; }
+			else if (videoRecorder.IsVideoCaptureRunning) { labelVideoStatus.Text = "Recording"; }
+			else { labelVideoStatus.Text = "Idling ..."; }
 		}
 
 		private void UpdateStatus()
 		{
 			if (!droneControl.IsConnected)
 			{
-				labelCamera.Text = "No picture";
+				labelStatusCamera.Text = "No picture";
+
+				labelStatusBattery.Text = "N/A";
+				labelStatusAltitude.Text = "N/A";
 
 				labelStatusPitch.Text = "+0.0000°";
 				labelStatusRoll.Text = "+0.0000°";
+				labelStatusYaw.Text = "+0.0000°";
+				labelStatusGaz.Text = "+0.0000°";
+
+				labelStatusFrameRate.Text = "No video";
+				//imageVideo.Source = null;
 			}
 			else
 			{
 				DroneData data = droneControl.NavigationData;
+				int frameRate = GetCurrentFrameRate();
 
-				labelCamera.Text = "Bottom camera";
+				ChangeCameraStatus();
+
+				labelStatusBattery.Text = data.BatteryLevel + "%";
+				labelStatusAltitude.Text = data.Altitude.ToString();
+
 				labelStatusPitch.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Theta);
 				labelStatusRoll.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Phi);
-				labelStatusBattery.Text = data.BatteryLevel + "%";
+				labelStatusYaw.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Psi);
+
+				labelStatusVX.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.VX);
+				labelStatusRoll.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Phi);
+				labelStatusYaw.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Psi);
+				//labelStatusGaz.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.);
 			}
 
 			labelStatusConnected.Text = droneControl.IsConnected.ToString();
 			labelStatusFlying.Text = droneControl.IsFlying.ToString();
 			labelStatusHovering.Text = droneControl.IsHovering.ToString();
+
+			UpdateCurrentBooleanInputState();
+		}
+
+		private void ChangeCameraStatus()
+		{
+			if (droneControl.CurrentCameraType == DroneCameraMode.FrontCamera)
+			{
+				labelStatusCamera.Text = "Front camera";
+				labelStatusCamera.Text = "Front";
+			}
+			else if (droneControl.CurrentCameraType == DroneCameraMode.PictureInPictureFront)
+			{
+				labelStatusCamera.Text = "Front camera (PiP)";
+				labelStatusCamera.Text = "Front (PiP)";
+			}
+			else if (droneControl.CurrentCameraType == DroneCameraMode.BottomCamera)
+			{
+				labelStatusCamera.Text = "Bottom camera";
+				labelStatusCamera.Text = "Bottom";
+			}
+			else if (droneControl.CurrentCameraType == DroneCameraMode.PictureInPictureBottom)
+			{
+				labelStatusCamera.Text = "Bottom camera (PiP)";
+				labelStatusCamera.Text = "Bottom (PiP)";
+			}
+		}
+
+		private int GetCurrentFrameRate()
+		{
+			int timePassed = (int)(DateTime.Now - lastFrameRateCaptureTime).TotalMilliseconds;
+			int frameRate = frameCountSinceLastCapture * 1000 / timePassed;
+			averageFrameRate = (averageFrameRate + frameRate) / 2;
+
+			lastFrameRateCaptureTime = DateTime.Now;
+			frameCountSinceLastCapture = 0;
+
+			return averageFrameRate;
 		}
 
 		private void UpdateInputState(InputState inputState)
@@ -395,19 +487,50 @@ namespace ADAPT
 
 		private void UpdateDroneState(InputState inputState)
 		{
+			//DroneData data = droneControl.NavigationData;
+
+			//labelStatusPitch.Text = String.Format("{0:+0.000;-0.000;+0.000}", inputState.Roll);
+			//labelStatusRoll.Text = String.Format("{0:+0.000;-0.000;+0.000}", inputState.Pitch);
+			//labelStatusYaw.Text = String.Format("{0:+0.000;-0.000;+0.000}", inputState.Yaw);
+			labelStatusGaz.Text = String.Format("{0:+0.000;-0.000;+0.000}", inputState.Gaz);
 			//lastValueForSpecialAction = inputState.SpecialAction;
+
+			UpdateCurrentBooleanInputState(inputState);
 		}
 
+		private void UpdateCurrentBooleanInputState()
+		{
+			RemoveOldBooleanInputStates();
+
+			labelCurrentBooleanInput.Text = GetCurrentBooleanInputStates();
+		}
+
+		private void UpdateCurrentBooleanInputState(InputState inputState)
+		{
+			RemoveOldBooleanInputStates();
+			AddNewBooleanInputStates(inputState);
+
+			labelCurrentBooleanInput.Text = GetCurrentBooleanInputStates();
+		}
+		
 		private void UpdateVideoImage()
 		{
 			if (droneControl.IsConnected)
 			{
-				Bitmap newImage = CopyBitmap((Bitmap)droneControl.BitmapImage);
+				Bitmap newImage = (Bitmap)droneControl.BitmapImage.Clone();
 
 				if (newImage != null)
 				{
-					//PerformStopSignDetection(newImage);
+					frameCountSinceLastCapture++;
+
+					if (videoRecorder.IsVideoCaptureRunning)
+					{
+						videoRecorder.AddFrame((System.Drawing.Bitmap)newImage.Clone());
+					}
+
 					UpdateVisualImage(newImage);
+
+					//PerformStopSignDetection(newImage);
 				}
 			}
 		}
@@ -416,8 +539,75 @@ namespace ADAPT
 		{
 			if (image != null)
 			{
-				pictureBoxVideo.Image = image;
+				imageVideo.Image = image;
 			}
+		}
+		#endregion
+
+		#region Boolean Input States
+		private void AddNewBooleanInputStates(InputState inputState)
+		{
+			if (inputState.TakeOff)
+				AddNewBooleanInputState("TakeOff");
+			if (inputState.Land)
+				AddNewBooleanInputState("Land");
+			if (inputState.Emergency)
+				AddNewBooleanInputState("Emergency");
+			if (inputState.FlatTrim)
+				AddNewBooleanInputState("FlatTrim");
+			if (inputState.Hover)
+				AddNewBooleanInputState("Hover");
+			if (inputState.CameraSwap)
+				AddNewBooleanInputState("Camera");
+			if (inputState.SpecialAction)
+				AddNewBooleanInputState("Special");
+		}
+
+		private void AddNewBooleanInputState(String command)
+		{
+			DateTime expirationDate = DateTime.Now + booleanInputTimeout;
+			if (booleanInputFadeout.ContainsKey(command))
+				booleanInputFadeout[command] = expirationDate;
+			else
+				booleanInputFadeout.Add(command, expirationDate);
+		}
+
+		private void RemoveOldBooleanInputStates()
+		{
+			List<String> keysToDelete = new List<String>();
+			foreach (KeyValuePair<String, DateTime> keyValuePair in booleanInputFadeout)
+			{
+				String command = keyValuePair.Key;
+				DateTime expirationDate = keyValuePair.Value;
+
+				if (expirationDate < DateTime.Now)
+					keysToDelete.Add(command);
+			}
+
+			foreach (String key in keysToDelete)
+				booleanInputFadeout.Remove(key);
+		}
+
+		private String GetCurrentBooleanInputStates()
+		{
+			String commandText = "";
+
+			List<String> commands = new List<String>();
+			foreach (KeyValuePair<String, DateTime> keyValuePair in booleanInputFadeout)
+				commands.Add(keyValuePair.Key);
+
+			for (int i = 0; i < commands.Count; i++)
+			{
+				commandText += commands[i];
+
+				if (i != commands.Count - 1)
+					commandText += ", ";
+			}
+
+			if (commandText == "")
+				commandText = "No buttons";
+
+			return commandText;
 		}
 		#endregion
 
@@ -438,7 +628,7 @@ namespace ADAPT
 		}
 		*/
 
-		private Bitmap CopyBitmap(Bitmap image)
+		/*private Bitmap CopyBitmap(Bitmap image)
 		{
 			try
 			{
@@ -458,7 +648,7 @@ namespace ADAPT
 			{
 				return null;
 			}
-		}
+		}*/
 
 		#region Video Capture
 		private void StartVideoCapture()
@@ -478,7 +668,7 @@ namespace ADAPT
 				size = droneControl.BottomCameraPictureSize;
 			}
 
-			//videoRecorder.StartVideo(videoFilePath, averageFrameRate, size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb, 4, checkBoxVideoCompress.IsChecked == true ? true : false);
+			videoRecorder.StartVideo(videoFilePath, averageFrameRate, size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb, 4, checkBoxVideoCompress.Checked == true ? true : false);
 			UpdateInteractiveElements();
 		}
 
@@ -503,6 +693,7 @@ namespace ADAPT
 		} 
 		#endregion
 
+		#region Dialog
 		private String ShowFileDialog(String extension, String filter)
 		{
 
@@ -563,6 +754,16 @@ namespace ADAPT
 			//}
 		}
 
+		private void OpenDroneConfigDialog()
+		{
+			if (!droneControl.IsConnected)
+				return;
+
+			//DroneConfigurationOutput configOutput = new DroneConfigurationOutput(droneControl.InternalDroneConfiguration);
+			//configOutput.ShowDialog();
+		} 
+		#endregion
+
 		private void SaveDroneAndHudConfigStates(DroneConfig droneConfig/*, HudConfig hudConfig*/)
 		{
 			currentDroneConfig = droneConfig;
@@ -578,16 +779,7 @@ namespace ADAPT
 			InitializeDroneControlEventHandlers();
 			//InitializeHudInterface(currentHudConfig);
 		}
-
-		private void OpenDroneConfigDialog()
-		{
-			if (!droneControl.IsConnected)
-				return;
-
-			//DroneConfigurationOutput configOutput = new DroneConfigurationOutput(droneControl.InternalDroneConfiguration);
-			//configOutput.ShowDialog();
-		}
-
+		
 		private void HandleConnectionStateChange(DroneConnectionStateChangedEventArgs args)
 		{
 			UpdateInteractiveElements();
@@ -748,7 +940,7 @@ namespace ADAPT
 
 		private void buttonSnapshot_Click(object sender, EventArgs e)
 		{
-			Snapshot();
+			TakeSnapshot();
 		}
 
 		private void buttonVideoStart_Click(object sender, EventArgs e)
@@ -788,5 +980,24 @@ namespace ADAPT
 			UpdateVideoImage();
 		} 
 		#endregion
+
+		private void buttonNavData_Click(object sender, EventArgs e)
+		{
+			if (navDataRecorder.recording == false)
+			{
+				navDataRecorder.startRecording();
+				buttonNavData.Text = "Pause Recording";
+			}
+			else
+			{
+				navDataRecorder.stopRecording();
+				buttonNavData.Text = "Start Recording";
+			}
+		}
+
+		private void buttonSaveNavData_Click(object sender, EventArgs e)
+		{
+			navDataRecorder.save("NavData");
+		}
 	}
 }

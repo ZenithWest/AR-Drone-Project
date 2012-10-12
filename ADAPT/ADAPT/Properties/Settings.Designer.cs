@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ADAPT.Properties {
+namespace ARDrone.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

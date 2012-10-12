@@ -28,7 +28,7 @@ namespace ARDrone.Input
 		  private IntPtr windowHandle;
 		  private List<GenericInput> inputDevices = null;
 
-		  private InputState lastInputState = null;
+		  public InputState lastInputState = null;
 
 		  private Thread inputThread = null;
 		  private bool inputThreadEnded = false;
