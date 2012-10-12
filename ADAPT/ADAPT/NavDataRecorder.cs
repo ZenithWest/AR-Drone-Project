@@ -126,17 +126,16 @@ namespace ARDrone.NavData
 
 		public void saveToCVS(string fileName)
 		{
-			string cvs = "";
+			StringBuilder cvs = new StringBuilder();
 
 			foreach (XElement dataGroup in xNavData.Element("Data").Elements())
 			{
 				foreach (XElement dataGroupName in dataGroup.Elements())
 				{
-					cvs += dataGroupName.Name + ",";
+					cvs.Append(dataGroupName.Name + ",");
 				}
 			}
-			cvs.TrimEnd(',');
-			cvs += "\n";
+			cvs[cvs.Length - 1] = '\n';
 
 			foreach (XElement dataPoint in xNavData.Elements())
 			{
@@ -144,11 +143,10 @@ namespace ARDrone.NavData
 				{
 					foreach (XElement dataItem in dataGroup.Elements())
 					{
-						cvs += dataItem.Value + ",";
+						cvs.Append(dataItem.Value + ",");
 					}
 				}
-				cvs.TrimEnd(',');
-				cvs += "\n";
+				cvs[cvs.Length - 1] = '\n';
 			}
 
 			using (StreamWriter outfile = new StreamWriter(fileName + ".csv"))

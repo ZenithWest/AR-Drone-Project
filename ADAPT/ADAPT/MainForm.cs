@@ -430,10 +430,10 @@ namespace ARDrone.UI
 				labelStatusPitch.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Theta);
 				labelStatusRoll.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Phi);
 				labelStatusYaw.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Psi);
-
+				
 				labelStatusVX.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.VX);
-				labelStatusRoll.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Phi);
-				labelStatusYaw.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.Psi);
+				labelStatusVY.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.VY);
+				labelStatusVZ.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.VZ);
 				//labelStatusGaz.Text = String.Format("{0:+0.000;-0.000;+0.000}", data.);
 			}
 
@@ -906,6 +906,7 @@ namespace ARDrone.UI
 
 		private void buttonCommandTakeoff_Click(object sender, EventArgs e)
 		{
+			//bool isfly = droneControl.is
 			if (!droneControl.IsFlying)
 			{
 				Takeoff();
