@@ -145,24 +145,24 @@
 			// 
 			this.numericUniquenessThreshold.DecimalPlaces = 3;
 			this.numericUniquenessThreshold.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
+				1,
+				0,
+				0,
+				131072});
 			this.numericUniquenessThreshold.Location = new System.Drawing.Point(15, 180);
 			this.numericUniquenessThreshold.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+				1,
+				0,
+				0,
+				0});
 			this.numericUniquenessThreshold.Name = "numericUniquenessThreshold";
 			this.numericUniquenessThreshold.Size = new System.Drawing.Size(70, 20);
 			this.numericUniquenessThreshold.TabIndex = 6;
 			this.numericUniquenessThreshold.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            65536});
+				8,
+				0,
+				0,
+				65536});
 			// 
 			// labelUniquenessThreshold
 			// 
@@ -204,24 +204,24 @@
 			// 
 			this.numericHessianThreshhold.DecimalPlaces = 1;
 			this.numericHessianThreshhold.Increment = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
+				50,
+				0,
+				0,
+				0});
 			this.numericHessianThreshhold.Location = new System.Drawing.Point(18, 235);
 			this.numericHessianThreshhold.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
+				100000,
+				0,
+				0,
+				0});
 			this.numericHessianThreshhold.Name = "numericHessianThreshhold";
 			this.numericHessianThreshhold.Size = new System.Drawing.Size(70, 20);
 			this.numericHessianThreshhold.TabIndex = 12;
 			this.numericHessianThreshhold.Value = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
+				500,
+				0,
+				0,
+				0});
 			// 
 			// checkBoxExtendedFlag
 			// 
@@ -241,10 +241,10 @@
 			this.numericnOctaves.Size = new System.Drawing.Size(70, 20);
 			this.numericnOctaves.TabIndex = 14;
 			this.numericnOctaves.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
+				3,
+				0,
+				0,
+				0});
 			// 
 			// numericnOctavesLayers
 			// 
@@ -253,10 +253,10 @@
 			this.numericnOctavesLayers.Size = new System.Drawing.Size(70, 20);
 			this.numericnOctavesLayers.TabIndex = 15;
 			this.numericnOctavesLayers.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
+				4,
+				0,
+				0,
+				0});
 			// 
 			// buttonDrawMatches
 			// 

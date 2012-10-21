@@ -94,6 +94,12 @@
     <Compile Include="Forms\SURFFeatureExample.Designer.cs">
       <DependentUpon>SURFFeatureExample.cs</DependentUpon>
     </Compile>
+    <Compile Include="OpticalFlow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OpticalFlow.Designer.cs">
+      <DependentUpon>OpticalFlow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\FaceDetection.resx">

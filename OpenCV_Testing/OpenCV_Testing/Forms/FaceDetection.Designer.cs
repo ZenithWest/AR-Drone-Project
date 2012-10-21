@@ -42,6 +42,7 @@
 			this.imageBox3 = new Emgu.CV.UI.ImageBox();
 			this.imageBox2 = new Emgu.CV.UI.ImageBox();
 			this.imageBox1 = new Emgu.CV.UI.ImageBox();
+			this.checkBoxFullBody = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.imageBox3)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.imageBox2)).BeginInit();
@@ -59,7 +60,6 @@
 			this.checkBoxFace.TabIndex = 1;
 			this.checkBoxFace.Text = "Face";
 			this.checkBoxFace.UseVisualStyleBackColor = true;
-			this.checkBoxFace.Visible = false;
 			// 
 			// checkBoxUpperbody
 			// 
@@ -70,7 +70,6 @@
 			this.checkBoxUpperbody.TabIndex = 2;
 			this.checkBoxUpperbody.Text = "Upperbody";
 			this.checkBoxUpperbody.UseVisualStyleBackColor = true;
-			this.checkBoxUpperbody.Visible = false;
 			// 
 			// checkBoxLeftEar
 			// 
@@ -81,7 +80,6 @@
 			this.checkBoxLeftEar.TabIndex = 3;
 			this.checkBoxLeftEar.Text = "Left Ear";
 			this.checkBoxLeftEar.UseVisualStyleBackColor = true;
-			this.checkBoxLeftEar.Visible = false;
 			// 
 			// timer1
 			// 
@@ -97,7 +95,6 @@
 			this.checkBoxRightEar.TabIndex = 4;
 			this.checkBoxRightEar.Text = "Right Ear";
 			this.checkBoxRightEar.UseVisualStyleBackColor = true;
-			this.checkBoxRightEar.Visible = false;
 			// 
 			// checkBoxRightEye
 			// 
@@ -108,20 +105,16 @@
 			this.checkBoxRightEye.TabIndex = 6;
 			this.checkBoxRightEye.Text = "Right Eye";
 			this.checkBoxRightEye.UseVisualStyleBackColor = true;
-			this.checkBoxRightEye.Visible = false;
 			// 
 			// checkBoxLeftEye
 			// 
 			this.checkBoxLeftEye.AutoSize = true;
-			this.checkBoxLeftEye.Checked = true;
-			this.checkBoxLeftEye.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxLeftEye.Location = new System.Drawing.Point(12, 127);
 			this.checkBoxLeftEye.Name = "checkBoxLeftEye";
 			this.checkBoxLeftEye.Size = new System.Drawing.Size(65, 17);
 			this.checkBoxLeftEye.TabIndex = 5;
 			this.checkBoxLeftEye.Text = "Left Eye";
 			this.checkBoxLeftEye.UseVisualStyleBackColor = true;
-			this.checkBoxLeftEye.Visible = false;
 			// 
 			// checkBoxMouth
 			// 
@@ -132,7 +125,6 @@
 			this.checkBoxMouth.TabIndex = 7;
 			this.checkBoxMouth.Text = "Mouth";
 			this.checkBoxMouth.UseVisualStyleBackColor = true;
-			this.checkBoxMouth.Visible = false;
 			// 
 			// checkBoxNose
 			// 
@@ -143,10 +135,10 @@
 			this.checkBoxNose.TabIndex = 8;
 			this.checkBoxNose.Text = "Nose";
 			this.checkBoxNose.UseVisualStyleBackColor = true;
-			this.checkBoxNose.Visible = false;
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add(this.checkBoxFullBody);
 			this.panel1.Controls.Add(this.imageBox3);
 			this.panel1.Controls.Add(this.checkBoxFace);
 			this.panel1.Controls.Add(this.imageBox2);
@@ -196,6 +188,18 @@
 			this.imageBox1.TabIndex = 2;
 			this.imageBox1.TabStop = false;
 			// 
+			// checkBoxFullBody
+			// 
+			this.checkBoxFullBody.AutoSize = true;
+			this.checkBoxFullBody.Checked = true;
+			this.checkBoxFullBody.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBoxFullBody.Location = new System.Drawing.Point(12, 196);
+			this.checkBoxFullBody.Name = "checkBoxFullBody";
+			this.checkBoxFullBody.Size = new System.Drawing.Size(69, 17);
+			this.checkBoxFullBody.TabIndex = 12;
+			this.checkBoxFullBody.Text = "Full Body";
+			this.checkBoxFullBody.UseVisualStyleBackColor = true;
+			// 
 			// FaceDetection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,6 +235,7 @@
 		  private Emgu.CV.UI.ImageBox imageBox3;
 		  private Emgu.CV.UI.ImageBox imageBox2;
 		  private Emgu.CV.UI.ImageBox imageBox1;
+		  private System.Windows.Forms.CheckBox checkBoxFullBody;
     }
 }
 
