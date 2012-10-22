@@ -230,8 +230,8 @@ namespace OpenCV_Testing
 		{
 			// passing 0 gets zeroth webcam
 
-			//cap = new Capture(5);
-			cap = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
+			cap = new Capture(5);
+			//cap = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			// adjust path to find your xml
 
 			//haarFace = new CascadeClassifier("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
