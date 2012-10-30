@@ -100,6 +100,7 @@
     <Compile Include="Forms\OpticalFlow.Designer.cs">
       <DependentUpon>OpticalFlow.cs</DependentUpon>
     </Compile>
+    <Compile Include="OpticalFlow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\FaceDetection.resx">

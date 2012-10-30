@@ -54,7 +54,7 @@ namespace OpenCV_Testing
 		public PointF referenceCentroid, nextCentroid;
 		public float sumVectorFieldX;
 		public float sumVectorFieldY;
-		public bool dense = false;
+		public bool dense = true;
 		public Random rand;
 
 		private void buttonInitializeTracking_Click(object sender, EventArgs e)
@@ -67,8 +67,12 @@ namespace OpenCV_Testing
 				_capture = new Capture(5);
 				Thread.Sleep(1000);
 			}
-				else
-				_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
+			else
+			{
+				_capture = new Capture(5);
+				//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
+				this.Size = new Size(785, 884);
+			}
 
 			InitializeFaceTracking();
 			Application.Idle += new EventHandler(Application_Idle);
@@ -79,6 +83,7 @@ namespace OpenCV_Testing
 			//_faces = new HaarCascade("../../haarcascade_frontalface_alt_tree.xml");
 			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
 			frame = _capture.QueryFrame();
+			frame = frame.Resize(0.5, INTER.CV_INTER_LINEAR);
 			//We convert it to grayscale
 			grayFrame = frame.Convert<Gray, Byte>();
 			if (dense)
@@ -96,7 +101,7 @@ namespace OpenCV_Testing
 					trackingArea = new Rectangle(faceDetected[0][0].rect.X, faceDetected[0][0].rect.Y, faceDetected[0][0].rect.Width, faceDetected[0][0].rect.Height);
 
 					// Here we enlarge or restrict the search features area on a smaller or larger face area
-					float scalingAreaFactor = 1.6f;
+					float scalingAreaFactor = 0.6f;
 					int trackingAreaWidth = (int)(faceDetected[0][0].rect.Width * scalingAreaFactor);
 					int trackingAreaHeight = (int)(faceDetected[0][0].rect.Height * scalingAreaFactor);
 					int leftXTrackingCoord = faceDetected[0][0].rect.X - (int)(((faceDetected[0][0].rect.X + trackingAreaWidth) - (faceDetected[0][0].rect.X + faceDetected[0][0].rect.Width)) / 2);
@@ -104,17 +109,19 @@ namespace OpenCV_Testing
 					trackingArea = new Rectangle(leftXTrackingCoord, leftYTrackingCoord, trackingAreaWidth, trackingAreaHeight);
 
 					// Allocating proper working images
-					faceImage = new Image<Bgr, Byte>(trackingArea.Width, trackingArea.Height);
-					faceGrayImage = new Image<Gray, Byte>(trackingArea.Width, trackingArea.Height);
-					frame.ROI = trackingArea;
-					frame.Copy(faceImage, null);
-					frame.ROI = Rectangle.Empty;
+					//faceImage = new Image<Bgr, Byte>(trackingArea.Width, trackingArea.Height);
+					//faceGrayImage = new Image<Gray, Byte>(trackingArea.Width, trackingArea.Height);
+					faceImage = frame.Copy(roi:trackingArea);
+					
+					//frame.ROI = trackingArea;
+					//frame.Copy(faceImage, null);
+					//frame.ROI = Rectangle.Empty;
 					faceGrayImage = faceImage.Convert<Gray, Byte>();
-
+					
 					// Detecting good features that will be tracked in following frames
-					ActualFeature = faceGrayImage.GoodFeaturesToTrack(400, 0.5d, 5d, 5);
-					faceGrayImage.FindCornerSubPix(ActualFeature, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(25, 1.5d));
-
+					ActualFeature = faceImage.GoodFeaturesToTrack(400, 0.5d, 5d, 5);
+					faceImage.FindCornerSubPix(ActualFeature, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(25, 1.5d));
+					
 					// Features computed on a different coordinate system are shifted to their original location
 					for (int i = 0; i < ActualFeature[0].Length; i++)
 					{
@@ -134,6 +141,7 @@ namespace OpenCV_Testing
 		void Application_Idle(object sender, EventArgs e)
 		{
 			nextFrame = _capture.QueryFrame();
+			nextFrame = nextFrame.Resize(0.5, INTER.CV_INTER_LINEAR);
 			faceNextGrayImage = new Image<Gray, byte>(trackingArea.Width, trackingArea.Height);
 			if (dense)
 			{
@@ -159,6 +167,9 @@ namespace OpenCV_Testing
 					//imageBoxOpticalFlow.Image = opticalFlowFrame.Flip(FLIP.HORIZONTAL);
 					imageBoxOpticalFlow.Image = nextFrame.Copy().Flip(FLIP.HORIZONTAL);
 					imageBoxOpticalFlow2.Image = opticalFlowFrame.Flip(FLIP.HORIZONTAL);
+					
+					//imageBoxOpticalFlow.Image = velx.Flip(FLIP.HORIZONTAL);
+					//imageBoxOpticalFlow2.Image = vely.Flip(FLIP.HORIZONTAL);
 
 					//Updating actual frames and features with the new ones
 					frame = nextFrame;
@@ -188,7 +199,7 @@ namespace OpenCV_Testing
 					if (ActualFeature[0] != null)
 						label1.Text = ActualFeature[0].Length.ToString();
 					else
-						label1.Text = ActualFeature[0].Length.ToString() + ".";
+						label1.Text = ".";
 
 					//Updating actual frames and features with the new ones
 					frame = nextFrame;
@@ -208,10 +219,10 @@ namespace OpenCV_Testing
 			velx = new Image<Gray, float>(faceGrayImage.Size);
 			vely = new Image<Gray, float>(faceNextGrayImage.Size);
 			Emgu.CV.OpticalFlow.HS(faceGrayImage, faceNextGrayImage, true, velx, vely, 0.1d, new MCvTermCriteria(100));
-
+			
 			#region Dense Optical Flow Drawing
-			int winSizeX = 2;
-			int winSizeY = 2;
+			int winSizeX = 3;
+			int winSizeY = 3;
 			vectorFieldX = (int)Math.Round((double)faceGrayImage.Width / winSizeX);
 			vectorFieldY = (int)Math.Round((double)faceGrayImage.Height / winSizeY);
 			sumVectorFieldX = 0f;
@@ -267,6 +278,9 @@ namespace OpenCV_Testing
 					//
 				}
 			}
+			label1.Text = sumVectorFieldX.ToString();
+			label2.Text = sumVectorFieldY.ToString();
+
 			#endregion
 		}
 
@@ -279,7 +293,7 @@ namespace OpenCV_Testing
 		{
 			// Compute optical flow using pyramidal Lukas Kanade Method                
 			Emgu.CV.OpticalFlow.PyrLK(grayFrame, nextGrayFrame, ActualFeature[0], new System.Drawing.Size(10, 10), 3, new MCvTermCriteria(20, 0.03d), out NextFeature, out Status, out TrackError);
-
+			
 			using (MemStorage storage = new MemStorage())
 				nextHull = PointCollection.ConvexHull(ActualFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
 			nextCentroid = FindCentroid(nextHull);
