@@ -12,17 +12,46 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.CV.UI;
 using Emgu.CV.VideoSurveillance;
+using System.Threading.Tasks;
 
 namespace OpenCV_Testing
 {
 	public partial class OpticalFlow : Form
 	{
+		Detection.OpticalFlow opticalFlow;
+
 		public OpticalFlow()
 		{
 			InitializeComponent();
 			System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
 		}
 
+		private void buttonInitializeTracking_Click(object sender, EventArgs e)
+		{
+			opticalFlow = new Detection.OpticalFlow();
+
+			Task t = Task.Factory.StartNew(() => drawImage());
+		}
+
+		void drawImage()
+		{
+			while (this.Visible)
+			{
+				if (opticalFlow._prevOpticalFlowFrame != null && !imageBoxOpticalFlow.IsDisposed)
+				{
+					try
+					{
+						imageBoxOpticalFlow.Image = opticalFlow._prevOpticalFlowFrame;
+					} catch (Exception)
+					{
+						
+					}
+				}
+			}
+			opticalFlow.stop();
+
+		}
+		/*
 		private Capture _capture;
 		private HaarCascade _faces;
 		private MCvAvgComp[][] faceDetected;
@@ -54,7 +83,7 @@ namespace OpenCV_Testing
 		public PointF referenceCentroid, nextCentroid;
 		public float sumVectorFieldX;
 		public float sumVectorFieldY;
-		public bool dense = true;
+		public bool dense = false;
 		public Random rand;
 
 		private void buttonInitializeTracking_Click(object sender, EventArgs e)
@@ -81,16 +110,48 @@ namespace OpenCV_Testing
 		private void InitializeFaceTracking()
 		{
 			//_faces = new HaarCascade("../../haarcascade_frontalface_alt_tree.xml");
-			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
+			//_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
 			frame = _capture.QueryFrame();
 			frame = frame.Resize(0.5, INTER.CV_INTER_LINEAR);
 			//We convert it to grayscale
 			grayFrame = frame.Convert<Gray, Byte>();
+
+
+
+			trackingArea = new Rectangle(0, 0, frame.Width, frame.Height);
+			faceImage = frame.Copy(roi: trackingArea);
+
+			//frame.ROI = trackingArea;
+			//frame.Copy(faceImage, null);
+			//frame.ROI = Rectangle.Empty;
+			faceGrayImage = faceImage.Convert<Gray, Byte>();
+
+			// Detecting good features that will be tracked in following frames
+			ActualFeature = faceImage.GoodFeaturesToTrack(400, 0.5d, 5d, 50);
+			//faceImage.FindCornerSubPix(ActualFeature, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(25, 1.5d));
+
+			// Features computed on a different coordinate system are shifted to their original location
+			for (int i = 0; i < ActualFeature[0].Length; i++)
+			{
+				ActualFeature[0][i].X += trackingArea.X;
+				ActualFeature[0][i].Y += trackingArea.Y;
+			}
+
+			// Computing convex hull                
+			using (MemStorage storage = new MemStorage())
+				hull = PointCollection.ConvexHull(ActualFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
+
+			referenceCentroid = FindCentroid(hull);
+			return;
+
+
+
+
 			if (dense)
 			{
 				trackingArea = new Rectangle(0, 0, frame.Width, frame.Height);
-				faceDetected = grayFrame.DetectHaarCascade(_faces, 1.1, 1, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
-				faceGrayImage = new Image<Gray, Byte>(trackingArea.Width, trackingArea.Height);
+				//faceDetected = grayFrame.DetectHaarCascade(_faces, 1.1, 1, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+				//faceGrayImage = new Image<Gray, Byte>(trackingArea.Width, trackingArea.Height);
 			}
 			else
 			{
@@ -128,7 +189,7 @@ namespace OpenCV_Testing
 						ActualFeature[0][i].X += trackingArea.X;
 						ActualFeature[0][i].Y += trackingArea.Y;
 					}
-
+					prevLength = ActualFeature[0].Length;
 					// Computing convex hull                
 					using (MemStorage storage = new MemStorage())
 						hull = PointCollection.ConvexHull(ActualFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
@@ -137,9 +198,11 @@ namespace OpenCV_Testing
 				}
 			}
 		}
-
+		int prevLength;
 		void Application_Idle(object sender, EventArgs e)
 		{
+			if (ActualFeature[0].Length < 5)
+			InitializeFaceTracking();
 			nextFrame = _capture.QueryFrame();
 			nextFrame = nextFrame.Resize(0.5, INTER.CV_INTER_LINEAR);
 			faceNextGrayImage = new Image<Gray, byte>(trackingArea.Width, trackingArea.Height);
@@ -180,7 +243,7 @@ namespace OpenCV_Testing
 			}
 			else
 			{
-				if (nextFrame != null && faceDetected[0].Length == 1)
+				if (nextFrame != null )//&& faceDetected[0].Length == 1)
 				{
 					nextGrayFrame = nextFrame.Convert<Gray, Byte>();
 
@@ -258,23 +321,6 @@ namespace OpenCV_Testing
 					//double value = ci.Length * 10.0;
 					//if (value > 255) value = 0.0;
 					//opticalFlowFrame.Draw(ci, new Bgr(value, value, value), 1);
-					/*if (ci.Length > 0)
-					{
-						double X = ci.Direction.X;
-						double Y = ci.Direction.Y;
-						if (X > 0 && Y > 0)
-							opticalFlowFrame.Draw(ci, new Bgr(255, 255, 0), 1);
-						else if (X < 0 && Y > 0)
-							opticalFlowFrame.Draw(ci, new Bgr(0, 255, 255), 1);
-						else if (X > 0 && Y < 0)
-							opticalFlowFrame.Draw(ci, new Bgr(255, 0, 255), 1);
-						else
-							opticalFlowFrame.Draw(ci, new Bgr(255, 255, 255), 1);
-					}
-					else
-					{
-						opticalFlowFrame.Draw(ci, new Bgr(0, 0, 0), 1);
-					}*/
 					//
 				}
 			}
@@ -405,7 +451,7 @@ namespace OpenCV_Testing
 			p.X = (int)(q.X + 6 * Math.Cos(angle - Math.PI / 4));
 			p.Y = (int)(q.Y + 6 * Math.Sin(angle - Math.PI / 4));
 			opticalFlowFrame.Draw(new LineSegment2D(p, q), new Bgr(255, 0, 0), 1);
-		}
+		}*/
 
 	}
 }
