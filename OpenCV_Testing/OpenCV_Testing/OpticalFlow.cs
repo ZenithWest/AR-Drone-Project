@@ -287,8 +287,10 @@ namespace Detection
 {
 
 
+
 	class OpticalFlow
 	{
+	
 		public Image<Bgr, Byte> _prevFrame { get; set; }
 		public Image<Gray, Byte> _prevGrayFrame { get; set; }
 		public Image<Bgr, Byte> _currentFrame { get; set; }
@@ -527,7 +529,7 @@ namespace Detection
 					ComputeSparseOpticalFlow();
 					ComputeMotionFromSparseOpticalFlow();
 
-					_opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
+					//_opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
 					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 2);
 					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 2);
 					ActualFeature[0] = NextFeature;
@@ -598,11 +600,11 @@ namespace Detection
 			//	nextHull = PointCollection.ConvexHull(ActualFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
 			//currentCentroid = FindCentroid(nextHull);
 			currentCentroid = FindCentroidFromAverage(ActualFeature[0]);
-			for (int i = 0; i < ActualFeature[0].Length; i++)
-			{
-				DrawTrackedFeatures(i);
-				DrawFlowVectors(i);
-			}
+			//for (int i = 0; i < ActualFeature[0].Length; i++)
+			//{
+			//   DrawTrackedFeatures(i);
+			//   DrawFlowVectors(i);
+			//}
 		}
 
 		private void ComputeMotionFromSparseOpticalFlow()
@@ -645,7 +647,7 @@ namespace Detection
 			PointF centroid = currentCentroid;
 			float count = 1;
 			foreach (var point in points){
-				if (point.X != 0 && point.Y != 0 && point.X < _currentFrame.Width && point.Y < _currentFrame.Height)
+				if ((point.X > 5) && (point.Y > 5) && (point.X < (_currentFrame.Width - 5)) && (point.Y < (_currentFrame.Height - 5)))
 				{
 					centroid.X += point.X;
 					centroid.Y += point.Y;
