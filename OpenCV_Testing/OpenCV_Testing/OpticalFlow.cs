@@ -471,7 +471,7 @@ namespace Detection
 			Image<Gray, byte> trackedImage = createTrackedImage(frame, trackingArea);
 
 			// Detecting good features that will be tracked in following frames
-			InitialFeature = trackedImage.GoodFeaturesToTrack(400, 0.5d, 5d, 5);
+			InitialFeature = trackedImage.GoodFeaturesToTrack(400, 0.15d, 5d, 250);
 			trackedImage.FindCornerSubPix(InitialFeature, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(25, 1.5d));
 
 			// Features computed on a different coordinate system are shifted to their original location
@@ -481,13 +481,16 @@ namespace Detection
 				InitialFeature[0][i].Y += _initialTrackingArea.Y;
 			}
 
-			if (InitialFeature[0].Length > 0)
-			{
-				// Computing convex hull                
-				using (MemStorage storage = new MemStorage())
-					hull = PointCollection.ConvexHull(InitialFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
 
-				initialCentroid = FindCentroid(hull);
+			
+			if (InitialFeature[0].Length > 2)
+			{
+				initialCentroid = FindCentroidFromAverage(InitialFeature[0]);
+				// Computing convex hull                
+				//using (MemStorage storage = new MemStorage())
+				//	hull = PointCollection.ConvexHull(InitialFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
+
+				//initialCentroid = FindCentroid(hull);
 				reinitialized = true;
 			}
 			
@@ -589,11 +592,12 @@ namespace Detection
 
 		private void ComputeSparseOpticalFlow()
 		{            
-			Emgu.CV.OpticalFlow.PyrLK(_prevGrayFrame, _currentGrayFrame, ActualFeature[0], new System.Drawing.Size(10, 10), 3, new MCvTermCriteria(20, 0.03d), out NextFeature, out Status, out TrackError);
+			Emgu.CV.OpticalFlow.PyrLK(_prevGrayFrame, _currentGrayFrame, ActualFeature[0], new System.Drawing.Size(10, 10), 13, new MCvTermCriteria(20, 0.03d), out NextFeature, out Status, out TrackError);
 
-			using (MemStorage storage = new MemStorage())
-				nextHull = PointCollection.ConvexHull(ActualFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
-			currentCentroid = FindCentroid(nextHull);
+			//using (MemStorage storage = new MemStorage())
+			//	nextHull = PointCollection.ConvexHull(ActualFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
+			//currentCentroid = FindCentroid(nextHull);
+			currentCentroid = FindCentroidFromAverage(ActualFeature[0]);
 			for (int i = 0; i < ActualFeature[0].Length; i++)
 			{
 				DrawTrackedFeatures(i);
@@ -633,6 +637,24 @@ namespace Detection
 			p.X = (int)(q.X + 6 * Math.Cos(angle - Math.PI / 4));
 			p.Y = (int)(q.Y + 6 * Math.Sin(angle - Math.PI / 4));
 			_opticalFlowFrame.Draw(new LineSegment2D(p, q), new Bgr(255, 0, 0), 1);
+		}
+
+
+		private PointF FindCentroidFromAverage(PointF[] points)
+		{
+			PointF centroid = currentCentroid;
+			float count = 1;
+			foreach (var point in points){
+				if (point.X != 0 && point.Y != 0 && point.X < _currentFrame.Width && point.Y < _currentFrame.Height)
+				{
+					centroid.X += point.X;
+					centroid.Y += point.Y;
+					++count;
+				}
+			}
+			centroid.X /= count;
+			centroid.Y /= count;
+			return centroid;
 		}
 
 		//Code adapted and improved from: http://blog.csharphelper.com/2010/01/04/find-a-polygons-centroid-in-c.aspx
