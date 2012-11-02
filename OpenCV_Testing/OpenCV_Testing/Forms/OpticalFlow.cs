@@ -35,6 +35,7 @@ namespace OpenCV_Testing
 
 		void drawImage()
 		{
+			CheckForIllegalCrossThreadCalls = false;
 			while (this.Visible)
 			{
 				if (opticalFlow._prevOpticalFlowFrame != null && !imageBoxOpticalFlow.IsDisposed)
@@ -42,15 +43,22 @@ namespace OpenCV_Testing
 					try
 					{
 						imageBoxOpticalFlow.Image = opticalFlow._prevOpticalFlowFrame;
+
+						label1.Text = opticalFlow.sumVectorFieldX.ToString();
+						label2.Text = opticalFlow.sumVectorFieldY.ToString();
 					} catch (Exception)
 					{
-						
+
 					}
+					label1.Text = opticalFlow.sumVectorFieldX.ToString();
+					label2.Text = opticalFlow.sumVectorFieldY.ToString();
+
 				}
 			}
 			opticalFlow.stop();
 
 		}
+
 		/*
 		private Capture _capture;
 		private HaarCascade _faces;

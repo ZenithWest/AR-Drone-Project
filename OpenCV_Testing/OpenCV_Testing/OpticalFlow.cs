@@ -290,7 +290,7 @@ namespace Detection
 
 	class OpticalFlow
 	{
-	
+
 		public Image<Bgr, Byte> _prevFrame { get; set; }
 		public Image<Gray, Byte> _prevGrayFrame { get; set; }
 		public Image<Bgr, Byte> _currentFrame { get; set; }
@@ -335,7 +335,9 @@ namespace Detection
 		CancellationToken cancelToken;
 		bool _stop = false;
 		bool detected;
-		
+
+		bool DRAW = false;
+
 		public OpticalFlow()
 		{
 			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
@@ -380,40 +382,46 @@ namespace Detection
 
 		void mainThread()
 		{
+			long timeA = DateTime.Now.Ticks;
 			while (!_stop)
 			{
 				addFrame(_capture.QueryFrame());
-				if (detectFaceTask.IsCompleted)
+				if (detectFaceTask.Status != TaskStatus.Running)
 				{
-				cts = new CancellationTokenSource();
-				detectFaceTask = Task.Factory.StartNew(() => detectFace(_currentFrame), cts.Token);
+					cts = new CancellationTokenSource();
+					detectFaceTask = Task.Factory.StartNew(() => detectFace(_currentFrame), cts.Token);
 				}
 				try
 				{
-					if (detectFaceTask.Wait(60))
+					//if ((DateTime.Now.Ticks - timeA) > 10000000) // 10000000
 					{
-						if (faceDetected[0].Length == 1)
+						if (detectFaceTask.Wait(60))
 						{
-							calculateFeaturesToTrack(_currentFrame, new Rectangle(faceDetected[0][0].rect.X, faceDetected[0][0].rect.Y, faceDetected[0][0].rect.Width, faceDetected[0][0].rect.Height));
+							if (faceDetected[0].Length == 1)
+							{
+								timeA = DateTime.Now.Ticks;
+								calculateFeaturesToTrack(_currentFrame, new Rectangle(faceDetected[0][0].rect.X, faceDetected[0][0].rect.Y, faceDetected[0][0].rect.Width, faceDetected[0][0].rect.Height));
+							}
+
+							if (reinitialized)
+								detected = true;
+						} else
+						{
+							cts.Cancel();
+
 						}
-							
-						if (reinitialized)
-							detected = true;
-					} else
-					{
-						cts.Cancel();
-						
 					}
+
 
 				} catch (Exception)
 				{
 
 				}
-				
-				
+
+
 				ComputeFlow();
 			}
-			
+
 		}
 		public void stop()
 		{
@@ -422,7 +430,8 @@ namespace Detection
 
 		public bool detectFace(Image<Bgr, Byte> frame)
 		{
-			faceDetected = frame.Convert<Gray, Byte>().DetectHaarCascade(_faces, 1.1, 1, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+			faceDetected = frame.Convert<Gray, Byte>().DetectHaarCascade(_faces, 1.1, 3, 0, new Size(40, 40));
+			//faceDetected = frame.Convert<Gray, Byte>().DetectHaarCascade(_faces, 1.1, 3, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DEFAULT, new Size(20, 20));
 			if (faceDetected[0].Length == 1)
 			{
 				return true;
@@ -444,28 +453,36 @@ namespace Detection
 
 		public void createTrackedImageFromCurrentFrame(Rectangle trackingArea)
 		{
+			//if (_currentTrackedGrayImage != null && _currentTrackedGrayImage.Size == trackingArea.Size)
+			//{
 			_prevTrackedImage = _currentTrackedImage;
 			_prevTrackedGrayImage = _currentTrackedGrayImage;
 			_currentTrackedImage = _currentFrame.Copy(roi: trackingArea);
 			_currentTrackedGrayImage = _currentTrackedImage.Convert<Gray, Byte>();
+			//} else
+			//{
+			//   _currentTrackedImage = _currentFrame.Copy(roi: trackingArea);
+			//   _currentTrackedGrayImage = _currentTrackedImage.Convert<Gray, Byte>();
+			//   _prevTrackedImage = _currentTrackedImage;
+			//   _prevTrackedGrayImage = _currentTrackedGrayImage;
+			//}
 		}
 
 		public Image<Gray, Byte> createTrackedImage(Image<Bgr, Byte> frame, Rectangle trackingArea)
 		{
-
 			return frame.Copy(roi: trackingArea).Convert<Gray, Byte>();
 		}
 
-		Rectangle scaleTrackingArea(Rectangle trackingArea, float scalingAreaFactor = 1.0f)
+		Rectangle scaleTrackingArea(Rectangle trackingArea, float scalingAreaFactor = 0.6f)
 		{
 			int trackingAreaWidth = (int)(trackingArea.Width * scalingAreaFactor);
 			int trackingAreaHeight = (int)(trackingArea.Height * scalingAreaFactor);
-			int leftXTrackingCoord = trackingArea.X - (int)(((trackingArea.X + trackingAreaWidth) - (trackingArea.X + trackingAreaWidth)) / 2);
+			int leftXTrackingCoord = trackingArea.X - (int)(((trackingArea.X + trackingAreaWidth) - (trackingArea.X + trackingArea.Width)) / 2);
 			int leftYTrackingCoord = trackingArea.Y - (int)(((trackingArea.Y + trackingAreaHeight) - (trackingArea.Y + trackingArea.Height)) / 2);
 			return new Rectangle(leftXTrackingCoord, leftYTrackingCoord, trackingAreaWidth, trackingAreaHeight);
 		}
 
-		void calculateFeaturesToTrack(Image<Bgr, Byte> frame, Rectangle trackingArea, float scalingAreaFactor = 1.0f)
+		void calculateFeaturesToTrack(Image<Bgr, Byte> frame, Rectangle trackingArea, float scalingAreaFactor = 0.6f)
 		{
 
 			_initialTrackingArea = scaleTrackingArea(trackingArea, scalingAreaFactor);
@@ -473,21 +490,39 @@ namespace Detection
 			Image<Gray, byte> trackedImage = createTrackedImage(frame, trackingArea);
 
 			// Detecting good features that will be tracked in following frames
-			InitialFeature = trackedImage.GoodFeaturesToTrack(400, 0.15d, 5d, 250);
-			trackedImage.FindCornerSubPix(InitialFeature, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(25, 1.5d));
+			//InitialFeature = trackedImage.GoodFeaturesToTrack(4000, 0.5d, 1d, 2500);
+			//trackedImage.FindCornerSubPix(InitialFeature, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(25, 1.5d));
 
 			// Features computed on a different coordinate system are shifted to their original location
-			for (int i = 0; i < InitialFeature[0].Length; i++)
+			//for (int i = 0; i < InitialFeature[0].Length; i++)
+			//{
+			//	InitialFeature[0][i].X += _initialTrackingArea.X;
+			//	InitialFeature[0][i].Y += _initialTrackingArea.Y;
+			//}
+
+			if (InitialFeature == null || InitialFeature.Length == 0)
 			{
-				InitialFeature[0][i].X += _initialTrackingArea.X;
-				InitialFeature[0][i].Y += _initialTrackingArea.Y;
+				InitialFeature = new PointF[1][];
+			}
+
+			if (InitialFeature[0] == null || InitialFeature[0].Length != _initialTrackingArea.Width * _initialTrackingArea.Height)
+			{
+				InitialFeature[0] = new PointF[_initialTrackingArea.Width * _initialTrackingArea.Height];
 			}
 
 
-			
+			for (int y = 0; y < _initialTrackingArea.Width; y++)
+				for (int x = 0; x < _initialTrackingArea.Height; x++)
+				{
+					InitialFeature[0][_initialTrackingArea.Height * y + x].X = x + _initialTrackingArea.X;
+					InitialFeature[0][_initialTrackingArea.Height * y + x].Y = y + _initialTrackingArea.Y;
+				}
+
+
+
 			if (InitialFeature[0].Length > 2)
 			{
-				initialCentroid = FindCentroidFromAverage(InitialFeature[0]);
+				initialCentroid = FindCentroidByAverage(InitialFeature[0]);
 				// Computing convex hull                
 				//using (MemStorage storage = new MemStorage())
 				//	hull = PointCollection.ConvexHull(InitialFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
@@ -495,7 +530,7 @@ namespace Detection
 				//initialCentroid = FindCentroid(hull);
 				reinitialized = true;
 			}
-			
+
 		}
 
 		void copyInitial()
@@ -528,14 +563,15 @@ namespace Detection
 				{
 					ComputeSparseOpticalFlow();
 					ComputeMotionFromSparseOpticalFlow();
-
-					//_opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
+					createTrackedImageFromCurrentFrame(_trackingArea);
+					ComputeDenseOpticalFlow();
+					if (DRAW)_opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
 					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 2);
 					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 2);
 					ActualFeature[0] = NextFeature;
 				} else
 				{
-					createTrackedImageFromCurrentFrame(_initialTrackingArea);
+					createTrackedImageFromCurrentFrame(_trackingArea);
 					ComputeDenseOpticalFlow();
 					ComputeMotionFromDenseOpticalFlow();
 				}
@@ -544,10 +580,42 @@ namespace Detection
 
 		void ComputeDenseOpticalFlow()
 		{
-			velx = new Image<Gray, float>(_prevTrackedGrayImage.Size);
-			vely = new Image<Gray, float>(_currentTrackedGrayImage.Size);
-			Emgu.CV.OpticalFlow.HS(_prevTrackedGrayImage, _currentTrackedGrayImage, true, velx, vely, 0.1d, new MCvTermCriteria(100));
-			
+
+			if (_currentTrackedGrayImage.Size.Width == _prevTrackedGrayImage.Size.Width)
+			{
+				velx = new Image<Gray, float>(_prevTrackedGrayImage.Size);
+				vely = new Image<Gray, float>(_currentTrackedGrayImage.Size);
+				int a = 2;
+				Emgu.CV.OpticalFlow.HS(_prevTrackedGrayImage, _currentTrackedGrayImage, true, velx, vely, 0.1d, new MCvTermCriteria(100));
+				CalculateCentroidOfDense();
+			}
+
+		}
+
+		void CalculateCentroidOfDense()
+		{
+			int winSizeX = 2;
+			int winSizeY = 2;
+			vectorFieldX = (int)Math.Round((double)_currentTrackedGrayImage.Width / winSizeX);
+			vectorFieldY = (int)Math.Round((double)_currentTrackedGrayImage.Height / winSizeY);
+			sumVectorFieldX = 0f;
+			sumVectorFieldY = 0f;
+			vectorField = new PointF[vectorFieldX][];
+			for (int i = 0; i < vectorFieldX; i++)
+			{
+				vectorField[i] = new PointF[vectorFieldY];
+				for (int j = 0; j < vectorFieldY; j++)
+				{
+					Gray velx_gray = velx[j * winSizeX, i * winSizeX];
+					float velx_float = (float)velx_gray.Intensity;
+					Gray vely_gray = vely[j * winSizeY, i * winSizeY];
+					float vely_float = (float)vely_gray.Intensity;
+					sumVectorFieldX += velx_float;
+					sumVectorFieldY += vely_float;
+					vectorField[i][j] = new PointF(velx_float, vely_float);
+
+				}
+			}
 		}
 
 		void DrawDenseOpticalFlow()
@@ -593,18 +661,46 @@ namespace Detection
 		}
 
 		private void ComputeSparseOpticalFlow()
-		{            
-			Emgu.CV.OpticalFlow.PyrLK(_prevGrayFrame, _currentGrayFrame, ActualFeature[0], new System.Drawing.Size(10, 10), 13, new MCvTermCriteria(20, 0.03d), out NextFeature, out Status, out TrackError);
+		{
+			Emgu.CV.OpticalFlow.PyrLK(_prevGrayFrame, _currentGrayFrame, ActualFeature[0], new System.Drawing.Size(10, 10), 3, new MCvTermCriteria(20, 0.03d), out NextFeature, out Status, out TrackError);
 
 			//using (MemStorage storage = new MemStorage())
 			//	nextHull = PointCollection.ConvexHull(ActualFeature[0], storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
 			//currentCentroid = FindCentroid(nextHull);
-			currentCentroid = FindCentroidFromAverage(ActualFeature[0]);
-			//for (int i = 0; i < ActualFeature[0].Length; i++)
-			//{
-			//   DrawTrackedFeatures(i);
-			//   DrawFlowVectors(i);
-			//}
+
+
+			RemoveBadFeatures();
+
+
+			currentCentroid = FindCentroidByAverage(NextFeature);
+			if (DRAW)
+			for (int i = 0; i < ActualFeature[0].Length; i++)
+			{
+				DrawTrackedFeatures(i);
+				DrawFlowVectors(i);
+			}
+		}
+
+		private void RemoveBadFeatures()
+		{
+			int pos = 0;
+
+			for (int i = 0; i < ActualFeature[0].Length; i++)
+			{
+				//if (Status[i] != 0 && Math.Abs(ActualFeature[0][i].X - NextFeature[i].X) < 30 && Math.Abs(ActualFeature[0][i].Y - NextFeature[i].Y) < 30)
+				if (Status[i] != 0)
+				{
+					ActualFeature[0][pos] = ActualFeature[0][i];
+					NextFeature[pos] = NextFeature[i];
+					++pos;
+				}
+			}
+			PointF[] temp = new PointF[pos];
+
+			Array.Copy(ActualFeature[0], temp, pos);
+			ActualFeature[0] = temp;
+			temp = new PointF[pos];
+			Array.Copy(NextFeature, temp, pos);
 		}
 
 		private void ComputeMotionFromSparseOpticalFlow()
@@ -642,11 +738,12 @@ namespace Detection
 		}
 
 
-		private PointF FindCentroidFromAverage(PointF[] points)
+		private PointF FindCentroidByAverage(PointF[] points)
 		{
 			PointF centroid = currentCentroid;
 			float count = 1;
-			foreach (var point in points){
+			foreach (var point in points)
+			{
 				if ((point.X > 5) && (point.Y > 5) && (point.X < (_currentFrame.Width - 5)) && (point.Y < (_currentFrame.Height - 5)))
 				{
 					centroid.X += point.X;
