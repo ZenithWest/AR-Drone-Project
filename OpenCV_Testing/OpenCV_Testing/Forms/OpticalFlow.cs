@@ -50,13 +50,32 @@ namespace OpenCV_Testing
 					{
 
 					}
-					label1.Text = opticalFlow.sumVectorFieldX.ToString();
-					label2.Text = opticalFlow.sumVectorFieldY.ToString();
+
+					string Text = "";
+					//Text = Text + string.Format("Both:\n {0}\n\n", opticalFlow.both);
+
+
+					Text = Text + string.Format("Centroid:\n {0}\n\n", opticalFlow.currentCentroid);
+					if (opticalFlow.NextFeature != null)
+					Text = Text + string.Format("Features:\n {0}\n\n", opticalFlow.NextFeature.Length);
+
+					richTextBox1.Text = Text;
+
 
 				}
 			}
 			opticalFlow.stop();
 
+		}
+
+		private void checkBox1_CheckedChanged(object sender, EventArgs e)
+		{
+			opticalFlow.test = checkBox1.Checked;
+		}
+
+		private void checkBox2_CheckedChanged(object sender, EventArgs e)
+		{
+			opticalFlow.DRAW = checkBox2.Checked;
 		}
 
 		/*

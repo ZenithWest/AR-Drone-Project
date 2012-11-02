@@ -37,6 +37,9 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.imageBoxOpticalFlow2 = new Emgu.CV.UI.ImageBox();
+			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.imageBoxOpticalFlow)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.imageBoxOpticalFlow2)).BeginInit();
 			this.SuspendLayout();
@@ -115,12 +118,49 @@
 			this.imageBoxOpticalFlow2.TabIndex = 10;
 			this.imageBoxOpticalFlow2.TabStop = false;
 			// 
+			// richTextBox1
+			// 
+			this.richTextBox1.Location = new System.Drawing.Point(646, 86);
+			this.richTextBox1.Name = "richTextBox1";
+			this.richTextBox1.Size = new System.Drawing.Size(270, 483);
+			this.richTextBox1.TabIndex = 11;
+			this.richTextBox1.Text = "";
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Checked = true;
+			this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox1.Location = new System.Drawing.Point(803, 28);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(58, 17);
+			this.checkBox1.TabIndex = 12;
+			this.checkBox1.Text = "Detect";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+			// 
+			// checkBox2
+			// 
+			this.checkBox2.AutoSize = true;
+			this.checkBox2.Checked = true;
+			this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox2.Location = new System.Drawing.Point(769, 63);
+			this.checkBox2.Name = "checkBox2";
+			this.checkBox2.Size = new System.Drawing.Size(90, 17);
+			this.checkBox2.TabIndex = 13;
+			this.checkBox2.Text = "Draw Vectors";
+			this.checkBox2.UseVisualStyleBackColor = true;
+			this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+			// 
 			// OpticalFlow
 			// 
 			this.AcceptButton = this.buttonInitializeTracking;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(775, 428);
+			this.ClientSize = new System.Drawing.Size(928, 606);
+			this.Controls.Add(this.checkBox2);
+			this.Controls.Add(this.checkBox1);
+			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.imageBoxOpticalFlow2);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label4);
@@ -131,7 +171,7 @@
 			this.Controls.Add(this.imageBoxOpticalFlow);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.Name = "OpticalFlow";
-			this.Text = "EmguCV  Tracking Head Movement ---> LukaDT";
+			this.Text = "EmguCV  Tracking Head Movement";
 			((System.ComponentModel.ISupportInitialize)(this.imageBoxOpticalFlow)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.imageBoxOpticalFlow2)).EndInit();
 			this.ResumeLayout(false);
@@ -149,5 +189,8 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label5;
 		private Emgu.CV.UI.ImageBox imageBoxOpticalFlow2;
+		private System.Windows.Forms.RichTextBox richTextBox1;
+		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox checkBox2;
 	}
 }
