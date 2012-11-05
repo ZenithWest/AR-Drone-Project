@@ -344,6 +344,7 @@ namespace Detection
 			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
 			rand = new Random();
 			_capture = new Capture(5);
+			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			Task.Factory.StartNew(() => initializeThread());
 		}
 
@@ -362,7 +363,7 @@ namespace Detection
 			_currentGrayFrame = _currentFrame.Convert<Gray, Byte>();
 			addFrame(_currentFrame);
 
-			calculateFeaturesToTrack(_currentFrame, new Rectangle(new Point(_currentFrame.Width / 2 - 20, _currentFrame.Height / 2 - 20), new Size(40, 40)));
+			calculateFeaturesToTrack(_currentFrame, new Rectangle(new Point(_currentFrame.Width / 2 - 40, _currentFrame.Height / 2 - 40), new Size(40, 40)));
 			copyInitial();
 
 			detectFaceTask = Task.Factory.StartNew(() => detectFace(_currentFrame));
@@ -389,6 +390,13 @@ namespace Detection
 			while (!_stop)
 			{
 				addFrame(_capture.QueryFrame());
+
+				if (NextFeature != null && NextFeature.Length < 10)
+				{
+					calculateFeaturesToTrack(_currentFrame, new Rectangle(new Point(_currentFrame.Width / 2 - 100, _currentFrame.Height / 2 - 100), new Size(200, 200)), 1.0f, 4);
+copyInitial();
+				}
+					
 				if (test) {
 				if (detectFaceTask.IsCompleted)
 				{
@@ -492,7 +500,7 @@ namespace Detection
 			}
 		}
 
-		void calculateFeaturesToTrack(Image<Bgr, Byte> frame, Rectangle trackingArea, float scalingAreaFactor = 0.6f)
+		void calculateFeaturesToTrack(Image<Bgr, Byte> frame, Rectangle trackingArea, float scalingAreaFactor = 0.6f, int spacing = 1)
 		{
 
 			_initialTrackingArea = scaleTrackingArea(trackingArea, scalingAreaFactor);
@@ -515,17 +523,17 @@ namespace Detection
 				InitialFeature = new PointF[1][];
 			}
 
-			if (InitialFeature[0] == null || InitialFeature[0].Length != _initialTrackingArea.Width * _initialTrackingArea.Height)
+			if (InitialFeature[0] == null || InitialFeature[0].Length != _initialTrackingArea.Width * _initialTrackingArea.Height / spacing)
 			{
-				InitialFeature[0] = new PointF[_initialTrackingArea.Width * _initialTrackingArea.Height];
+				InitialFeature[0] = new PointF[_initialTrackingArea.Width * _initialTrackingArea.Height / spacing];
 			}
 
 
-			for (int y = 0; y < _initialTrackingArea.Width; y++)
-				for (int x = 0; x < _initialTrackingArea.Height; x++)
+			for (int y = 0; y < _initialTrackingArea.Width; y += spacing)
+				for (int x = 0; x < _initialTrackingArea.Height; x += spacing)
 				{
-					InitialFeature[0][_initialTrackingArea.Height * y + x].X = x + _initialTrackingArea.X;
-					InitialFeature[0][_initialTrackingArea.Height * y + x].Y = y + _initialTrackingArea.Y;
+					InitialFeature[0][_initialTrackingArea.Height * y / spacing + x / spacing].X = x + _initialTrackingArea.X;
+					InitialFeature[0][_initialTrackingArea.Height * y / spacing + x / spacing].Y = y + _initialTrackingArea.Y;
 				}
 
 
