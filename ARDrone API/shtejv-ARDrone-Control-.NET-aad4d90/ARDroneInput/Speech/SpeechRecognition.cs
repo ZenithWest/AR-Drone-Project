@@ -44,10 +44,10 @@ namespace ARDrone.Input.Speech
 
         private void InitSpeechRecognition()
         {
-            speechRecognizer = new SpeechRecognitionEngine();
-            speechRecognizer.SetInputToDefaultAudioDevice();
+            //speechRecognizer = new SpeechRecognitionEngine();
+            //speechRecognizer.SetInputToDefaultAudioDevice();
 
-            speechRecognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(speechRecognizer_SpeechRecognized);
+            //speechRecognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(speechRecognizer_SpeechRecognized);
         }
 
         public void RecognizeMappingGrammar()
@@ -72,7 +72,7 @@ namespace ARDrone.Input.Speech
 
         public void EndSpeechRecognition()
         {
-            speechRecognizer.RecognizeAsyncStop();
+            //speechRecognizer.RecognizeAsyncStop();
         }
 
         private Grammar GetUnrestrictedGrammar()

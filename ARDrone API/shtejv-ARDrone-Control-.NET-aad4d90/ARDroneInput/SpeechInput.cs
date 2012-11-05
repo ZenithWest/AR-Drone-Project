@@ -108,7 +108,7 @@ namespace ARDrone.Input
 
         public override void StartControlInput()
         {
-            speechRecognition.RecognizeMappingGrammar();
+            //speechRecognition.RecognizeMappingGrammar();
             currentMode = SpeechMode.Controlled;
         }
 
