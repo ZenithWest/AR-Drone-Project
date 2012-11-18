@@ -84,7 +84,7 @@ namespace OpenCV_Testing.Forms
         {
             ax = e.X;// store mouse locations over picturebox in avriables
             ay = e.Y;
-            MouseLive_LBL.Text = "Mose Position Live- X:" + ax.ToString() + " Y:" + ay.ToString();
+            //MouseLive_LBL.Text = "Mose Position Live- X:" + ax.ToString() + " Y:" + ay.ToString();
         }
 
         private void KalmanFilterRunner(object sender, EventArgs e)
@@ -99,17 +99,13 @@ namespace OpenCV_Testing.Forms
 
             PointF[] pts = oup;
 
-            MouseCorrected_LBL.Text = "Mouse Position Corrected- X:" + cx.ToString() + " Y:" + cy.ToString();
-            MousePredicted_LBL.Text = "Mouse Position Predicted- X:" + px.ToString() + " Y:" + py.ToString();
+            //MouseCorrected_LBL.Text = "Mouse Position Corrected- X:" + cx.ToString() + " Y:" + cy.ToString();
+            //MousePredicted_LBL.Text = "Mouse Position Predicted- X:" + px.ToString() + " Y:" + py.ToString();
 
-
-            Graphics G = MouseTrackingArea.CreateGraphics();
-
-            G.FillEllipse(Brushes.Magenta, cx, cy, 5, 5);
-
-            G.FillEllipse(Brushes.Cyan, px, py, 5, 5);
-
-            G.FillEllipse(Brushes.Blue, ix, iy, 5, 5);
+            //Graphics G = MouseTrackingArea.CreateGraphics();
+            //G.FillEllipse(Brushes.Magenta, cx, cy, 5, 5);
+            //G.FillEllipse(Brushes.Cyan, px, py, 5, 5);
+            //G.FillEllipse(Brushes.Blue, ix, iy, 5, 5);
                
             // Action<PointF, Bgr> drawCross =
             // delegate(PointF point, Bgr color)
@@ -130,12 +126,12 @@ namespace OpenCV_Testing.Forms
             Random rand = new Random();
             ix = (int)ax;
             iy = (int)ay;
-            MouseTimed_LBL.Text = "Mouse Position Timed- X:" + ix.ToString() + " Y:" + iy.ToString();
+            //MouseTimed_LBL.Text = "Mouse Position Timed- X:" + ix.ToString() + " Y:" + iy.ToString();
         }
 
         
         //Initialse Kalman Filter and Timers
-        private void Start_BTN_Click(object sender, EventArgs e)
+        /*private void Start_BTN_Click(object sender, EventArgs e)
         {
             if (Start_BTN.Text == "Start")
             {
@@ -148,7 +144,8 @@ namespace OpenCV_Testing.Forms
                 StopTimers();
                 Start_BTN.Text = "Start";
             }
-        }
+        }*/
+
         private void InitialiseTimers(int Timer_Interval = 1000)
         {
             MousePositionTaker.Interval = Timer_Interval;
