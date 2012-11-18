@@ -13,6 +13,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 
 using Emgu.CV.OCR;
+using System.Threading.Tasks;
 
 
 namespace OpenCV_Testing
@@ -29,6 +30,7 @@ namespace OpenCV_Testing
 		private HaarCascade haarLeftEye;
 		private HaarCascade haarRightEye;
 		private HaarCascade haarUpperBody;
+		private HaarCascade haarFullBody;
 		private Tesseract _ocr;
 		public FaceDetection()
 		{
@@ -51,6 +53,7 @@ namespace OpenCV_Testing
 					bool checkBoxLeftEyeValue = checkBoxLeftEye.Checked;
 					bool checkBoxRightEyeValue = checkBoxRightEye.Checked;
 					bool checkBoxUpperbodyValue = checkBoxUpperbody.Checked;
+					bool checkBoxFullbodyValue = checkBoxFullBody.Checked;
 
 					Emgu.CV.Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
 					//Rectangle[] faces = null;
@@ -62,6 +65,7 @@ namespace OpenCV_Testing
 					MCvAvgComp[] righteye = null;
 					MCvAvgComp[] lefteye = null;
 					MCvAvgComp[] upperbody = null;
+					MCvAvgComp[] fullbody = null;
 
 					//Size minSize = new Size(nextFrame.Width / 8, nextFrame.Height / 8);
 					Size minSize = new Size(20,20);
@@ -73,40 +77,51 @@ namespace OpenCV_Testing
 						//faces = haarFace.DetectMultiScale(grayframe, 1.1, 8, minSize, Size.Empty);
 						faces = haarFace.Detect(grayframe, 1.1, 4, detection_type, minSize, Size.Empty);
 					}
-
+					List<Task> t = new List<Task>();
+										
 					if (checkBoxMouthValue)
 					{
-						mouth = haarMouth.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
+						t.Add(Task.Factory.StartNew(() => mouth = haarMouth.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty)));
 					}
 
 					if (checkBoxNoseValue)
 					{
-						nose = haarNose.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
+						t.Add(Task.Factory.StartNew(() => nose = haarNose.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty)));
 					}
 
 					if (checkBoxLeftEarValue)
 					{
-						leftear = haarLeftEar.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
+						t.Add(Task.Factory.StartNew(() => leftear = haarLeftEar.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty)));
 					}
 
 					if (checkRightEarValue)
 					{
-						rightear = haarRightEar.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
+						t.Add(Task.Factory.StartNew(() => rightear = haarRightEar.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty)));
 					}
 
 					if (checkBoxLeftEyeValue)
 					{
-						lefteye = haarLeftEye.Detect(grayframe, 1.2, 4, detection_type, minSize, Size.Empty);
+						t.Add(Task.Factory.StartNew(() => lefteye = haarLeftEye.Detect(grayframe, 1.2, 4, detection_type, minSize, Size.Empty)));
 					}
 
 					if (checkBoxRightEyeValue)
 					{
-						righteye = haarRightEye.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
+						t.Add(Task.Factory.StartNew(() => righteye = haarRightEye.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty)));
 					}
 
 					if (checkBoxUpperbodyValue)
 					{
-						upperbody = haarUpperBody.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty);
+						t.Add(Task.Factory.StartNew(() => upperbody = haarUpperBody.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty)));
+					}
+
+					if (checkBoxFullbodyValue)
+					{
+						t.Add(Task.Factory.StartNew(() => fullbody = haarFullBody.Detect(grayframe, 1.4, 4, detection_type, minSize, Size.Empty)));
+					}
+
+					foreach (Task tsk in t)
+					{
+						tsk.Wait();
 					}
 
 					int thickness = 2;
@@ -119,9 +134,9 @@ namespace OpenCV_Testing
 						}
 					}
 
-					if (checkBoxLeftEyeValue)
+					if (checkBoxFullbodyValue)
 					{
-						foreach (var face in lefteye)
+						foreach (var face in fullbody)
 						{
 							imageBox3.Image = nextFrame.Copy(face.rect);
 						}
@@ -134,6 +149,7 @@ namespace OpenCV_Testing
 						{
 							//nextFrame.Draw(face, new Bgr(Color.AliceBlue), thickness);
 							nextFrame.Draw(face.rect, new Bgr(Color.AliceBlue), thickness);
+
 						}
 					}
 
@@ -195,6 +211,14 @@ namespace OpenCV_Testing
 						}
 					}
 
+					if (checkBoxFullbodyValue)
+					{
+						foreach (var face in fullbody)
+						{
+							nextFrame.Draw(face.rect, new Bgr(Color.DarkSlateGray), thickness);
+						}
+					}
+
 
 
 					imageBox1.Image = nextFrame;
@@ -207,6 +231,7 @@ namespace OpenCV_Testing
 			// passing 0 gets zeroth webcam
 
 			cap = new Capture(5);
+			//cap = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			// adjust path to find your xml
 
 			//haarFace = new CascadeClassifier("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
@@ -218,6 +243,7 @@ namespace OpenCV_Testing
 			haarLeftEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_lefteye_2splits.xml");
 			haarRightEye = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_righteye_2splits.xml");
 			haarUpperBody = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_upperbody.xml");
+			haarFullBody = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_fullbody.xml");
 			//	 "..\\..\\..\\..\\lib\\haarcascade_frontalface_alt2.xml");
 		}
 	}

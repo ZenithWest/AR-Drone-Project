@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyntheticData.cs" />
     <EmbeddedResource Include="DirectionControl.resx">
       <DependentUpon>DirectionControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -30,6 +30,7 @@
 		{
 			this.buttonSURF = new System.Windows.Forms.Button();
 			this.buttonFace = new System.Windows.Forms.Button();
+			this.buttonOpticalFlow = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// buttonSURF
@@ -52,14 +53,25 @@
 			this.buttonFace.UseVisualStyleBackColor = true;
 			this.buttonFace.Click += new System.EventHandler(this.buttonFace_Click);
 			// 
-			// Main
+			// buttonOpticalFlow
+			// 
+			this.buttonOpticalFlow.Location = new System.Drawing.Point(105, 112);
+			this.buttonOpticalFlow.Name = "buttonOpticalFlow";
+			this.buttonOpticalFlow.Size = new System.Drawing.Size(75, 39);
+			this.buttonOpticalFlow.TabIndex = 2;
+			this.buttonOpticalFlow.Text = "Optical Flow";
+			this.buttonOpticalFlow.UseVisualStyleBackColor = true;
+			this.buttonOpticalFlow.Click += new System.EventHandler(this.buttonOpticalFlow_Click);
+			// 
+			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(284, 262);
+			this.Controls.Add(this.buttonOpticalFlow);
 			this.Controls.Add(this.buttonFace);
 			this.Controls.Add(this.buttonSURF);
-			this.Name = "Main";
+			this.Name = "MainForm";
 			this.Text = "Main";
 			this.ResumeLayout(false);
 
@@ -69,5 +81,6 @@
 
 		private System.Windows.Forms.Button buttonSURF;
 		private System.Windows.Forms.Button buttonFace;
+		private System.Windows.Forms.Button buttonOpticalFlow;
 	}
 }

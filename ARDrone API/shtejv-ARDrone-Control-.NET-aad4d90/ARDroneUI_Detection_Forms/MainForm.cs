@@ -48,9 +48,20 @@ namespace ARDroneUI_Detection_Forms
 
         private CourseList course = null;
 
+        //Data that is used by the Kalman Filter
+        private List<PointF> mousePoints;
+        private List<PointF> kalmanPoints;
+        private Kalman kalFilter;
+        private SyntheticData syntheticData;
+
+
+
         public MainForm()
         {
             InitializeComponent();
+
+            KalmanFilter();
+
             InitializeInputManager();
 
             InitializeDroneControl();
@@ -61,6 +72,25 @@ namespace ARDroneUI_Detection_Forms
         public void DisposeControl()
         {
             inputManager.Dispose();
+        }
+
+        public void KalmanFilter()
+        {
+            mousePoints = new List<PointF>();
+            kalmanPoints = new List<PointF>();
+            kalFilter = new Kalman(3, 3, 0);
+            syntheticData = new SyntheticData();
+            Matrix<float> state = new Matrix<float>(new float[]
+            {
+                0.0f, 0.0f, 0.0f
+            });
+
+            kalFilter.CorrectedState = state;
+            kalFilter.TransitionMatrix = syntheticData.transitionMatrix;
+            kalFilter.MeasurementNoiseCovariance = syntheticData.measurementNoise;
+            kalFilter.ProcessNoiseCovariance = syntheticData.processNoise;
+            kalFilter.ErrorCovariancePost = syntheticData.errorCovariancePost;
+            kalFilter.MeasurementMatrix = syntheticData.measurementMatrix;
         }
 
         public void InitializeInputManager()

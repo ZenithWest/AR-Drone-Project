@@ -26,5 +26,10 @@ namespace OpenCV_Testing
 		{
 			(new FaceDetection()).Show();
 		}
+
+		private void buttonOpticalFlow_Click(object sender, EventArgs e)
+		{
+			(new OpticalFlow()).Show();
+		}
 	}
 }
