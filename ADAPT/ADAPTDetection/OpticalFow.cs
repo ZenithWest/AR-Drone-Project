@@ -342,7 +342,7 @@ namespace ARDrone.Detection
 
 		public OpticalFlow()
 		{
-			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
+			_faces = new HaarCascade("haarcascade_frontalface_alt.xml");
 			rand = new Random();
 			detected = false;
 			ActualFeature = new PointF[1][];
