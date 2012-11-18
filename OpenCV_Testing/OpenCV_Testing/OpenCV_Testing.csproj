@@ -35,31 +35,31 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.DebuggerVisualizers.VS2010">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.DebuggerVisualizers.VS2010.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.DebuggerVisualizers.VS2010.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.GPU">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.GPU.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.GPU.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.ML">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.ML.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.ML.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.OCR">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.OCR.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.OCR.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.Stitching">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.Stitching.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.Stitching.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.UI">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.UI.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.UI.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.VideoStab">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.CV.VideoStab.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.CV.VideoStab.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.Util">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\Emgu.Util.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\Emgu.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,7 +72,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
-      <HintPath>..\..\..\..\..\..\..\Emgu\emgucv-windows-x86-gpu 2.4.2.1777\bin\ZedGraph.dll</HintPath>
+      <HintPath>..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +81,9 @@
     </Compile>
     <Compile Include="Forms\FaceDetection.Designer.cs">
       <DependentUpon>FaceDetection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KalmanFilter.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -103,6 +106,7 @@
     <Compile Include="OpticalFlow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyntheticData.cs" />
     <EmbeddedResource Include="Forms\FaceDetection.resx">
       <DependentUpon>FaceDetection.cs</DependentUpon>
     </EmbeddedResource>
@@ -135,6 +139,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\ARDrone API\shtejv-ARDrone-Control-.NET-aad4d90\GlobalLib\x86\nvcuda.dll">
+      <Link>nvcuda.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="cublas32_42_9.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

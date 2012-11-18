@@ -10,6 +10,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.UI;
 using Emgu.CV.VideoSurveillance;
 using System.Threading.Tasks;
+using OpenCV_Testing;
 
 
 #region EmguCV's OpticalFlow Class
@@ -286,8 +287,6 @@ Array of double numbers containing difference between patches around the origina
 namespace Detection
 {
 
-
-
 	class OpticalFlow
 	{
 
@@ -339,17 +338,23 @@ namespace Detection
 
 		public bool DRAW = true;
 
+
+
 		public OpticalFlow()
 		{
-			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
+            _faces = new HaarCascade("C:\\Users\\BriceScott\\Documents\\GitHub\\AR-Drone-Project\\OpenCV_Testing\\OpenCV_Testing\\haarcascade_frontalface_alt_tree.xml");
 			rand = new Random();
-			_capture = new Capture(5);
-			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
+            _capture = new Capture(0);
+
 			Task.Factory.StartNew(() => initializeThread());
 		}
 
-		#region Threads
-		void initializeThread()
+
+
+
+
+        #region Threads
+        void initializeThread()
 		{
 			cts = new CancellationTokenSource();
 			detected = false;
@@ -568,6 +573,7 @@ copyInitial();
 				if (sparse)
 				{
 					ComputeSparseOpticalFlow();
+                    ComputeKalmanPoints();
 					ComputeMotionFromSparseOpticalFlow();
 					createTrackedImageFromCurrentFrame(_trackingArea);
 					//ComputeDenseOpticalFlow();
@@ -575,6 +581,7 @@ copyInitial();
 					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);
 					_opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);
 					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);
+                    _opticalFlowFrame.Draw(new CircleF(kalmanCentroid, 1.0f), new Bgr(Color.BlanchedAlmond), 4);
 					ActualFeature[0] = NextFeature;
 				} else
 				{
@@ -585,7 +592,8 @@ copyInitial();
 			}
 		}
 
-		void ComputeDenseOpticalFlow()
+        #region Dense Optical Flow
+        void ComputeDenseOpticalFlow()
 		{
 
 			if (_currentTrackedGrayImage.Size.Width == _prevTrackedGrayImage.Size.Width)
@@ -666,8 +674,10 @@ copyInitial();
 		private void ComputeMotionFromDenseOpticalFlow()
 		{
 		}
+        #endregion
 
-		private void ComputeSparseOpticalFlow()
+
+        private void ComputeSparseOpticalFlow()
 		{
 			Emgu.CV.OpticalFlow.PyrLK(_prevGrayFrame, _currentGrayFrame, ActualFeature[0], new System.Drawing.Size(10, 10), 3, new MCvTermCriteria(20, 0.03d), out NextFeature, out Status, out TrackError);
 
