@@ -339,6 +339,8 @@ namespace ARDrone.Detection
 		public bool DRAW = true;
 
 		public Semaphore sema;
+		KalmanFilter kalman;
+		PointF[] kalmandata;
 
 		public OpticalFlow()
 		{
@@ -348,6 +350,7 @@ namespace ARDrone.Detection
 			ActualFeature = new PointF[1][];
 			currentCentroid = new PointF(50, 50);
 			sema = new Semaphore(0, 1);
+			kalman = new KalmanFilter();
 			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			Task.Factory.StartNew(() => initializeThread());
 		}
@@ -450,20 +453,20 @@ namespace ARDrone.Detection
 		#region Image Processing
 		public void addFrame(Image<Bgr, Byte> frame)
 		{
-            if (_currentFrame == null) _currentFrame = frame.Copy();
-            if (_currentGrayFrame == null) _currentGrayFrame = frame.Convert<Gray, Byte>();
+				if (_currentFrame == null) _currentFrame = frame.Copy();
+				if (_currentGrayFrame == null) _currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevFrame = _currentFrame.Copy();
 			_prevGrayFrame = _currentGrayFrame.Copy();
 			_currentFrame = frame.Copy();
 			_currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevOpticalFlowFrame = _opticalFlowFrame;
 			_opticalFlowFrame = frame.Copy();
-            try
-            {
+				try
+				{
 
-                sema.Release();
-            }
-            catch { }
+					 sema.Release();
+				}
+				catch { }
 		}
 
 		public void createTrackedImageFromCurrentFrame(Rectangle trackingArea)
@@ -587,6 +590,8 @@ namespace ARDrone.Detection
 					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);
 					_opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);
 					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);
+					_opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Blue), 4);
+					_opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);
 					ActualFeature[0] = NextFeature;
 				} else
 				{
@@ -692,6 +697,7 @@ namespace ARDrone.Detection
 
 			NonPrunnedCentroid = FindCentroidByAverageWithOutPrunning(NextFeature);
 			currentCentroid = FindCentroidByAverage(NextFeature);
+			kalmandata = kalman.filterPoints(currentCentroid);
 			if (DRAW)
 				for (int i = 0; i < ActualFeature[0].Length; i++)
 				{
