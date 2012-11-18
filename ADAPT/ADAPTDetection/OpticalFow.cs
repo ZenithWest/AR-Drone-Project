@@ -283,12 +283,12 @@ Array of double numbers containing difference between patches around the origina
 #endregion
 
 
-namespace ADAPTDetection
+namespace ARDrone.Detection
 {
 
 
 
-	class OpticalFlow
+	public class OpticalFlow
 	{
 
 		public Image<Bgr, Byte> _prevFrame { get; set; }

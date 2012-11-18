@@ -77,6 +77,8 @@ namespace ARDrone.UI
 		int snapshotFileCount = 0;
 
 		NavDataRecorder navDataRecorder;
+
+		Detection.OpticalFlow opticalFlow;
 		#endregion
 
 		#region MainForm
@@ -91,6 +93,7 @@ namespace ARDrone.UI
 			InitializeRecorders();
 
 			navDataRecorder = new NavDataRecorder(droneControl, inputManager, (double)navDataInterval.Value);
+			opticalFlow = new Detection.OpticalFlow();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -518,6 +521,8 @@ namespace ARDrone.UI
 			if (droneControl.IsConnected)
 			{
 				Bitmap newImage = (Bitmap)droneControl.BitmapImage.Clone();
+				Image<Bgr, byte> image = new Image<Bgr, byte>(newImage);
+				opticalFlow.addFrame(image);
 
 				if (newImage != null)
 				{
