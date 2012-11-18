@@ -161,6 +161,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADAPTDetection\ADAPTDetection.csproj">
+      <Project>{C1346FE2-4DA9-4308-8041-904920BA1D77}</Project>
+      <Name>ADAPTDetection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ARDroneBasics\ARDroneBasics.csproj">
       <Project>{30FB7E9C-2668-4303-BF0D-1618DD30B8E5}</Project>
       <Name>ARDroneBasics</Name>
