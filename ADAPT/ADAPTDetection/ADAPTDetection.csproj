@@ -72,8 +72,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Detection.cs" />
+    <Compile Include="KalmanFilter.cs" />
     <Compile Include="OpticalFow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyntheticData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ARDroneControlLibrary\ARDroneControlLibrary.csproj">
