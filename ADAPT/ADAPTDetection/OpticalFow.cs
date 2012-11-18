@@ -331,30 +331,31 @@ namespace ADAPTDetection
 		public PointF initialCentroid;
 
 		public Task detectFaceTask = null;
-		CancellationTokenSource cts;
-		CancellationToken cancelToken;
+
 		bool _stop = false;
 		bool detected;
 		public PointF NonPrunnedCentroid;
 
 		public bool DRAW = true;
 
+		public Semaphore sema;
+
 		public OpticalFlow()
 		{
 			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
 			rand = new Random();
-			_capture = new Capture(5);
+			detected = false;
+			ActualFeature = new PointF[1][];
+			currentCentroid = new PointF(50, 50);
+			sema = new Semaphore(1, 1);
 			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
-			Task.Factory.StartNew(() => initializeThread());
+			//Task.Factory.StartNew(() => initializeThread());
 		}
 
 		#region Threads
-		void initializeThread()
+		void initializeThread(Image<Bgr, Byte> image)
 		{
-			cts = new CancellationTokenSource();
-			detected = false;
-			ActualFeature = new PointF[1][];
-			_currentFrame = _capture.QueryFrame();
+			sema.WaitOne();
 			currentCentroid = new PointF(_currentFrame.Width / 2, _currentFrame.Height / 2);
 			while (_currentFrame == null)
 			{
@@ -382,6 +383,8 @@ namespace ADAPTDetection
 			reinitialized = false;
 			Task.Factory.StartNew(() => mainThread());
 		}
+		
+
 		public bool test = true;
 		public long timeA = DateTime.Now.Ticks;
 		void mainThread()
@@ -389,7 +392,7 @@ namespace ADAPTDetection
 			timeA = DateTime.Now.Ticks;
 			while (!_stop)
 			{
-				addFrame(_capture.QueryFrame());
+				sema.WaitOne();
 
 				if (NextFeature != null && NextFeature.Length < 10)
 				{
@@ -453,6 +456,7 @@ namespace ADAPTDetection
 			_currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevOpticalFlowFrame = _opticalFlowFrame;
 			_opticalFlowFrame = frame.Copy();
+			sema.Release();
 		}
 
 		public void createTrackedImageFromCurrentFrame(Rectangle trackingArea)
