@@ -38,7 +38,6 @@ namespace OpenCV_Testing.Forms
         #endregion
 
 
-
         public KalmanFilter()
         {
 
@@ -73,44 +72,14 @@ namespace OpenCV_Testing.Forms
             PointF[] results = new PointF[2];
             results[0] = predictPoint;
             results[1] = estimatedPoint;
-            
-            //px = predictPoint.X;
-            //py = predictPoint.Y;
-            //cx = estimatedPoint.X;
-            //cy = estimatedPoint.Y;
-            
+            px = predictPoint.X;
+            py = predictPoint.Y;
+            cx = estimatedPoint.X;
+            cy = estimatedPoint.Y;
             return results;
-
-            PointF centroid = currentCentroid;
-            PointF current = FindCentroidByAverageWithOutPrunning(points);
-            int count = 1;
-            foreach (var point in points)
-            {
-                PointF dist = AbsDifference(current, point);
-                if (dist.X + dist.Y < 200)
-                {
-                    centroid.X += point.X;
-                    centroid.Y += point.Y;
-                    ++count;
-                }
-
-            }
-            centroid.X /= count;
-            centroid.Y /= count;
-            return centroid;
         }
 
-
-        private void ComputeKalmanPoints()
-        {
-            kalmanCentroid = filterPoints(currentCentroid);
-        }
-
-    }
-}
-
-
-        //Record mouse position when over the specific tracking area
+         //Record mouse position when over the specific tracking area
         private void MouseTrackingArea_MouseMove(object sender, MouseEventArgs e)
         {
             ax = e.X;// store mouse locations over picturebox in avriables
@@ -154,8 +123,6 @@ namespace OpenCV_Testing.Forms
             //gridx.Draw(new LineSegment2DF(inp, oup[0]), new Bgr(Color.Magenta), 1); //Draw a line between the current position and prediction of next position
 
             //pictureBox1.Image = gridx.ToBitmap();
-
-
         }
 
         private void MousePositionRecord(object sender, EventArgs e)
@@ -166,45 +133,7 @@ namespace OpenCV_Testing.Forms
             MouseTimed_LBL.Text = "Mouse Position Timed- X:" + ix.ToString() + " Y:" + iy.ToString();
         }
 
-        public PointF[] filterPoints(PointF pt)
-        {
-            syntheticData.state[0, 0] = pt.X;
-            syntheticData.state[1, 0] = pt.Y;
-            Matrix<float> prediction = kal.Predict();
-            PointF predictPoint = new PointF(prediction[0, 0], prediction[1, 0]);
-            PointF measurePoint = new PointF(syntheticData.GetMeasurement()[0, 0],
-                syntheticData.GetMeasurement()[1, 0]);
-            Matrix<float> estimated = kal.Correct(syntheticData.GetMeasurement());
-            PointF estimatedPoint = new PointF(estimated[0, 0], estimated[1, 0]);
-            syntheticData.GoToNextState();
-            PointF[] results = new PointF[2];
-            results[0] = predictPoint;
-            results[1] = estimatedPoint;
-            px = predictPoint.X;
-            py = predictPoint.Y;
-            cx = estimatedPoint.X;
-            cy = estimatedPoint.Y;
-            return results;
-        }
-
-        public void KalmanFilter()
-            {
-                mousePoints = new List<PointF>();
-                kalmanPoints = new List<PointF>();
-                kal = new Kalman(4, 2, 0);
-                syntheticData = new SyntheticData();
-                Matrix<float> state = new Matrix<float>(new float[]
-                {
-                    0.0f, 0.0f, 0.0f, 0.0f
-                });
-                kal.CorrectedState = state;
-                kal.TransitionMatrix = syntheticData.transitionMatrix;
-                kal.MeasurementNoiseCovariance = syntheticData.measurementNoise;
-                kal.ProcessNoiseCovariance = syntheticData.processNoise;
-                kal.ErrorCovariancePost = syntheticData.errorCovariancePost;
-                kal.MeasurementMatrix = syntheticData.measurementMatrix;
-            }
-
+        
         //Initialse Kalman Filter and Timers
         private void Start_BTN_Click(object sender, EventArgs e)
         {
@@ -235,6 +164,11 @@ namespace OpenCV_Testing.Forms
             MousePositionTaker.Stop();
             KalmanOutputDisplay.Tick -= new EventHandler(KalmanFilterRunner);
             KalmanOutputDisplay.Stop();
+        }
+
+        private void ComputeKalmanPoints()
+        {
+            //kalmanCentroid = filterPoints(currentCentroid);
         }
 
     }
