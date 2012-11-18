@@ -347,13 +347,13 @@ namespace ARDrone.Detection
 			detected = false;
 			ActualFeature = new PointF[1][];
 			currentCentroid = new PointF(50, 50);
-			sema = new Semaphore(1, 1);
+			sema = new Semaphore(0, 1);
 			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
-			//Task.Factory.StartNew(() => initializeThread());
+			Task.Factory.StartNew(() => initializeThread());
 		}
 
 		#region Threads
-		void initializeThread(Image<Bgr, Byte> image)
+		void initializeThread()
 		{
 			sema.WaitOne();
 			currentCentroid = new PointF(_currentFrame.Width / 2, _currentFrame.Height / 2);
@@ -450,13 +450,20 @@ namespace ARDrone.Detection
 		#region Image Processing
 		public void addFrame(Image<Bgr, Byte> frame)
 		{
+            if (_currentFrame == null) _currentFrame = frame.Copy();
+            if (_currentGrayFrame == null) _currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevFrame = _currentFrame.Copy();
 			_prevGrayFrame = _currentGrayFrame.Copy();
 			_currentFrame = frame.Copy();
 			_currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevOpticalFlowFrame = _opticalFlowFrame;
 			_opticalFlowFrame = frame.Copy();
-			sema.Release();
+            try
+            {
+
+                sema.Release();
+            }
+            catch { }
 		}
 
 		public void createTrackedImageFromCurrentFrame(Rectangle trackingArea)
