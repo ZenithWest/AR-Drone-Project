@@ -7,7 +7,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 
-namespace OpenCV_Testing
+namespace ARDrone.Detection
 {
     public class SyntheticData
     {
