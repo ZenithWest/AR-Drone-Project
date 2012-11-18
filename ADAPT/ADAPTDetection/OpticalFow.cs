@@ -283,12 +283,12 @@ Array of double numbers containing difference between patches around the origina
 #endregion
 
 
-namespace ADAPTDetection
+namespace ARDrone.Detection
 {
 
 
 
-	class OpticalFlow
+	public class OpticalFlow
 	{
 
 		public Image<Bgr, Byte> _prevFrame { get; set; }
@@ -342,7 +342,7 @@ namespace ADAPTDetection
 
 		public OpticalFlow()
 		{
-			_faces = new HaarCascade("C:\\OpenCV\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
+			_faces = new HaarCascade("haarcascade_frontalface_alt.xml");
 			rand = new Random();
 			detected = false;
 			ActualFeature = new PointF[1][];
