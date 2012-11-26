@@ -990,7 +990,7 @@ namespace ARDrone.UI
 			if (droneControlAuto && droneControl.IsFlying)
 			{
 				// 160 is half the width
-				float deltaYaw = 160 - kalman[0].X;
+				float deltaYaw = kalman[0].X/160 - 1;
 				Control.Commands.FlightMoveCommand movecmd = new Control.Commands.FlightMoveCommand(0, 0, deltaYaw, 0);
 				droneControl.SendCommand(movecmd);
 			}
