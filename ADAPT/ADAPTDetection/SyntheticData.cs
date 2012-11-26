@@ -39,8 +39,8 @@ namespace ARDrone.Detection
                     });*/
             transitionMatrix = new Matrix<float>(new float[,]
                     {
-                        { 1, 0 },  // x-pos, y-pos
-                        { 0, 1 }
+                        { 1.0F, 0 },  // x-pos, y-pos
+                        { 0,    1.0F }
                     });
             measurementMatrix = new Matrix<float>(new float[,]
                     {
@@ -50,7 +50,7 @@ namespace ARDrone.Detection
 
             measurementMatrix.SetIdentity();
             processNoise = new Matrix<float>(2, 2); //Linked to the size of the transition matrix
-            processNoise.SetIdentity(new MCvScalar(1.0e-4)); //The smaller the value the more resistance to noise 
+            processNoise.SetIdentity(new MCvScalar(1.0e-2)); //The smaller the value the more resistance to noise 
             measurementNoise = new Matrix<float>(2, 2); //Fixed accordiong to input data 
             measurementNoise.SetIdentity(new MCvScalar(1.0e-1));
             errorCovariancePost = new Matrix<float>(2, 2); //Linked to the size of the transition matrix

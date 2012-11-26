@@ -82,9 +82,7 @@
     <Compile Include="Forms\FaceDetection.Designer.cs">
       <DependentUpon>FaceDetection.cs</DependentUpon>
     </Compile>
-    <Compile Include="KalmanFilter.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="KalmanFilter.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
