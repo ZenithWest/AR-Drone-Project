@@ -40,7 +40,6 @@ namespace ARDrone.Detection
 
 		  public KalmanFilter()
 		  {
-
 				dataPoints = new List<PointF>();
 				kalmanPoints = new List<PointF>();
 				kalFilter = new Kalman(2, 2, 0);
