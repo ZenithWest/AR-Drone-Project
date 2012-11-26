@@ -340,6 +340,8 @@ namespace ARDrone.Detection
 
 		public Semaphore sema;
 		KalmanFilter kalman;
+
+		System.Threading.ReaderWriterLockSlim kalmanLock;
 		PointF[] kalmandata;
 
 		public OpticalFlow()
@@ -351,8 +353,21 @@ namespace ARDrone.Detection
 			currentCentroid = new PointF(50, 50);
 			sema = new Semaphore(0, 1);
 			kalman = new KalmanFilter();
+			kalmanLock = new System.Threading.ReaderWriterLockSlim();
 			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			Task.Factory.StartNew(() => initializeThread());
+		}
+
+		public PointF[] syncKalmanData()
+		{
+			PointF[] localCopy;
+
+			// Lock Semaphore, nab data
+			kalmanLock.EnterReadLock();
+				localCopy = kalmandata;
+			kalmanLock.ExitReadLock();
+
+			return localCopy;
 		}
 
 		#region Threads
@@ -590,8 +605,10 @@ namespace ARDrone.Detection
 					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);
 					_opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);
 					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);
+					kalmanLock.EnterReadLock();
 					_opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Blue), 4);
 					_opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);
+					kalmanLock.ExitReadLock();
 					ActualFeature[0] = NextFeature;
 				} else
 				{
@@ -697,7 +714,10 @@ namespace ARDrone.Detection
 
 			NonPrunnedCentroid = FindCentroidByAverageWithOutPrunning(NextFeature);
 			currentCentroid = FindCentroidByAverage(NextFeature);
+			kalmanLock.EnterWriteLock();
 			kalmandata = kalman.filterPoints(currentCentroid);
+			kalmanLock.ExitWriteLock();
+
 			if (DRAW)
 				for (int i = 0; i < ActualFeature[0].Length; i++)
 				{

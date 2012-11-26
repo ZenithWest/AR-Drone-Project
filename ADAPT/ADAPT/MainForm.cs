@@ -67,6 +67,7 @@ namespace ARDrone.UI
 		private DroneControl droneControl = null;
 		private DroneConfig currentDroneConfig;
 
+		private bool droneControlAuto = false;
 
 		int frameCountSinceLastCapture = 0;
 		DateTime lastFrameRateCaptureTime;
@@ -504,16 +505,12 @@ namespace ARDrone.UI
 		private void UpdateCurrentBooleanInputState()
 		{
 			RemoveOldBooleanInputStates();
-
-			labelCurrentBooleanInput.Text = GetCurrentBooleanInputStates();
 		}
 
 		private void UpdateCurrentBooleanInputState(InputState inputState)
 		{
 			RemoveOldBooleanInputStates();
 			AddNewBooleanInputStates(inputState);
-
-			labelCurrentBooleanInput.Text = GetCurrentBooleanInputStates();
 		}
 		
 		private void UpdateVideoImage()
@@ -984,8 +981,27 @@ namespace ARDrone.UI
 		private void timerVideoUpdate_Tick(object sender, EventArgs e)
 		{
 			UpdateVideoImage();
+			PointF[] kalman = opticalFlow.syncKalmanData();
+
+			if ( kalman != null )
+				UpdateUIAsync(string.Join(".", kalman));
+
+			// Movement calls
+			if (droneControlAuto && droneControl.IsFlying)
+			{
+				// 160 is half the width
+				float deltaYaw = 160 - kalman[0].X;
+				Control.Commands.FlightMoveCommand movecmd = new Control.Commands.FlightMoveCommand(0, 0, deltaYaw, 0);
+				droneControl.SendCommand(movecmd);
+			}
 		} 
 		#endregion
+
+		private void buttonToggleDroneCtrl_Click(object sender, EventArgs e)
+		{
+			droneControlAuto = !droneControlAuto;
+			UpdateUIAsync("Drone Autopilot: " + droneControlAuto);
+		}
 
 		private void buttonNavData_Click(object sender, EventArgs e)
 		{
