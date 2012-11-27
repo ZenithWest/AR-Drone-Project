@@ -5,3 +5,21 @@ obj
 # mstest test results
 TestResults
 *.suo
+*.suo
+/OpenCV_Testing/*.suo
+*.suo
+/HeadMovementTracker/*.suo
+/HeadMovementTracker/*.suo
+/HeadMovementTracker/*.suo
+/ADAPT/*.suo
+/Object Tracking/zk00006-OpenTLD-8a6934d/mex/*.suo
+/Object Tracking/zk00006-OpenTLD-8a6934d/mex/*.suo
+/ARDrone_f12/DroneControllerApp/*.suo
+/ARDrone_f12/DroneControllerApp/*.suo
+/ARDrone_WPF_Application/*.suo
+/ARDrone_WPF_Application/*.suo
+/ARDrone/*.suo
+/ARDrone/*.suo
+/ARDrone API/*.suo
+/*.suo
+/HeadMovementTracker/HeadTracker/*.suo
