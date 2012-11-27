@@ -83,8 +83,8 @@ namespace ARDrone.UI
 
 		#region MainForm
 		public MainForm()
-        {
-            opticalFlow = new Detection.OpticalFlow();
+		  {
+				opticalFlow = new Detection.OpticalFlow();
 			InitializeDroneControl();
 
 			InitializeComponent();
@@ -520,20 +520,20 @@ namespace ARDrone.UI
 		{
 			if (droneControl.IsConnected)
 			{
-                if ((Bitmap)droneControl.BitmapImage == null) return;
+					 if ((Bitmap)droneControl.BitmapImage == null) return;
 				Bitmap newImage = (Bitmap)droneControl.BitmapImage.Clone();
 
 				if (newImage != null)
-                {
-                    Image<Bgr, byte> image = new Image<Bgr, byte>(newImage);
-                    opticalFlow.addFrame(image);
+					 {
+						  Image<Bgr, byte> image = new Image<Bgr, byte>(newImage);
+						  opticalFlow.addFrame(image);
 					frameCountSinceLastCapture++;
 
 					if (videoRecorder.IsVideoCaptureRunning)
 					{
 						videoRecorder.AddFrame((System.Drawing.Bitmap)newImage.Clone());
 					}
-                    if (opticalFlow._prevOpticalFlowFrame != null) UpdateVisualImage(opticalFlow._prevOpticalFlowFrame.Bitmap);
+						  if (opticalFlow._prevOpticalFlowFrame != null) UpdateVisualImage(opticalFlow._prevOpticalFlowFrame.Bitmap);
 					//UpdateVisualImage(newImage);
 
 					//PerformStopSignDetection(newImage);
