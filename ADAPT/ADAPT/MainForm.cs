@@ -86,6 +86,11 @@ namespace ARDrone.UI
 		public MainForm()
         {
             opticalFlow = new Detection.OpticalFlow();
+				if (opticalFlow.CrashError)
+				{
+					Application.Exit();
+					this.Close();
+				}
 			InitializeDroneControl();
 
 			InitializeComponent();
@@ -95,6 +100,7 @@ namespace ARDrone.UI
 			InitializeRecorders();
 
 			navDataRecorder = new NavDataRecorder(droneControl, inputManager, (double)navDataInterval.Value);
+		
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)

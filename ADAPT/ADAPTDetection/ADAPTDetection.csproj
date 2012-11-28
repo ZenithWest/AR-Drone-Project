@@ -61,6 +61,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -82,6 +83,92 @@
       <Project>{92277DFC-0D55-4998-8ACF-B01F3A7FB508}</Project>
       <Name>ARDroneControlLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\GlobalLib\data\haarcascades\body10\haarcascade_upperbody.xml">
+      <Link>haarcascade_upperbody.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_eye.xml">
+      <Link>haarcascade_eye.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_eye_tree_eyeglasses.xml">
+      <Link>haarcascade_eye_tree_eyeglasses.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_frontalface_alt.xml">
+      <Link>haarcascade_frontalface_alt.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_frontalface_alt2.xml">
+      <Link>haarcascade_frontalface_alt2.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_frontalface_alt_tree.xml">
+      <Link>haarcascade_frontalface_alt_tree.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_frontalface_default.xml">
+      <Link>haarcascade_frontalface_default.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_fullbody.xml">
+      <Link>haarcascade_fullbody.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_lefteye_2splits.xml">
+      <Link>haarcascade_lefteye_2splits.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_lowerbody.xml">
+      <Link>haarcascade_lowerbody.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_eyepair_big.xml">
+      <Link>haarcascade_mcs_eyepair_big.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_eyepair_small.xml">
+      <Link>haarcascade_mcs_eyepair_small.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_leftear.xml">
+      <Link>haarcascade_mcs_leftear.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_lefteye.xml">
+      <Link>haarcascade_mcs_lefteye.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_mouth.xml">
+      <Link>haarcascade_mcs_mouth.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_nose.xml">
+      <Link>haarcascade_mcs_nose.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_rightear.xml">
+      <Link>haarcascade_mcs_rightear.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_righteye.xml">
+      <Link>haarcascade_mcs_righteye.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\haarcascade_mcs_upperbody.xml">
+      <Link>haarcascade_mcs_upperbody.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\HS22x20\HS.xml">
+      <Link>HS.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\GlobalLib\data\haarcascades\profileFace10\haarcascade_profileface.xml">
+      <Link>haarcascade_profileface.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
