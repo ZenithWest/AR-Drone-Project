@@ -10,6 +10,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.UI;
 using Emgu.CV.VideoSurveillance;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 
 #region EmguCV's OpticalFlow Class
@@ -338,9 +339,11 @@ namespace ARDrone.Detection
 
 		public Semaphore sema;
 		KalmanFilter kalman;
+		public Mutex mut;
 
 		System.Threading.ReaderWriterLockSlim kalmanLock;
 		PointF[] kalmandata;
+		public bool CrashError = false;
 
         // Boolean variables that determine which algorithms to display in UI
         public bool isVectorsVisible;
@@ -353,16 +356,30 @@ namespace ARDrone.Detection
 
 		public OpticalFlow()
 		{
-			_faces = new HaarCascade("haarcascade_frontalface_alt.xml");
+			//_faces = new HaarCascade("haarcascade_frontalface_alt.xml");
+			try
+			{
+				_faces = new HaarCascade("haarcascade_frontalface_alt.xml");
+			}
+			catch
+			{
+				DialogResult Result;
+				Result = MessageBox.Show("HAAR FILE NOT FOUND", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Application.Exit();
+
+				CrashError = true;
+
+			}
 			rand = new Random();
 			detected = false;
 			ActualFeature = new PointF[1][];
-			currentCentroid = new PointF(50, 50);
+			currentCentroid = new PointF(200, 150);
 			sema = new Semaphore(0, 1);
 			kalman = new KalmanFilter();
 			kalmanLock = new System.Threading.ReaderWriterLockSlim();
 			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			Task.Factory.StartNew(() => initializeThread());
+			mut = new Mutex();
 
             // Initialize boolean variables
             isVectorsVisible = false;
@@ -397,7 +414,7 @@ namespace ARDrone.Detection
 			_currentGrayFrame = _currentFrame.Convert<Gray, Byte>();
 			addFrame(_currentFrame);
 
-			calculateFeaturesToTrack(_currentFrame, new Rectangle(new Point(_currentFrame.Width / 2 - 40, _currentFrame.Height / 2 - 40), new Size(40, 40)));
+			calculateFeaturesToTrack(_currentFrame, new Rectangle(new Point(_currentFrame.Width / 2 - 20, _currentFrame.Height / 2 - 20), new Size(40, 40)));
 			copyInitial();
 
 			detectFaceTask = Task.Factory.StartNew(() => detectFace(_currentFrame));
@@ -416,7 +433,7 @@ namespace ARDrone.Detection
 			reinitialized = false;
 			Task.Factory.StartNew(() => mainThread());
 		}
-		
+
 
 		public bool test = true;
 		public long timeA = DateTime.Now.Ticks;
@@ -464,7 +481,8 @@ namespace ARDrone.Detection
 							}
 							timeA = DateTime.Now.Ticks;
 						}
-					} catch (Exception)
+					}
+					catch (Exception)
 					{
 
 					}
@@ -483,20 +501,22 @@ namespace ARDrone.Detection
 		#region Image Processing
 		public void addFrame(Image<Bgr, Byte> frame)
 		{
-				if (_currentFrame == null) _currentFrame = frame.Copy();
-				if (_currentGrayFrame == null) _currentGrayFrame = frame.Convert<Gray, Byte>();
+			mut.WaitOne();
+			if (_currentFrame == null) _currentFrame = frame.Copy();
+			if (_currentGrayFrame == null) _currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevFrame = _currentFrame.Copy();
 			_prevGrayFrame = _currentGrayFrame.Copy();
 			_currentFrame = frame.Copy();
 			_currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevOpticalFlowFrame = _opticalFlowFrame;
 			_opticalFlowFrame = frame.Copy();
-				try
-				{
+			try
+			{
 
-					 sema.Release();
-				}
-				catch { }
+				sema.Release();
+			}
+			catch { }
+			mut.ReleaseMutex();
 		}
 
 		public void createTrackedImageFromCurrentFrame(Rectangle trackingArea)
@@ -535,12 +555,24 @@ namespace ARDrone.Detection
 		public bool detectFace(Image<Bgr, Byte> frame)
 		{
 			//faceDetected = frame.Convert<Gray, Byte>().DetectHaarCascade(_faces, 1.1, 3, 0, new Size(40, 40));
-			faceDetected = frame.Convert<Gray, Byte>().DetectHaarCascade(_faces, 1.1, 3, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(40, 40));
-			if (faceDetected[0].Length == 1)
+
+			MCvAvgComp[][] temp = frame.Convert<Gray, Byte>().DetectHaarCascade(_faces, 1.1, 3, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+			if (faceDetected == null) faceDetected = temp;
+			if (temp[0].Length == 1)
 			{
+				float X = (float)(temp[0][0].rect.Width / 2.0 + temp[0][0].rect.X);
+				float Y = (float)(temp[0][0].rect.Height / 2.0 + temp[0][0].rect.Y);
+
+				if (ManhattanDistance(new PointF(X, Y), currentCentroid) > 100)
+				{
+					return false;
+				}
+				faceDetected = temp;
 				return true;
-			} else
+			}
+			else
 			{
+				faceDetected = temp;
 				return false;
 			}
 		}
@@ -625,7 +657,8 @@ namespace ARDrone.Detection
                     if (isKalmanEstimatedVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);        // Centroid of Kalman filter estimated point
 					//kalmanLock.ExitReadLock();
 					ActualFeature[0] = NextFeature;
-				} else
+				}
+				else
 				{
 					createTrackedImageFromCurrentFrame(_trackingArea);
 					ComputeDenseOpticalFlow();
