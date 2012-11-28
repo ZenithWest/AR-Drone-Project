@@ -998,23 +998,50 @@ namespace ARDrone.UI
 			if (droneControlAuto && droneControl.IsFlying)
 			{
 				// 160 is half the width
-				float deltaYaw;
-				if (kalman[0].X > droneControl.FrontCameraPictureSize.Width)
-				{
-					deltaYaw = kalman[0].X / droneControl.FrontCameraPictureSize.Width - 1;
-					deltaYaw = (float)Math.Pow((float)deltaYaw, 3) + 1;
-				}
-				else
-				{
-					deltaYaw = kalman[0].X / droneControl.FrontCameraPictureSize.Width + 1;
-					deltaYaw = (float)Math.Pow((float)deltaYaw, 3) - 1;
-				}
-
-				Control.Commands.FlightMoveCommand movecmd = new Control.Commands.FlightMoveCommand(0, 0, deltaYaw, 0);
+				Control.Commands.FlightMoveCommand movecmd = new Control.Commands.FlightMoveCommand(0, 0, LinearDeltaYaw(kalman[0].X), LinearDeltaGaz());
 				droneControl.SendCommand(movecmd);
 			}
 		}
 		#endregion
+
+		float LinearDeltaYaw(float X)
+		{
+			return X / droneControl.FrontCameraPictureSize.Width - 1; ;
+		}
+
+		float LinearDeltaGaz()
+		{
+			int target = 1300;
+			int margin = 100;
+
+			int diff = droneControl.NavigationData.altitude - target;
+
+			if (Math.Abs(diff) > margin) {
+				if (diff > 0) {
+					diff = margin;
+				} else {
+					diff = -margin;
+				}
+			}
+			return (float)diff / margin; ;
+		}
+
+		float CubicDeltaYaw(float X)
+		{
+			float deltaYaw;
+			if (X > droneControl.FrontCameraPictureSize.Width)
+			{
+				deltaYaw = X / droneControl.FrontCameraPictureSize.Width - 1;
+				deltaYaw = (float)Math.Pow((float)deltaYaw, 3) + 1;
+			}
+			else
+			{
+				deltaYaw = X / droneControl.FrontCameraPictureSize.Width + 1;
+				deltaYaw = (float)Math.Pow((float)deltaYaw, 3) - 1;
+			}
+
+			return deltaYaw;
+		}
 
 		private void buttonToggleDroneCtrl_Click(object sender, EventArgs e)
 		{

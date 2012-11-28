@@ -652,10 +652,10 @@ namespace ARDrone.Detection
 					if (isHaarDetectionVisible) _opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);  // Centroid of last Haar detected feature (center of rect.)
                     if (isAllPointsVisible) _opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.DarkTurquoise), 4);          // Centroid of all tracked points (blue vectors)
                     if (isWithin100PixelsVisible) _opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);        // Centroid of tracked points within 100 pixel distance of Cyan centroid
-					kalmanLock.EnterReadLock();
+					//kalmanLock.EnterReadLock();
                     if (isKalmanPredictVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Salmon), 4);         // Centroid of Kalman filter predicted point
                     if (isKalmanEstimatedVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);        // Centroid of Kalman filter estimated point
-					kalmanLock.ExitReadLock();
+					//kalmanLock.ExitReadLock();
 
 					ActualFeature[0] = NextFeature;
 				}
