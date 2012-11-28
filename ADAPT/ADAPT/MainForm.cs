@@ -998,7 +998,11 @@ namespace ARDrone.UI
 			if (droneControlAuto && droneControl.IsFlying)
 			{
 				// 160 is half the width
-				Control.Commands.FlightMoveCommand movecmd = new Control.Commands.FlightMoveCommand(0, 0, LinearDeltaYaw(kalman[0].X), LinearDeltaGaz());
+				Control.Commands.FlightMoveCommand movecmd = new Control.Commands.FlightMoveCommand(
+                    0, 
+                    0, 
+                    LinearDeltaYaw(kalman[0].X), 
+                    0); // LinearDeltaGaz());
 				droneControl.SendCommand(movecmd);
 			}
 		}
@@ -1006,7 +1010,7 @@ namespace ARDrone.UI
 
 		float LinearDeltaYaw(float X)
 		{
-			return X / droneControl.FrontCameraPictureSize.Width - 1; ;
+			return X / (float)(droneControl.FrontCameraPictureSize.Width / 2.0) - 1;
 		}
 
 		float LinearDeltaGaz()
@@ -1029,14 +1033,15 @@ namespace ARDrone.UI
 		float CubicDeltaYaw(float X)
 		{
 			float deltaYaw;
+            float half = (float)droneControl.FrontCameraPictureSize.Width / 2.0f;
 			if (X > droneControl.FrontCameraPictureSize.Width)
 			{
-				deltaYaw = X / droneControl.FrontCameraPictureSize.Width - 1;
+                deltaYaw = X / half - 1;
 				deltaYaw = (float)Math.Pow((float)deltaYaw, 3) + 1;
 			}
 			else
 			{
-				deltaYaw = X / droneControl.FrontCameraPictureSize.Width + 1;
+                deltaYaw = X / half + 1;
 				deltaYaw = (float)Math.Pow((float)deltaYaw, 3) - 1;
 			}
 
