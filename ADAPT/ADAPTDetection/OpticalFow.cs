@@ -337,7 +337,7 @@ namespace ARDrone.Detection
 		bool detected;
 		public PointF NonPrunnedCentroid;
 
-		public bool DRAW = true;
+		public bool isVectorsVisible = true;
 
 		public Semaphore sema;
 		KalmanFilter kalman;
@@ -346,6 +346,14 @@ namespace ARDrone.Detection
 		System.Threading.ReaderWriterLockSlim kalmanLock;
 		PointF[] kalmandata;
 		public bool CrashError = false;
+
+		// Boolean variables that determine which algorithms to display in UI
+		public bool isHaarDetectionVisible;
+		public bool isAllPointsVisible;
+		public bool isWithin100PixelsVisible;
+		public bool isKalmanPredictVisible;
+		public bool isKalmanEstimatedVisible;
+
 
 		public OpticalFlow()
 		{
@@ -359,7 +367,7 @@ namespace ARDrone.Detection
 				DialogResult Result;
 				Result = MessageBox.Show("HAAR FILE NOT FOUND", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Application.Exit();
-				
+
 				CrashError = true;
 
 			}
@@ -373,6 +381,13 @@ namespace ARDrone.Detection
 			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			Task.Factory.StartNew(() => initializeThread());
 			mut = new Mutex();
+
+			// Initialize boolean variables 
+			isHaarDetectionVisible = true;
+			isAllPointsVisible = true;
+			isWithin100PixelsVisible = true;
+			isKalmanPredictVisible = true;
+			isKalmanEstimatedVisible = true;
 		}
 
 		public PointF[] syncKalmanData()
@@ -381,7 +396,7 @@ namespace ARDrone.Detection
 
 			// Lock Semaphore, nab data
 			//kalmanLock.EnterReadLock();
-				localCopy = kalmandata;
+			localCopy = kalmandata;
 			//kalmanLock.ExitReadLock();
 
 			return localCopy;
@@ -418,7 +433,7 @@ namespace ARDrone.Detection
 			reinitialized = false;
 			Task.Factory.StartNew(() => mainThread());
 		}
-		
+
 
 		public bool test = true;
 		public long timeA = DateTime.Now.Ticks;
@@ -466,7 +481,8 @@ namespace ARDrone.Detection
 							}
 							timeA = DateTime.Now.Ticks;
 						}
-					} catch (Exception)
+					}
+					catch (Exception)
 					{
 
 					}
@@ -486,21 +502,21 @@ namespace ARDrone.Detection
 		public void addFrame(Image<Bgr, Byte> frame)
 		{
 			mut.WaitOne();
-				if (_currentFrame == null) _currentFrame = frame.Copy();
-				if (_currentGrayFrame == null) _currentGrayFrame = frame.Convert<Gray, Byte>();
+			if (_currentFrame == null) _currentFrame = frame.Copy();
+			if (_currentGrayFrame == null) _currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevFrame = _currentFrame.Copy();
 			_prevGrayFrame = _currentGrayFrame.Copy();
 			_currentFrame = frame.Copy();
 			_currentGrayFrame = frame.Convert<Gray, Byte>();
 			_prevOpticalFlowFrame = _opticalFlowFrame;
 			_opticalFlowFrame = frame.Copy();
-				try
-				{
+			try
+			{
 
-					 sema.Release();
-				}
-				catch { }
-				mut.ReleaseMutex();
+				sema.Release();
+			}
+			catch { }
+			mut.ReleaseMutex();
 		}
 
 		public void createTrackedImageFromCurrentFrame(Rectangle trackingArea)
@@ -547,12 +563,14 @@ namespace ARDrone.Detection
 				float X = (float)(temp[0][0].rect.Width / 2.0 + temp[0][0].rect.X);
 				float Y = (float)(temp[0][0].rect.Height / 2.0 + temp[0][0].rect.Y);
 
-				if (ManhattanDistance(new PointF(X,Y), currentCentroid) > 100) {
+				if (ManhattanDistance(new PointF(X, Y), currentCentroid) > 100)
+				{
 					return false;
 				}
 				faceDetected = temp;
 				return true;
-			} else
+			}
+			else
 			{
 				faceDetected = temp;
 				return false;
@@ -630,16 +648,19 @@ namespace ARDrone.Detection
 					ComputeMotionFromSparseOpticalFlow();
 					createTrackedImageFromCurrentFrame(_trackingArea);
 					//ComputeDenseOpticalFlow();
-					if (DRAW) _opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
-					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);
-					_opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);
-					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);
+					if (isHaarDetectionVisible) _opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
+
+					if (isHaarDetectionVisible) _opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);  // Centroid of last Haar detected feature (center of rect.)
+					if (isAllPointsVisible) _opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);      // Centroid of all tracked points (blue vectors)
+					if (isWithin100PixelsVisible) _opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);          // Centroid of tracked points within 100 pixel distance of Cyan centroid
 					//kalmanLock.EnterReadLock();
-					_opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Blue), 4);
-					_opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);
+					if (isKalmanPredictVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Blue), 4);           // Centroid of Kalman filter predicted point
+					if (isKalmanEstimatedVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);          // Centroid of Kalman filter estimated point
 					//kalmanLock.ExitReadLock();
+
 					ActualFeature[0] = NextFeature;
-				} else
+				}
+				else
 				{
 					createTrackedImageFromCurrentFrame(_trackingArea);
 					ComputeDenseOpticalFlow();
@@ -747,7 +768,7 @@ namespace ARDrone.Detection
 			kalmandata = kalman.filterPoints(currentCentroid);
 			//kalmanLock.ExitWriteLock();
 
-			if (DRAW)
+			if (isVectorsVisible)
 				for (int i = 0; i < ActualFeature[0].Length; i++)
 				{
 					DrawTrackedFeatures(i);
