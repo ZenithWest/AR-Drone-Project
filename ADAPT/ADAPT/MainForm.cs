@@ -491,6 +491,7 @@ namespace ARDrone.UI
 
 		private void UpdateDroneState(InputState inputState)
 		{
+			CheckForIllegalCrossThreadCalls = false;
 			//DroneData data = droneControl.NavigationData;
 
 			//labelStatusPitch.Text = String.Format("{0:+0.000;-0.000;+0.000}", inputState.Roll);
