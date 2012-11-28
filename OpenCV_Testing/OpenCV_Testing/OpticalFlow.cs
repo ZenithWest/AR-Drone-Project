@@ -573,7 +573,7 @@ copyInitial();
 				if (sparse)
 				{
 					ComputeSparseOpticalFlow();
-                    ComputeKalmanPoints();
+                    //ComputeKalmanPoints();
 					ComputeMotionFromSparseOpticalFlow();
 					createTrackedImageFromCurrentFrame(_trackingArea);
 					//ComputeDenseOpticalFlow();
@@ -581,7 +581,7 @@ copyInitial();
 					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);
 					_opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);
 					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);
-                    _opticalFlowFrame.Draw(new CircleF(kalmanCentroid, 1.0f), new Bgr(Color.BlanchedAlmond), 4);
+                  //  _opticalFlowFrame.Draw(new CircleF(kalmanCentroid, 1.0f), new Bgr(Color.BlanchedAlmond), 4);
 					ActualFeature[0] = NextFeature;
 				} else
 				{

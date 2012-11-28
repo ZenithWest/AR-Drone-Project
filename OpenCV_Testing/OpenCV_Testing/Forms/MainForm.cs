@@ -31,5 +31,10 @@ namespace OpenCV_Testing
 		{
 			(new OpticalFlow()).Show();
 		}
+
+		private void buttonCamshift_Click(object sender, EventArgs e)
+		{
+			(new Camshift()).Show();
+		}
 	}
 }
