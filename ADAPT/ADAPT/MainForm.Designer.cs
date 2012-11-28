@@ -87,12 +87,15 @@
             this.buttonSaveNavData = new System.Windows.Forms.Button();
             this.buttonNavData = new System.Windows.Forms.Button();
             this.buttonToggleDroneCtrl = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.trackingAlgorithmsGroupBox = new System.Windows.Forms.GroupBox();
             this.haarCheckBox = new System.Windows.Forms.CheckBox();
             this.allPointsCheckBox = new System.Windows.Forms.CheckBox();
             this.within100PixelsCheckBox = new System.Windows.Forms.CheckBox();
             this.kfPredictedCheckBox = new System.Windows.Forms.CheckBox();
             this.kfEstimatedCheckBox = new System.Windows.Forms.CheckBox();
+            this.trackingVectorsCheckBox = new System.Windows.Forms.CheckBox();
+            this.btnCheckAll = new System.Windows.Forms.Button();
+            this.btnUncheckAll = new System.Windows.Forms.Button();
             this.groupBoxStatus.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageVideo)).BeginInit();
@@ -101,7 +104,7 @@
             this.groupBoxVideoSnapshots.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navDataInterval)).BeginInit();
-            this.groupBox2.SuspendLayout();
+            this.trackingAlgorithmsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelStatusCamera
@@ -140,7 +143,7 @@
             this.groupBoxStatus.Controls.Add(this.tableLayoutPanel1);
             this.groupBoxStatus.Location = new System.Drawing.Point(864, 12);
             this.groupBoxStatus.Name = "groupBoxStatus";
-            this.groupBoxStatus.Size = new System.Drawing.Size(184, 195);
+            this.groupBoxStatus.Size = new System.Drawing.Size(184, 207);
             this.groupBoxStatus.TabIndex = 55;
             this.groupBoxStatus.TabStop = false;
             this.groupBoxStatus.Text = "Status";
@@ -178,14 +181,14 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(178, 176);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(178, 188);
             this.tableLayoutPanel1.TabIndex = 61;
             // 
             // labelStatusEmergency
             // 
             this.labelStatusEmergency.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusEmergency.AutoSize = true;
-            this.labelStatusEmergency.Location = new System.Drawing.Point(90, 136);
+            this.labelStatusEmergency.Location = new System.Drawing.Point(90, 143);
             this.labelStatusEmergency.Name = "labelStatusEmergency";
             this.labelStatusEmergency.Size = new System.Drawing.Size(32, 13);
             this.labelStatusEmergency.TabIndex = 42;
@@ -195,7 +198,7 @@
             // 
             this.labelStatusFrameRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusFrameRate.AutoSize = true;
-            this.labelStatusFrameRate.Location = new System.Drawing.Point(90, 158);
+            this.labelStatusFrameRate.Location = new System.Drawing.Point(90, 168);
             this.labelStatusFrameRate.Name = "labelStatusFrameRate";
             this.labelStatusFrameRate.Size = new System.Drawing.Size(51, 13);
             this.labelStatusFrameRate.TabIndex = 46;
@@ -205,7 +208,7 @@
             // 
             this.labelStatusAltitude.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusAltitude.AutoSize = true;
-            this.labelStatusAltitude.Location = new System.Drawing.Point(90, 48);
+            this.labelStatusAltitude.Location = new System.Drawing.Point(90, 51);
             this.labelStatusAltitude.Name = "labelStatusAltitude";
             this.labelStatusAltitude.Size = new System.Drawing.Size(27, 13);
             this.labelStatusAltitude.TabIndex = 50;
@@ -215,7 +218,7 @@
             // 
             this.labelStatusBatteryInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusBatteryInfo.AutoSize = true;
-            this.labelStatusBatteryInfo.Location = new System.Drawing.Point(3, 4);
+            this.labelStatusBatteryInfo.Location = new System.Drawing.Point(3, 5);
             this.labelStatusBatteryInfo.Name = "labelStatusBatteryInfo";
             this.labelStatusBatteryInfo.Size = new System.Drawing.Size(71, 13);
             this.labelStatusBatteryInfo.TabIndex = 0;
@@ -225,7 +228,7 @@
             // 
             this.labelStatusHovering.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusHovering.AutoSize = true;
-            this.labelStatusHovering.Location = new System.Drawing.Point(90, 114);
+            this.labelStatusHovering.Location = new System.Drawing.Point(90, 120);
             this.labelStatusHovering.Name = "labelStatusHovering";
             this.labelStatusHovering.Size = new System.Drawing.Size(32, 13);
             this.labelStatusHovering.TabIndex = 38;
@@ -235,7 +238,7 @@
             // 
             this.labelStatusConnected.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusConnected.AutoSize = true;
-            this.labelStatusConnected.Location = new System.Drawing.Point(90, 70);
+            this.labelStatusConnected.Location = new System.Drawing.Point(90, 74);
             this.labelStatusConnected.Name = "labelStatusConnected";
             this.labelStatusConnected.Size = new System.Drawing.Size(32, 13);
             this.labelStatusConnected.TabIndex = 40;
@@ -245,7 +248,7 @@
             // 
             this.labelStatusFlying.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusFlying.AutoSize = true;
-            this.labelStatusFlying.Location = new System.Drawing.Point(90, 92);
+            this.labelStatusFlying.Location = new System.Drawing.Point(90, 97);
             this.labelStatusFlying.Name = "labelStatusFlying";
             this.labelStatusFlying.Size = new System.Drawing.Size(32, 13);
             this.labelStatusFlying.TabIndex = 37;
@@ -255,7 +258,7 @@
             // 
             this.labelStatusCameraShown.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusCameraShown.AutoSize = true;
-            this.labelStatusCameraShown.Location = new System.Drawing.Point(90, 26);
+            this.labelStatusCameraShown.Location = new System.Drawing.Point(90, 28);
             this.labelStatusCameraShown.Name = "labelStatusCameraShown";
             this.labelStatusCameraShown.Size = new System.Drawing.Size(27, 13);
             this.labelStatusCameraShown.TabIndex = 48;
@@ -265,7 +268,7 @@
             // 
             this.labelStatusAltitudeInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusAltitudeInfo.AutoSize = true;
-            this.labelStatusAltitudeInfo.Location = new System.Drawing.Point(3, 48);
+            this.labelStatusAltitudeInfo.Location = new System.Drawing.Point(3, 51);
             this.labelStatusAltitudeInfo.Name = "labelStatusAltitudeInfo";
             this.labelStatusAltitudeInfo.Size = new System.Drawing.Size(42, 13);
             this.labelStatusAltitudeInfo.TabIndex = 49;
@@ -275,7 +278,7 @@
             // 
             this.labelStatusBattery.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusBattery.AutoSize = true;
-            this.labelStatusBattery.Location = new System.Drawing.Point(90, 4);
+            this.labelStatusBattery.Location = new System.Drawing.Point(90, 5);
             this.labelStatusBattery.Name = "labelStatusBattery";
             this.labelStatusBattery.Size = new System.Drawing.Size(27, 13);
             this.labelStatusBattery.TabIndex = 34;
@@ -285,7 +288,7 @@
             // 
             this.labelStatusFrameRateInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusFrameRateInfo.AutoSize = true;
-            this.labelStatusFrameRateInfo.Location = new System.Drawing.Point(3, 158);
+            this.labelStatusFrameRateInfo.Location = new System.Drawing.Point(3, 168);
             this.labelStatusFrameRateInfo.Name = "labelStatusFrameRateInfo";
             this.labelStatusFrameRateInfo.Size = new System.Drawing.Size(62, 13);
             this.labelStatusFrameRateInfo.TabIndex = 45;
@@ -295,7 +298,7 @@
             // 
             this.labelStatusCameraShownInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusCameraShownInfo.AutoSize = true;
-            this.labelStatusCameraShownInfo.Location = new System.Drawing.Point(3, 26);
+            this.labelStatusCameraShownInfo.Location = new System.Drawing.Point(3, 28);
             this.labelStatusCameraShownInfo.Name = "labelStatusCameraShownInfo";
             this.labelStatusCameraShownInfo.Size = new System.Drawing.Size(77, 13);
             this.labelStatusCameraShownInfo.TabIndex = 47;
@@ -305,7 +308,7 @@
             // 
             this.labelStatusConnectedInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusConnectedInfo.AutoSize = true;
-            this.labelStatusConnectedInfo.Location = new System.Drawing.Point(3, 70);
+            this.labelStatusConnectedInfo.Location = new System.Drawing.Point(3, 74);
             this.labelStatusConnectedInfo.Name = "labelStatusConnectedInfo";
             this.labelStatusConnectedInfo.Size = new System.Drawing.Size(59, 13);
             this.labelStatusConnectedInfo.TabIndex = 39;
@@ -315,7 +318,7 @@
             // 
             this.labelStatusEmergencyInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusEmergencyInfo.AutoSize = true;
-            this.labelStatusEmergencyInfo.Location = new System.Drawing.Point(3, 136);
+            this.labelStatusEmergencyInfo.Location = new System.Drawing.Point(3, 143);
             this.labelStatusEmergencyInfo.Name = "labelStatusEmergencyInfo";
             this.labelStatusEmergencyInfo.Size = new System.Drawing.Size(60, 13);
             this.labelStatusEmergencyInfo.TabIndex = 41;
@@ -325,7 +328,7 @@
             // 
             this.labelStatusFlyingInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusFlyingInfo.AutoSize = true;
-            this.labelStatusFlyingInfo.Location = new System.Drawing.Point(3, 92);
+            this.labelStatusFlyingInfo.Location = new System.Drawing.Point(3, 97);
             this.labelStatusFlyingInfo.Name = "labelStatusFlyingInfo";
             this.labelStatusFlyingInfo.Size = new System.Drawing.Size(34, 13);
             this.labelStatusFlyingInfo.TabIndex = 3;
@@ -335,7 +338,7 @@
             // 
             this.labelStatusHoveringInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelStatusHoveringInfo.AutoSize = true;
-            this.labelStatusHoveringInfo.Location = new System.Drawing.Point(3, 114);
+            this.labelStatusHoveringInfo.Location = new System.Drawing.Point(3, 120);
             this.labelStatusHoveringInfo.Name = "labelStatusHoveringInfo";
             this.labelStatusHoveringInfo.Size = new System.Drawing.Size(50, 13);
             this.labelStatusHoveringInfo.TabIndex = 4;
@@ -455,7 +458,7 @@
             // 
             // buttonCommandTakeoff
             // 
-            this.buttonCommandTakeoff.Location = new System.Drawing.Point(468, 529);
+            this.buttonCommandTakeoff.Location = new System.Drawing.Point(468, 526);
             this.buttonCommandTakeoff.Name = "buttonCommandTakeoff";
             this.buttonCommandTakeoff.Size = new System.Drawing.Size(184, 40);
             this.buttonCommandTakeoff.TabIndex = 52;
@@ -602,9 +605,9 @@
             this.groupBoxVideoSnapshots.Controls.Add(this.buttonVideoEnd);
             this.groupBoxVideoSnapshots.Controls.Add(this.checkBoxVideoCompress);
             this.groupBoxVideoSnapshots.Controls.Add(this.buttonVideoStart);
-            this.groupBoxVideoSnapshots.Location = new System.Drawing.Point(661, 277);
+            this.groupBoxVideoSnapshots.Location = new System.Drawing.Point(661, 269);
             this.groupBoxVideoSnapshots.Name = "groupBoxVideoSnapshots";
-            this.groupBoxVideoSnapshots.Size = new System.Drawing.Size(184, 118);
+            this.groupBoxVideoSnapshots.Size = new System.Drawing.Size(184, 110);
             this.groupBoxVideoSnapshots.TabIndex = 61;
             this.groupBoxVideoSnapshots.TabStop = false;
             this.groupBoxVideoSnapshots.Text = "Video && Snapshots";
@@ -612,7 +615,7 @@
             // labelVideoStatus
             // 
             this.labelVideoStatus.AutoSize = true;
-            this.labelVideoStatus.Location = new System.Drawing.Point(6, 98);
+            this.labelVideoStatus.Location = new System.Drawing.Point(6, 93);
             this.labelVideoStatus.Name = "labelVideoStatus";
             this.labelVideoStatus.Size = new System.Drawing.Size(41, 13);
             this.labelVideoStatus.TabIndex = 66;
@@ -620,7 +623,7 @@
             // 
             // buttonSnapshot
             // 
-            this.buttonSnapshot.Location = new System.Drawing.Point(9, 19);
+            this.buttonSnapshot.Location = new System.Drawing.Point(9, 18);
             this.buttonSnapshot.Name = "buttonSnapshot";
             this.buttonSnapshot.Size = new System.Drawing.Size(169, 23);
             this.buttonSnapshot.TabIndex = 62;
@@ -630,7 +633,7 @@
             // 
             // buttonVideoEnd
             // 
-            this.buttonVideoEnd.Location = new System.Drawing.Point(103, 71);
+            this.buttonVideoEnd.Location = new System.Drawing.Point(103, 67);
             this.buttonVideoEnd.Name = "buttonVideoEnd";
             this.buttonVideoEnd.Size = new System.Drawing.Size(75, 23);
             this.buttonVideoEnd.TabIndex = 65;
@@ -641,7 +644,7 @@
             // checkBoxVideoCompress
             // 
             this.checkBoxVideoCompress.AutoSize = true;
-            this.checkBoxVideoCompress.Location = new System.Drawing.Point(6, 48);
+            this.checkBoxVideoCompress.Location = new System.Drawing.Point(6, 46);
             this.checkBoxVideoCompress.Name = "checkBoxVideoCompress";
             this.checkBoxVideoCompress.Size = new System.Drawing.Size(101, 17);
             this.checkBoxVideoCompress.TabIndex = 63;
@@ -650,7 +653,7 @@
             // 
             // buttonVideoStart
             // 
-            this.buttonVideoStart.Location = new System.Drawing.Point(6, 71);
+            this.buttonVideoStart.Location = new System.Drawing.Point(6, 67);
             this.buttonVideoStart.Name = "buttonVideoStart";
             this.buttonVideoStart.Size = new System.Drawing.Size(75, 23);
             this.buttonVideoStart.TabIndex = 64;
@@ -660,9 +663,9 @@
             // 
             // buttonShowConfig
             // 
-            this.buttonShowConfig.Location = new System.Drawing.Point(864, 263);
+            this.buttonShowConfig.Location = new System.Drawing.Point(864, 308);
             this.buttonShowConfig.Name = "buttonShowConfig";
-            this.buttonShowConfig.Size = new System.Drawing.Size(184, 23);
+            this.buttonShowConfig.Size = new System.Drawing.Size(184, 31);
             this.buttonShowConfig.TabIndex = 62;
             this.buttonShowConfig.Text = "Show Drone config";
             this.buttonShowConfig.UseVisualStyleBackColor = true;
@@ -670,9 +673,9 @@
             // 
             // buttonInputSettings
             // 
-            this.buttonInputSettings.Location = new System.Drawing.Point(864, 213);
+            this.buttonInputSettings.Location = new System.Drawing.Point(864, 228);
             this.buttonInputSettings.Name = "buttonInputSettings";
-            this.buttonInputSettings.Size = new System.Drawing.Size(184, 23);
+            this.buttonInputSettings.Size = new System.Drawing.Size(184, 31);
             this.buttonInputSettings.TabIndex = 63;
             this.buttonInputSettings.Text = "Input settings";
             this.buttonInputSettings.UseVisualStyleBackColor = true;
@@ -680,9 +683,9 @@
             // 
             // buttonGeneralSettings
             // 
-            this.buttonGeneralSettings.Location = new System.Drawing.Point(864, 238);
+            this.buttonGeneralSettings.Location = new System.Drawing.Point(864, 268);
             this.buttonGeneralSettings.Name = "buttonGeneralSettings";
-            this.buttonGeneralSettings.Size = new System.Drawing.Size(184, 23);
+            this.buttonGeneralSettings.Size = new System.Drawing.Size(184, 31);
             this.buttonGeneralSettings.TabIndex = 64;
             this.buttonGeneralSettings.Text = "General settings";
             this.buttonGeneralSettings.UseVisualStyleBackColor = true;
@@ -694,9 +697,9 @@
             this.groupBox1.Controls.Add(this.navDataInterval);
             this.groupBox1.Controls.Add(this.buttonSaveNavData);
             this.groupBox1.Controls.Add(this.buttonNavData);
-            this.groupBox1.Location = new System.Drawing.Point(658, 193);
+            this.groupBox1.Location = new System.Drawing.Point(658, 192);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(184, 78);
+            this.groupBox1.Size = new System.Drawing.Size(184, 72);
             this.groupBox1.TabIndex = 66;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Navigational Data";
@@ -704,7 +707,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(158, 50);
+            this.label1.Location = new System.Drawing.Point(158, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(20, 13);
             this.label1.TabIndex = 3;
@@ -712,7 +715,7 @@
             // 
             // navDataInterval
             // 
-            this.navDataInterval.Location = new System.Drawing.Point(96, 48);
+            this.navDataInterval.Location = new System.Drawing.Point(96, 46);
             this.navDataInterval.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -731,7 +734,7 @@
             // 
             // buttonSaveNavData
             // 
-            this.buttonSaveNavData.Location = new System.Drawing.Point(9, 45);
+            this.buttonSaveNavData.Location = new System.Drawing.Point(9, 43);
             this.buttonSaveNavData.Name = "buttonSaveNavData";
             this.buttonSaveNavData.Size = new System.Drawing.Size(81, 23);
             this.buttonSaveNavData.TabIndex = 1;
@@ -751,38 +754,41 @@
             // 
             // buttonToggleDroneCtrl
             // 
-            this.buttonToggleDroneCtrl.Location = new System.Drawing.Point(864, 288);
+            this.buttonToggleDroneCtrl.Location = new System.Drawing.Point(864, 348);
             this.buttonToggleDroneCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonToggleDroneCtrl.Name = "buttonToggleDroneCtrl";
-            this.buttonToggleDroneCtrl.Size = new System.Drawing.Size(181, 26);
+            this.buttonToggleDroneCtrl.Size = new System.Drawing.Size(184, 31);
             this.buttonToggleDroneCtrl.TabIndex = 67;
             this.buttonToggleDroneCtrl.Text = "Toggle Drone Control";
             this.buttonToggleDroneCtrl.UseVisualStyleBackColor = true;
             this.buttonToggleDroneCtrl.Click += new System.EventHandler(this.buttonToggleDroneCtrl_Click);
             // 
-            // groupBox2
+            // trackingAlgorithmsGroupBox
             // 
-            this.groupBox2.Controls.Add(this.kfEstimatedCheckBox);
-            this.groupBox2.Controls.Add(this.kfPredictedCheckBox);
-            this.groupBox2.Controls.Add(this.within100PixelsCheckBox);
-            this.groupBox2.Controls.Add(this.allPointsCheckBox);
-            this.groupBox2.Controls.Add(this.haarCheckBox);
-            this.groupBox2.Location = new System.Drawing.Point(667, 420);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(378, 100);
-            this.groupBox2.TabIndex = 68;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Tracking Algorithms";
+            this.trackingAlgorithmsGroupBox.BackColor = System.Drawing.Color.White;
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.btnUncheckAll);
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.btnCheckAll);
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.trackingVectorsCheckBox);
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.kfEstimatedCheckBox);
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.kfPredictedCheckBox);
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.within100PixelsCheckBox);
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.allPointsCheckBox);
+            this.trackingAlgorithmsGroupBox.Controls.Add(this.haarCheckBox);
+            this.trackingAlgorithmsGroupBox.Enabled = false;
+            this.trackingAlgorithmsGroupBox.Location = new System.Drawing.Point(864, 391);
+            this.trackingAlgorithmsGroupBox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.trackingAlgorithmsGroupBox.Name = "trackingAlgorithmsGroupBox";
+            this.trackingAlgorithmsGroupBox.Size = new System.Drawing.Size(184, 323);
+            this.trackingAlgorithmsGroupBox.TabIndex = 68;
+            this.trackingAlgorithmsGroupBox.TabStop = false;
+            this.trackingAlgorithmsGroupBox.Text = "Tracking Algorithms";
             // 
             // haarCheckBox
             // 
-            this.haarCheckBox.AutoSize = true;
-            this.haarCheckBox.Checked = true;
-            this.haarCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.haarCheckBox.ForeColor = System.Drawing.Color.Goldenrod;
-            this.haarCheckBox.Location = new System.Drawing.Point(20, 20);
+            this.haarCheckBox.Location = new System.Drawing.Point(21, 26);
             this.haarCheckBox.Name = "haarCheckBox";
-            this.haarCheckBox.Size = new System.Drawing.Size(98, 17);
+            this.haarCheckBox.Size = new System.Drawing.Size(98, 32);
             this.haarCheckBox.TabIndex = 0;
             this.haarCheckBox.Text = "Haar Detection";
             this.haarCheckBox.UseVisualStyleBackColor = true;
@@ -790,13 +796,11 @@
             // 
             // allPointsCheckBox
             // 
-            this.allPointsCheckBox.AutoSize = true;
-            this.allPointsCheckBox.Checked = true;
-            this.allPointsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.allPointsCheckBox.ForeColor = System.Drawing.Color.Cyan;
-            this.allPointsCheckBox.Location = new System.Drawing.Point(20, 44);
+            this.allPointsCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.allPointsCheckBox.ForeColor = System.Drawing.Color.DarkTurquoise;
+            this.allPointsCheckBox.Location = new System.Drawing.Point(21, 112);
             this.allPointsCheckBox.Name = "allPointsCheckBox";
-            this.allPointsCheckBox.Size = new System.Drawing.Size(160, 17);
+            this.allPointsCheckBox.Size = new System.Drawing.Size(160, 32);
             this.allPointsCheckBox.TabIndex = 1;
             this.allPointsCheckBox.Text = "Centroid of all tracked points";
             this.allPointsCheckBox.UseVisualStyleBackColor = true;
@@ -804,13 +808,10 @@
             // 
             // within100PixelsCheckBox
             // 
-            this.within100PixelsCheckBox.AutoSize = true;
-            this.within100PixelsCheckBox.Checked = true;
-            this.within100PixelsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.within100PixelsCheckBox.ForeColor = System.Drawing.Color.Red;
-            this.within100PixelsCheckBox.Location = new System.Drawing.Point(20, 68);
+            this.within100PixelsCheckBox.Location = new System.Drawing.Point(21, 155);
             this.within100PixelsCheckBox.Name = "within100PixelsCheckBox";
-            this.within100PixelsCheckBox.Size = new System.Drawing.Size(306, 17);
+            this.within100PixelsCheckBox.Size = new System.Drawing.Size(158, 32);
             this.within100PixelsCheckBox.TabIndex = 2;
             this.within100PixelsCheckBox.Text = "Centroid of tracked points within 100 pixels of cyan centroid";
             this.within100PixelsCheckBox.UseVisualStyleBackColor = true;
@@ -818,13 +819,10 @@
             // 
             // kfPredictedCheckBox
             // 
-            this.kfPredictedCheckBox.AutoSize = true;
-            this.kfPredictedCheckBox.Checked = true;
-            this.kfPredictedCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.kfPredictedCheckBox.ForeColor = System.Drawing.Color.Blue;
-            this.kfPredictedCheckBox.Location = new System.Drawing.Point(217, 19);
+            this.kfPredictedCheckBox.ForeColor = System.Drawing.Color.Salmon;
+            this.kfPredictedCheckBox.Location = new System.Drawing.Point(21, 241);
             this.kfPredictedCheckBox.Name = "kfPredictedCheckBox";
-            this.kfPredictedCheckBox.Size = new System.Drawing.Size(134, 17);
+            this.kfPredictedCheckBox.Size = new System.Drawing.Size(136, 32);
             this.kfPredictedCheckBox.TabIndex = 3;
             this.kfPredictedCheckBox.Text = "Kalman predicted point";
             this.kfPredictedCheckBox.UseVisualStyleBackColor = true;
@@ -832,24 +830,54 @@
             // 
             // kfEstimatedCheckBox
             // 
-            this.kfEstimatedCheckBox.AutoSize = true;
-            this.kfEstimatedCheckBox.Checked = true;
-            this.kfEstimatedCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.kfEstimatedCheckBox.ForeColor = System.Drawing.Color.Green;
-            this.kfEstimatedCheckBox.Location = new System.Drawing.Point(217, 44);
+            this.kfEstimatedCheckBox.Location = new System.Drawing.Point(21, 198);
             this.kfEstimatedCheckBox.Name = "kfEstimatedCheckBox";
-            this.kfEstimatedCheckBox.Size = new System.Drawing.Size(135, 17);
+            this.kfEstimatedCheckBox.Size = new System.Drawing.Size(136, 32);
             this.kfEstimatedCheckBox.TabIndex = 4;
             this.kfEstimatedCheckBox.Text = "Kalman estimated point";
             this.kfEstimatedCheckBox.UseVisualStyleBackColor = true;
             this.kfEstimatedCheckBox.CheckedChanged += new System.EventHandler(this.kfEstimatedCheckBox_CheckedChanged);
             // 
+            // trackingVectorsCheckBox
+            // 
+            this.trackingVectorsCheckBox.BackColor = System.Drawing.Color.White;
+            this.trackingVectorsCheckBox.ForeColor = System.Drawing.Color.Blue;
+            this.trackingVectorsCheckBox.Location = new System.Drawing.Point(21, 69);
+            this.trackingVectorsCheckBox.Name = "trackingVectorsCheckBox";
+            this.trackingVectorsCheckBox.Size = new System.Drawing.Size(136, 32);
+            this.trackingVectorsCheckBox.TabIndex = 5;
+            this.trackingVectorsCheckBox.Text = "Tracking Vectors";
+            this.trackingVectorsCheckBox.UseVisualStyleBackColor = false;
+            this.trackingVectorsCheckBox.CheckedChanged += new System.EventHandler(this.trackingVectorsCheckBox_CheckedChanged);
+            // 
+            // btnCheckAll
+            // 
+            this.btnCheckAll.Location = new System.Drawing.Point(15, 294);
+            this.btnCheckAll.Name = "btnCheckAll";
+            this.btnCheckAll.Size = new System.Drawing.Size(75, 23);
+            this.btnCheckAll.TabIndex = 6;
+            this.btnCheckAll.Text = "Check All";
+            this.btnCheckAll.UseVisualStyleBackColor = true;
+            this.btnCheckAll.Click += new System.EventHandler(this.btnCheckAll_Click);
+            // 
+            // btnUncheckAll
+            // 
+            this.btnUncheckAll.Location = new System.Drawing.Point(96, 294);
+            this.btnUncheckAll.Name = "btnUncheckAll";
+            this.btnUncheckAll.Size = new System.Drawing.Size(75, 23);
+            this.btnUncheckAll.TabIndex = 7;
+            this.btnUncheckAll.Text = "Uncheck All";
+            this.btnUncheckAll.UseVisualStyleBackColor = true;
+            this.btnUncheckAll.Click += new System.EventHandler(this.btnUncheckAll_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1073, 726);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.trackingAlgorithmsGroupBox);
             this.Controls.Add(this.buttonToggleDroneCtrl);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonGeneralSettings);
@@ -884,8 +912,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navDataInterval)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.trackingAlgorithmsGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -952,12 +979,15 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.NumericUpDown navDataInterval;
 		private System.Windows.Forms.Button buttonToggleDroneCtrl;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox trackingAlgorithmsGroupBox;
         private System.Windows.Forms.CheckBox kfEstimatedCheckBox;
         private System.Windows.Forms.CheckBox kfPredictedCheckBox;
         private System.Windows.Forms.CheckBox within100PixelsCheckBox;
         private System.Windows.Forms.CheckBox allPointsCheckBox;
         private System.Windows.Forms.CheckBox haarCheckBox;
+        private System.Windows.Forms.CheckBox trackingVectorsCheckBox;
+        private System.Windows.Forms.Button btnUncheckAll;
+        private System.Windows.Forms.Button btnCheckAll;
 	}
 }
 

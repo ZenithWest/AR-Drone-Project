@@ -337,8 +337,6 @@ namespace ARDrone.Detection
 		bool detected;
 		public PointF NonPrunnedCentroid;
 
-		public bool isVectorsVisible = true;
-
 		public Semaphore sema;
 		KalmanFilter kalman;
 		public Mutex mut;
@@ -347,12 +345,13 @@ namespace ARDrone.Detection
 		PointF[] kalmandata;
 		public bool CrashError = false;
 
-		// Boolean variables that determine which algorithms to display in UI
-		public bool isHaarDetectionVisible;
-		public bool isAllPointsVisible;
-		public bool isWithin100PixelsVisible;
-		public bool isKalmanPredictVisible;
-		public bool isKalmanEstimatedVisible;
+        // Boolean variables that determine which algorithms to display in UI
+        public bool isVectorsVisible;
+        public bool isHaarDetectionVisible;
+        public bool isAllPointsVisible;
+        public bool isWithin100PixelsVisible;
+        public bool isKalmanPredictVisible;
+        public bool isKalmanEstimatedVisible;
 
 
 		public OpticalFlow()
@@ -382,12 +381,13 @@ namespace ARDrone.Detection
 			Task.Factory.StartNew(() => initializeThread());
 			mut = new Mutex();
 
-			// Initialize boolean variables 
-			isHaarDetectionVisible = true;
-			isAllPointsVisible = true;
-			isWithin100PixelsVisible = true;
-			isKalmanPredictVisible = true;
-			isKalmanEstimatedVisible = true;
+            // Initialize boolean variables
+            isVectorsVisible = false;
+            isHaarDetectionVisible = false;
+            isAllPointsVisible = false;
+            isWithin100PixelsVisible = false;
+            isKalmanPredictVisible = false;
+            isKalmanEstimatedVisible = false;
 		}
 
 		public PointF[] syncKalmanData()
@@ -648,15 +648,14 @@ namespace ARDrone.Detection
 					ComputeMotionFromSparseOpticalFlow();
 					createTrackedImageFromCurrentFrame(_trackingArea);
 					//ComputeDenseOpticalFlow();
-					if (isHaarDetectionVisible) _opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
-
+                    if (isHaarDetectionVisible) _opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Goldenrod), 1);
 					if (isHaarDetectionVisible) _opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);  // Centroid of last Haar detected feature (center of rect.)
-					if (isAllPointsVisible) _opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);      // Centroid of all tracked points (blue vectors)
-					if (isWithin100PixelsVisible) _opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);          // Centroid of tracked points within 100 pixel distance of Cyan centroid
-					//kalmanLock.EnterReadLock();
-					if (isKalmanPredictVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Blue), 4);           // Centroid of Kalman filter predicted point
-					if (isKalmanEstimatedVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);          // Centroid of Kalman filter estimated point
-					//kalmanLock.ExitReadLock();
+                    if (isAllPointsVisible) _opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.DarkTurquoise), 4);          // Centroid of all tracked points (blue vectors)
+                    if (isWithin100PixelsVisible) _opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);        // Centroid of tracked points within 100 pixel distance of Cyan centroid
+					kalmanLock.EnterReadLock();
+                    if (isKalmanPredictVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Salmon), 4);         // Centroid of Kalman filter predicted point
+                    if (isKalmanEstimatedVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);        // Centroid of Kalman filter estimated point
+					kalmanLock.ExitReadLock();
 
 					ActualFeature[0] = NextFeature;
 				}

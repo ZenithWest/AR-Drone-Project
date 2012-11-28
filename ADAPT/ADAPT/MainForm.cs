@@ -386,6 +386,7 @@ namespace ARDrone.UI
 
 			if (!droneControl.IsConnected) { buttonConnect.Enabled = true; } else { buttonConnect.Enabled = false; }
 			if (droneControl.IsConnected) { buttonShutdown.Enabled = true; } else { buttonShutdown.Enabled = false; }
+            if (droneControl.IsConnected) { trackingAlgorithmsGroupBox.Enabled = true; } else { trackingAlgorithmsGroupBox.Enabled = false; }
 
 			if (droneControl.CanTakeoff || droneControl.CanLand) { buttonCommandTakeoff.Enabled = true; } else { buttonCommandTakeoff.Enabled = false; }
 			if (droneControl.CanEnterHoverMode || droneControl.CanLeaveHoverMode) { buttonCommandHover.Enabled = true; } else { buttonCommandHover.Enabled = false; }
@@ -1079,5 +1080,33 @@ namespace ARDrone.UI
 			else
 				opticalFlow.isKalmanEstimatedVisible = false;
 		}
+
+        private void trackingVectorsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (trackingVectorsCheckBox.Checked == true)
+                opticalFlow.isVectorsVisible = true;
+            else
+                opticalFlow.isVectorsVisible = false;
+        }
+
+        private void btnCheckAll_Click(object sender, EventArgs e)
+        {
+            haarCheckBox.Checked = true;
+            allPointsCheckBox.Checked = true;
+            within100PixelsCheckBox.Checked = true;
+            kfPredictedCheckBox.Checked = true;
+            kfEstimatedCheckBox.Checked = true;
+            trackingVectorsCheckBox.Checked = true;
+        }
+
+        private void btnUncheckAll_Click(object sender, EventArgs e)
+        {
+            haarCheckBox.Checked = false;
+            allPointsCheckBox.Checked = false;
+            within100PixelsCheckBox.Checked = false;
+            kfPredictedCheckBox.Checked = false;
+            kfEstimatedCheckBox.Checked = false;
+            trackingVectorsCheckBox.Checked = false;
+        }
 	}
 }
