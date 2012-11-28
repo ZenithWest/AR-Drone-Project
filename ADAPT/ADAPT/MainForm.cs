@@ -84,23 +84,23 @@ namespace ARDrone.UI
 
 		#region MainForm
 		public MainForm()
-        {
-            opticalFlow = new Detection.OpticalFlow();
-				if (opticalFlow.CrashError)
-				{
-					Application.Exit();
-					this.Close();
-				}
+		{
+			opticalFlow = new Detection.OpticalFlow();
+			if (opticalFlow.CrashError)
+			{
+				Application.Exit();
+				this.Close();
+			}
 			InitializeDroneControl();
 
 			InitializeComponent();
-			
+
 			InitializeTimers();
 			InitializeInputManager();
 			InitializeRecorders();
 
 			navDataRecorder = new NavDataRecorder(droneControl, inputManager, (double)navDataInterval.Value);
-		
+
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -122,7 +122,7 @@ namespace ARDrone.UI
 				videoRecorder.Dispose();
 		}
 		#endregion
-		
+
 		#region Initialize
 		public void Init()
 		{
@@ -130,7 +130,7 @@ namespace ARDrone.UI
 
 			UpdateStatus();
 			UpdateInteractiveElements();
-		} 
+		}
 
 		private void InitializeDroneControl()
 		{
@@ -170,7 +170,7 @@ namespace ARDrone.UI
 
 			inputManager = new ARDrone.Input.InputManager(this.Handle);
 			inputManager.SwitchInputMode(ARDrone.Input.InputManager.InputMode.ControlInput);
-			
+
 			inputManager.NewInputState += inputManager_NewInputState;
 			inputManager.NewInputDevice += inputManager_NewInputDevice;
 			inputManager.InputDeviceLost += inputManager_InputDeviceLost;
@@ -187,7 +187,7 @@ namespace ARDrone.UI
 			videoRecorder.CompressionError += new System.IO.ErrorEventHandler(videoRecorder_CompressionError);
 		}
 		#endregion
-				
+
 		#region Connection
 		private void Connect()
 		{
@@ -205,7 +205,7 @@ namespace ARDrone.UI
 
 			UpdateUISync("Disconnecting from the drone");
 			droneControl.Disconnect();
-		} 
+		}
 		#endregion
 
 		#region Commands
@@ -493,7 +493,7 @@ namespace ARDrone.UI
 		private void UpdateInputState(InputState inputState)
 		{
 			//labelStatusSpecialAction.Text = inputState.SpecialAction.ToString();
-		} 
+		}
 
 		private void UpdateDroneState(InputState inputState)
 		{
@@ -519,25 +519,25 @@ namespace ARDrone.UI
 			RemoveOldBooleanInputStates();
 			AddNewBooleanInputStates(inputState);
 		}
-		
+
 		private void UpdateVideoImage()
 		{
 			if (droneControl.IsConnected)
 			{
-					 if ((Bitmap)droneControl.BitmapImage == null) return;
+				if ((Bitmap)droneControl.BitmapImage == null) return;
 				Bitmap newImage = (Bitmap)droneControl.BitmapImage.Clone();
 
 				if (newImage != null)
-					 {
-						  Image<Bgr, byte> image = new Image<Bgr, byte>(newImage);
-						  opticalFlow.addFrame(image);
+				{
+					Image<Bgr, byte> image = new Image<Bgr, byte>(newImage);
+					opticalFlow.addFrame(image);
 					frameCountSinceLastCapture++;
 
 					if (videoRecorder.IsVideoCaptureRunning)
 					{
 						videoRecorder.AddFrame((System.Drawing.Bitmap)newImage.Clone());
 					}
-						  if (opticalFlow._prevOpticalFlowFrame != null) UpdateVisualImage(opticalFlow._prevOpticalFlowFrame.Bitmap);
+					if (opticalFlow._prevOpticalFlowFrame != null) UpdateVisualImage(opticalFlow._prevOpticalFlowFrame.Bitmap);
 					//UpdateVisualImage(newImage);
 
 					//PerformStopSignDetection(newImage);
@@ -700,7 +700,7 @@ namespace ARDrone.UI
 			{
 				return droneControl.CanSwitchCamera;
 			}
-		} 
+		}
 		#endregion
 
 		#region Dialog
@@ -771,7 +771,7 @@ namespace ARDrone.UI
 
 			//DroneConfigurationOutput configOutput = new DroneConfigurationOutput(droneControl.InternalDroneConfiguration);
 			//configOutput.ShowDialog();
-		} 
+		}
 		#endregion
 
 		private void SaveDroneAndHudConfigStates(DroneConfig droneConfig/*, HudConfig hudConfig*/)
@@ -789,7 +789,7 @@ namespace ARDrone.UI
 			InitializeDroneControlEventHandlers();
 			//InitializeHudInterface(currentHudConfig);
 		}
-		
+
 		private void HandleConnectionStateChange(DroneConnectionStateChangedEventArgs args)
 		{
 			UpdateInteractiveElements();
@@ -804,7 +804,7 @@ namespace ARDrone.UI
 				UpdateUISync("Disconnected from the drone");
 			}
 		}
-		
+
 		#region Error Handling
 		private void HandleError(DroneErrorEventArgs args)
 		{
@@ -828,7 +828,7 @@ namespace ARDrone.UI
 			}
 
 			return errorText;
-		} 
+		}
 		#endregion
 
 		#region Event Handlers
@@ -841,7 +841,7 @@ namespace ARDrone.UI
 		{
 			HandleError(e);
 		}
-		
+
 		private void droneControl_ConnectionStateChanged_Async(object sender, DroneConnectionStateChangedEventArgs e)
 		{
 			this.BeginInvoke(new DroneConnectionStateChangedEventHandler(droneControl_ConnectionStateChanged_Sync), sender, e);
@@ -976,7 +976,7 @@ namespace ARDrone.UI
 		private void buttonShowConfig_Click(object sender, EventArgs e)
 		{
 			OpenDroneConfigDialog();
-		} 
+		}
 		#endregion
 
 		#region Timers
@@ -990,18 +990,29 @@ namespace ARDrone.UI
 			UpdateVideoImage();
 			PointF[] kalman = opticalFlow.syncKalmanData();
 
-			if ( kalman != null )
+			if (kalman != null)
 				UpdateUIAsync(string.Join(".", kalman));
 
 			// Movement calls
 			if (droneControlAuto && droneControl.IsFlying)
 			{
 				// 160 is half the width
-				float deltaYaw = kalman[0].X/160 - 1;
+				float deltaYaw;
+				if (kalman[0].X > droneControl.FrontCameraPictureSize.Width)
+				{
+					deltaYaw = kalman[0].X / droneControl.FrontCameraPictureSize.Width - 1;
+					deltaYaw = (float)Math.Pow((float)deltaYaw, 3) + 1;
+				}
+				else
+				{
+					deltaYaw = kalman[0].X / droneControl.FrontCameraPictureSize.Width + 1;
+					deltaYaw = (float)Math.Pow((float)deltaYaw, 3) - 1;
+				}
+
 				Control.Commands.FlightMoveCommand movecmd = new Control.Commands.FlightMoveCommand(0, 0, deltaYaw, 0);
 				droneControl.SendCommand(movecmd);
 			}
-		} 
+		}
 		#endregion
 
 		private void buttonToggleDroneCtrl_Click(object sender, EventArgs e)
@@ -1029,44 +1040,44 @@ namespace ARDrone.UI
 			navDataRecorder.save("NavData");
 		}
 
-        private void haarCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (haarCheckBox.Checked == true)
-                opticalFlow.isHaarDetectionVisible = true;
-            else
-                opticalFlow.isHaarDetectionVisible = false;
-        }
+		private void haarCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (haarCheckBox.Checked == true)
+				opticalFlow.isHaarDetectionVisible = true;
+			else
+				opticalFlow.isHaarDetectionVisible = false;
+		}
 
-        private void allPointsCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (allPointsCheckBox.Checked == true)
-                opticalFlow.isAllPointsVisible = true;
-            else
-                opticalFlow.isAllPointsVisible = false;
-        }
+		private void allPointsCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (allPointsCheckBox.Checked == true)
+				opticalFlow.isAllPointsVisible = true;
+			else
+				opticalFlow.isAllPointsVisible = false;
+		}
 
-        private void within100PixelsCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (within100PixelsCheckBox.Checked == true)
-                opticalFlow.isWithin100PixelsVisible = true;
-            else
-                opticalFlow.isWithin100PixelsVisible = false;
-        }
+		private void within100PixelsCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (within100PixelsCheckBox.Checked == true)
+				opticalFlow.isWithin100PixelsVisible = true;
+			else
+				opticalFlow.isWithin100PixelsVisible = false;
+		}
 
-        private void kfPredictedCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (kfPredictedCheckBox.Checked == true)
-                opticalFlow.isKalmanPredictVisible = true;
-            else
-                opticalFlow.isKalmanPredictVisible = false;
-        }
+		private void kfPredictedCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (kfPredictedCheckBox.Checked == true)
+				opticalFlow.isKalmanPredictVisible = true;
+			else
+				opticalFlow.isKalmanPredictVisible = false;
+		}
 
-        private void kfEstimatedCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (kfEstimatedCheckBox.Checked == true)
-                opticalFlow.isKalmanEstimatedVisible = true;
-            else
-                opticalFlow.isKalmanEstimatedVisible = false;
-        }
+		private void kfEstimatedCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (kfEstimatedCheckBox.Checked == true)
+				opticalFlow.isKalmanEstimatedVisible = true;
+			else
+				opticalFlow.isKalmanEstimatedVisible = false;
+		}
 	}
 }
