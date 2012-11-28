@@ -1022,5 +1022,45 @@ namespace ARDrone.UI
 		{
 			navDataRecorder.save("NavData");
 		}
+
+        private void haarCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (haarCheckBox.Checked == true)
+                opticalFlow.isHaarDetectionVisible = true;
+            else
+                opticalFlow.isHaarDetectionVisible = false;
+        }
+
+        private void allPointsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (allPointsCheckBox.Checked == true)
+                opticalFlow.isAllPointsVisible = true;
+            else
+                opticalFlow.isAllPointsVisible = false;
+        }
+
+        private void within100PixelsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (within100PixelsCheckBox.Checked == true)
+                opticalFlow.isWithin100PixelsVisible = true;
+            else
+                opticalFlow.isWithin100PixelsVisible = false;
+        }
+
+        private void kfPredictedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (kfPredictedCheckBox.Checked == true)
+                opticalFlow.isKalmanPredictVisible = true;
+            else
+                opticalFlow.isKalmanPredictVisible = false;
+        }
+
+        private void kfEstimatedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (kfEstimatedCheckBox.Checked == true)
+                opticalFlow.isKalmanEstimatedVisible = true;
+            else
+                opticalFlow.isKalmanEstimatedVisible = false;
+        }
 	}
 }

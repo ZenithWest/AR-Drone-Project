@@ -344,6 +344,14 @@ namespace ARDrone.Detection
 		System.Threading.ReaderWriterLockSlim kalmanLock;
 		PointF[] kalmandata;
 
+        // Boolean variables that determine which algorithms to display in UI
+        public bool isHaarDetectionVisible;
+        public bool isAllPointsVisible;
+        public bool isWithin100PixelsVisible;
+        public bool isKalmanPredictVisible;
+        public bool isKalmanEstimatedVisible;
+
+
 		public OpticalFlow()
 		{
 			_faces = new HaarCascade("haarcascade_frontalface_alt.xml");
@@ -356,6 +364,13 @@ namespace ARDrone.Detection
 			kalmanLock = new System.Threading.ReaderWriterLockSlim();
 			//_capture = new Capture("C:\\Users\\Zenith\\SkyDrive\\2012 FALL\\CSCE 483 Computer System Design\\ARDroneOut.avi");
 			Task.Factory.StartNew(() => initializeThread());
+
+            // Initialize boolean variables 
+            isHaarDetectionVisible = true;
+            isAllPointsVisible = true;
+            isWithin100PixelsVisible = true;
+            isKalmanPredictVisible = true;
+            isKalmanEstimatedVisible = true;
 		}
 
 		public PointF[] syncKalmanData()
@@ -602,12 +617,12 @@ namespace ARDrone.Detection
 					createTrackedImageFromCurrentFrame(_trackingArea);
 					//ComputeDenseOpticalFlow();
 					if (DRAW) _opticalFlowFrame.Draw(_trackingArea, new Bgr(Color.Red), 1);
-					_opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);
-					_opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);
-					_opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);
+					if (isHaarDetectionVisible) _opticalFlowFrame.Draw(new CircleF(referenceCentroid, 1.0f), new Bgr(Color.Goldenrod), 4);  // Centroid of last Haar detected feature (center of rect.)
+                    if (isAllPointsVisible) _opticalFlowFrame.Draw(new CircleF(NonPrunnedCentroid, 1.0f), new Bgr(Color.Cyan), 4);      // Centroid of all tracked points (blue vectors)
+                    if (isWithin100PixelsVisible) _opticalFlowFrame.Draw(new CircleF(currentCentroid, 1.0f), new Bgr(Color.Red), 4);          // Centroid of tracked points within 100 pixel distance of Cyan centroid
 					kalmanLock.EnterReadLock();
-					_opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Blue), 4);
-					_opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);
+                    if (isKalmanPredictVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[0], 1.0f), new Bgr(Color.Blue), 4);           // Centroid of Kalman filter predicted point
+                    if (isKalmanEstimatedVisible) _opticalFlowFrame.Draw(new CircleF(kalmandata[1], 1.0f), new Bgr(Color.Green), 4);          // Centroid of Kalman filter estimated point
 					kalmanLock.ExitReadLock();
 					ActualFeature[0] = NextFeature;
 				} else
