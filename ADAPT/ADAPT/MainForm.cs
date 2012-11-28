@@ -85,7 +85,7 @@ namespace ARDrone.UI
 		#region MainForm
 		public MainForm()
 		  {
-				opticalFlow = new Detection.OpticalFlow();
+			opticalFlow = new Detection.OpticalFlow();
 			InitializeDroneControl();
 
 			InitializeComponent();
